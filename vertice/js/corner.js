@@ -1,140 +1,165 @@
 /**
  * VERTICE - КЛАСС ВЕРШИНЫ (CORNER / VERTEX)
+ * (p5 Instance Mode)
  * 
  * Управляет отдельными кругами-вершинами, их координатами, 
  * радиусом, отрисовкой, перетаскиванием мышью и состояниями.
  */
 
-class Corner {
-  constructor(center, radians, glyph) {
-    // Координаты центра вершины
-    this.center = createVector(center.x, center.y);
-    // Радиус вершины
-    this.radians = radians;
-    // Текущий масштаб
-    this.scale = 1;
-    // Флаг перетаскивания вершины
-    this.dragging = false;
-    // Флаг активности (выделения) вершины
-    this.active = false;
-    // Смещение мыши при начале перетаскивания
-    this.offsetX = 0;
-    this.offsetY = 0;
-    // Ссылка на родительский глиф
-    this.glyph = glyph;
-  }
+export function createCornerClass(p) {
 
-  /**
-   * Создает копию вершины для буфера истории (Undo/Redo)
-   */
-  copy(glyph) {
-    const cornerCopy = new Corner(this.center, this.radians, glyph);
-    cornerCopy.scale = this.scale;
-    cornerCopy.active = this.active;
-    cornerCopy.offsetX = this.offsetX;
-    cornerCopy.offsetY = this.offsetY;
-    return cornerCopy;
-  }
+  // Глобальные переменные стилей из основного приложения
+  // Передаем их через замыкание или читаем напрямую из объекта app если нужно,
+  // но лучше определить статические константы здесь.
+  const corner_radiansMin = 12;
+  const corner_radiansMax = 150;
+  const corner_buttonRadians = 8;
+  const corner_buttonStrokeWeight = 1.5;
 
-  /**
-   * Отрисовка круга вершины на холсте (или в SVG при экспорте)
-   */
-  draw(g) {
-    const scaledRadians = constrain(this.radians * this.scale, corner_radiansMin, corner_radiansMax);
-    const target = g || (exportActive && exportSVGActive ? svgCanvas : null);
-
-    if (target) {
-      target.fill(shapeColor);
-      target.noStroke();
-      target.ellipse(this.center.x, this.center.y, scaledRadians * 2, scaledRadians * 2);
-    } else {
-      fill(shapeColor);
-      noStroke();
-      ellipse(this.center.x, this.center.y, scaledRadians * 2, scaledRadians * 2);
+  class Corner {
+    constructor(center, radians, glyph) {
+      this.center = p.createVector(center.x, center.y);
+      this.radians = radians;
+      this.scale = 1;
+      this.dragging = false;
+      this.active = false;
+      this.offsetX = 0;
+      this.offsetY = 0;
+      this.glyph = glyph; // Ссылка на родительский глиф (не сериализуется напрямую, восстанавливается при загрузке)
     }
-  }
 
-  /**
-   * Отрисовка маркера активности вершины при редактировании
-   */
-  drawButton() {
-    if (this.active || this.checkHover() || activeMode === "glyph" || activeMode === "scene") {
-      if ((activeMode === "corner" && this.active) ||
-          ((activeMode === "glyph" || activeMode === "scene") && this.checkHover())) {
-        fill(backgroundColor);
-        stroke(shapeColor);
+    /**
+     * Создает копию вершины для буфера истории (Undo/Redo)
+     */
+    copy(glyph) {
+      const cornerCopy = new Corner(this.center, this.radians, glyph);
+      cornerCopy.scale = this.scale;
+      cornerCopy.active = this.active;
+      cornerCopy.offsetX = this.offsetX;
+      cornerCopy.offsetY = this.offsetY;
+      return cornerCopy;
+    }
+
+    /**
+     * Отрисовка круга вершины на холсте (или в SVG при экспорте)
+     */
+    draw(shapeColor, g = null) {
+      const scaledRadians = p.constrain(this.radians * this.scale, corner_radiansMin, corner_radiansMax);
+      
+      if (g) {
+        g.fill(shapeColor);
+        g.noStroke();
+        g.ellipse(this.center.x, this.center.y, scaledRadians * 2, scaledRadians * 2);
       } else {
-        fill(shapeColor);
-        stroke(backgroundColor);
+        p.fill(shapeColor);
+        p.noStroke();
+        p.ellipse(this.center.x, this.center.y, scaledRadians * 2, scaledRadians * 2);
       }
-      strokeWeight(corner_buttonStrokeWeight);
-      ellipse(this.center.x, this.center.y, corner_buttonRadians * 2, corner_buttonRadians * 2);
+    }
+
+    /**
+     * Отрисовка маркера активности вершины при редактировании
+     */
+    drawButton(shapeColor, backgroundColor, activeMode, mouse) {
+      if (this.active || this.checkHover(mouse) || activeMode === "glyph" || activeMode === "scene") {
+        if ((activeMode === "corner" && this.active) ||
+            ((activeMode === "glyph" || activeMode === "scene") && this.checkHover(mouse))) {
+          p.fill(backgroundColor);
+          p.stroke(shapeColor);
+        } else {
+          p.fill(shapeColor);
+          p.stroke(backgroundColor);
+        }
+        p.strokeWeight(corner_buttonStrokeWeight);
+        p.ellipse(this.center.x, this.center.y, corner_buttonRadians * 2, corner_buttonRadians * 2);
+      }
+    }
+
+    /**
+     * Проверяет, была ли нажата мышь в области маркера вершины для начала перетаскивания
+     */
+    checkDrag(mouse) {
+      if (p.dist(mouse.x, mouse.y, this.center.x, this.center.y) < corner_buttonRadians) {
+        this.dragging = true;
+        this.offsetX = mouse.x - this.center.x;
+        this.offsetY = mouse.y - this.center.y;
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Обновляет координаты центра при перетаскивании
+     */
+    drag(mouse) {
+      if (this.dragging) {
+        this.center.x = mouse.x - this.offsetX;
+        this.center.y = mouse.y - this.offsetY;
+      }
+    }
+
+    /**
+     * Завершает процесс перетаскивания
+     */
+    endDrag() {
+      this.dragging = false;
+    }
+
+    /**
+     * Проверяет наведение мыши на маркер вершины
+     */
+    checkHoverButton(mouse) {
+      return p.dist(mouse.x, mouse.y, this.center.x, this.center.y) < corner_buttonRadians;
+    }
+
+    /**
+     * Проверяет наведение мыши на саму область круга вершины
+     */
+    checkHover(mouse) {
+      return p.dist(mouse.x, mouse.y, this.center.x, this.center.y) < this.radians;
+    }
+
+    /**
+     * Изменение радиуса вершины с ограничением диапазона
+     */
+    setRadians(increment) {
+      this.radians += increment;
+      this.radians = p.constrain(this.radians, corner_radiansMin, corner_radiansMax);
+    }
+
+    /**
+     * Установка масштаба вершины
+     */
+    setScale(increment) {
+      this.scale += increment;
+    }
+
+    /**
+     * Установка флага активности выделения вершины
+     */
+    setActive(state) {
+      this.active = state;
+    }
+
+    // --- СЕРИАЛИЗАЦИЯ (для файла JSON и HistoryManager) ---
+    
+    serialize() {
+      return {
+        x: this.center.x,
+        y: this.center.y,
+        r: this.radians,
+        s: this.scale,
+        active: this.active
+      };
+    }
+
+    static deserialize(data, glyphInstance) {
+      const c = new Corner({x: data.x, y: data.y}, data.r, glyphInstance);
+      c.scale = data.s !== undefined ? data.s : 1;
+      c.active = data.active || false;
+      return c;
     }
   }
 
-  /**
-   * Проверяет, была ли нажата мышь в области маркера вершины для начала перетаскивания
-   */
-  checkDrag() {
-    if (dist(mouse.x, mouse.y, this.center.x, this.center.y) < corner_buttonRadians) {
-      this.dragging = true;
-      this.offsetX = mouse.x - this.center.x;
-      this.offsetY = mouse.y - this.center.y;
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Обновляет координаты центра при перетаскивании
-   */
-  drag() {
-    if (this.dragging) {
-      this.center.x = mouse.x - this.offsetX;
-      this.center.y = mouse.y - this.offsetY;
-    }
-  }
-
-  /**
-   * Завершает процесс перетаскивания
-   */
-  endDrag() {
-    this.dragging = false;
-  }
-
-  /**
-   * Проверяет наведение мыши на маркер вершины
-   */
-  checkHoverButton() {
-    return dist(mouse.x, mouse.y, this.center.x, this.center.y) < corner_buttonRadians;
-  }
-
-  /**
-   * Проверяет наведение мыши на саму область круга вершины
-   */
-  checkHover() {
-    return dist(mouse.x, mouse.y, this.center.x, this.center.y) < this.radians;
-  }
-
-  /**
-   * Изменение радиуса вершины с ограничением диапазона
-   */
-  setRadians(increment) {
-    this.radians += increment;
-    this.radians = constrain(this.radians, corner_radiansMin, corner_radiansMax);
-  }
-
-  /**
-   * Установка масштаба вершины
-   */
-  setScale(increment) {
-    this.scale += increment;
-  }
-
-  /**
-   * Установка флага активности выделения вершины
-   */
-  setActive(state) {
-    this.active = state;
-  }
+  return Corner;
 }
