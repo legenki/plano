@@ -319,6 +319,7 @@ async function uploadToServer(blob, fileName, folder) {
   return {
     importJSON,
     exportJSON,
+    importScript,
     exportScript,
     exportTextBoxSettings,
     exportAs,

@@ -16,7 +16,7 @@ const TextBox = createTextBoxClass(_p5);
 const GlyphEditor = createGlyphEditorClass(_p5);
 const { Button, GuideButton, PathButton, AnchorButton, HandleButton } = createButtonClasses(_p5);
 const {
-  importJSON, exportJSON, exportScript, exportTextBoxSettings,
+  importJSON, exportJSON, importScript, exportScript, exportTextBoxSettings,
   exportAs, exportText_SVG, exportText_PNG, exportText_TXT,
   uploadToServer, importTextBoxSettings,
 } = createExportUtils(_p5);
