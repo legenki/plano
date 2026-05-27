@@ -4,7 +4,7 @@
  * Requires _p5 (p5.js instance) passed as factory parameter.
  */
 
-export function createGlyphEditorClass(_p5) {
+export function createGlyphEditorClass(_p5, { GuideButton, PathButton, AnchorButton, Path, Anchor }) {
 
 class GlyphEditor {
 
