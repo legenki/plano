@@ -6,6 +6,30 @@
 
 export function createAnimationUtils(_p5) {
 
+// AnimatedVariable must be defined first (classes are not hoisted)
+class AnimatedVariable {
+  constructor(o, t, d) {
+    this.startTime = _p5.millis();
+    this.duration = d || 600;
+    this.elapsed = 0;
+    this.progress = 0;
+    this.originValue = o;
+    this.targetValue = t;
+    this.currentValue = this.originValue;
+    this.complete = false;
+  }
+
+  update() {
+    this.elapsed = _p5.millis() - this.startTime;
+    this.progress = _p5.constrain(this.elapsed / this.duration, 0, 1);
+    this.currentValue = _p5.lerp(this.originValue, this.targetValue, this.progress);
+    if (this.progress === 1) {
+      this.complete = true;
+    }
+    return this.currentValue;
+  }
+}
+
 function anyActiveAnimation() {
   return animations.length > 0
 }
