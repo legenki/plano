@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-light">
+
+  <!-- Top-Center Tab Switcher Capsule -->
+  <div class="app-switcher-container">
+    <div class="app-switcher">
+      <button id="tab-grafema" class="switcher-tab active" onclick="switchApp('grafema')">GRAFEMA</button>
+      <button id="tab-vertice" class="switcher-tab" onclick="switchApp('vertice')">VERTICE</button>
+      <button id="tab-secuencia" class="switcher-tab" onclick="switchApp('secuencia')">SECUENCIA</button>
+    </div>
+  </div>
+
+  <!-- Fullscreen Iframes -->
+  <div class="iframe-container">
+    <iframe id="iframe-grafema" src="grafema/index.html" class="app-iframe active"></iframe>
+    <iframe id="iframe-vertice" src="vertice/index.html" class="app-iframe"></iframe>
+    <iframe id="iframe-secuencia" src="secuencia/index.html" class="app-iframe"></iframe>
+  </div>
+
+  <script>
+    const apps = ['grafema', 'vertice', 'secuencia'];
+    let currentApp = 'grafema';
+
+    function switchApp(appName) {
+      if (!apps.includes(appName)) return;
+      currentApp = appName;
+
+      // Update switcher buttons
+      apps.forEach(app => {
+        const btn = document.getElementById(`tab-${app}`);
+        const iframe = document.getElementById(`iframe-${app}`);
+        if (app === appName) {
+          btn.classList.add('active');
+          iframe.classList.add('active');
+          // Focus the iframe to ensure keyboard shortcuts work instantly
+          iframe.focus();
+        } else {
+          btn.classList.remove('active');
+          iframe.classList.remove('active');
+        }
+      });
+    }
+
+    // Keyboard navigation (Alt + G, Alt + V, Alt + S)
+    window.addEventListener('keydown', (e) => {
+      handleGlobalKeys(e);
+    });
+
+    function handleGlobalKeys(e) {
+      if (e.altKey) {
+        const key = e.key.toLowerCase();
+        if (key === 'g' || key === 'п') {
+          e.preventDefault();
+          switchApp('grafema');
+        } else if (key === 'v' || key === 'м') {
+          e.preventDefault();
+          switchApp('vertice');
+        } else if (key === 's' || key === 'ы') {
+          e.preventDefault();
+          switchApp('secuencia');
+        }
+      }
+    }
+
+    // Listen to messages from child iframes (theme changes and key events)
+    window.addEventListener('message', (event) => {
+      const data = event.data;
+      if (!data) return;
+
+      if (data.type === 'THEME_CHANGED') {
+        if (data.theme === 'dark') {
+          document.body.classList.add('theme-dark');
+          document.body.classList.remove('theme-light');
+        } else {
+          document.body.classList.add('theme-light');
+          document.body.classList.remove('theme-dark');
+        }
+        
+        // Forward theme to other iframes
+        apps.forEach(app => {
+          const iframe = document.getElementById(`iframe-${app}`);
+          if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage({ type: 'SYNC_THEME', theme: data.theme }, '*');
+          }
+        });
+      }
+
+      if (data.type === 'KEYDOWN_EVENT') {
+        // Re-create key event details for global shortcuts handling
+        const e = {
+          altKey: data.altKey,
+          ctrlKey: data.ctrlKey,
+          metaKey: data.metaKey,
+          shiftKey: data.shiftKey,
+          key: data.key,
+          keyCode: data.keyCode,
+          preventDefault: () => {}
+        };
+        handleGlobalKeys(e);
+      }
+    });
+
+    // Initial focus on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const iframe = document.getElementById('iframe-grafema');
+        if (iframe) iframe.focus();
+      }, 500);
+    });
+  </script>
+</body>
+</html>
