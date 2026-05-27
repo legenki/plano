@@ -1,5 +1,5 @@
 /**
- * SECUENCIA — Script Model
+ * SECUENCIA — _p5.env.Script Model
  * Requires _p5 (p5.js instance) + Glyph classes passed as factory parameters.
  */
 
@@ -380,7 +380,7 @@ class Script {
             anchors = [];
           } else {
             let xPosition = this.decodeHersheyCharToCoordinate(coordinates.charAt(i)) + _p5.abs(left);
-            let yPosition = this.decodeHersheyCharToCoordinate(coordinates.charAt(i + 1), true) - hersheyShift;
+            let yPosition = this.decodeHersheyCharToCoordinate(coordinates.charAt(i + 1), true) - _p5.env.hersheyShift;
             let first = false;
             let last = false;
             anchors.push(new Anchor(anchors.length, xPosition, yPosition, xPosition, yPosition, xPosition, yPosition, first, last));
@@ -400,9 +400,9 @@ class Script {
   }
 
   decodeHersheyCharToCoordinate(character) {
-    let indexOfCharacter = hersheyAlphabet.indexOf(character);
-    let value = indexOfCharacter - hersheyBaseIndex;
-    let coordinate = _p5.map(value, -hersheyScale, hersheyScale, -1, 1);
+    let indexOfCharacter = _p5.env.hersheyAlphabet.indexOf(character);
+    let value = indexOfCharacter - _p5.env.hersheyBaseIndex;
+    let coordinate = _p5.map(value, -_p5.env.hersheyScale, _p5.env.hersheyScale, -1, 1);
     return coordinate;
   }
 

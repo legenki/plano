@@ -110,12 +110,12 @@ document.addEventListener('keydown', (event) => {
 
 function switchMode(value) {
   _p5.env.glyphEditor.setMode(value);
-  updateInterface_glyphEditorTools_state();
+  _p5.env.updateInterface_glyphEditorTools_state();
 }
 
 function switchGlyphEditorDisplayInfo() {
   _p5.env.glyphEditor.displayInfo = !_p5.env.glyphEditor.displayInfo;
-  updateInterface_glyphEditorTools_state();
+  _p5.env.updateInterface_glyphEditorTools_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -124,17 +124,17 @@ function switchGlyphEditorDisplayInfo() {
 
 function switchConnectionToPrev() {
   _p5.env.glyphEditor.switchConnectionToPrev();
-  updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
 }
 
 function switchConnectionToNext() {
   _p5.env.glyphEditor.switchConnectionToNext();
-  updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
 }
 
 function switchMainPath() {
   _p5.env.glyphEditor.switchMainPath();
-  updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -143,22 +143,22 @@ function switchMainPath() {
 
 function setGlyph(char) {
   _p5.env.glyphEditor.setActiveGlyph(char);
-  updateInterface_glyphSet_state();
+  _p5.env.updateInterface_glyphSet_state();
 }
 
 function setGlyphName() {
 
   var value = document.Id("setGlyphName").value;
-  var char = glyphSet_missingLink;
+  var char = _p5.env.glyphSet_missingLink;
 
   if (value.length > 0 && value != '') {
     char = value;
   }
 
   _p5.env.glyphEditor.setActiveGlyphName(char);
-  updateInterface_glyphSet_state();
+  _p5.env.updateInterface_glyphSet_state();
 
-  closePrompt('setGlyphNamePrompt');
+  _p5.env.closePrompt('setGlyphNamePrompt');
 }
 
 function clearGlyph() {
@@ -170,35 +170,35 @@ function clearGlyph() {
 // script
 
 function setScript(value) {
-  activeScriptIndex = value;
-  activeScript = scripts[activeScriptIndex];
+  _p5.env.activeScriptIndex = value;
+  _p5.env.activeScript = _p5.env.scripts[_p5.env.activeScriptIndex];
   if (_p5.env.glyphEditor == null) return;
   _p5.env.glyphEditor.reloadActiveGlyph();
   _p5.env.glyphEditor.repositionGuides();
-  updateInterface_scriptName();
-  updateInterface_glyphSet_boxes();
-  updateInterface_scriptList_state();
-  updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_glyphSet_boxes();
+  _p5.env.updateInterface_scriptList_state();
+  _p5.env.updateInterface_scriptList_label();
 }
 
 function nextScript() {
-  activeScriptIndex = (activeScriptIndex + 1 + scripts.length) % scripts.length;
-  setScript(activeScriptIndex);
+  _p5.env.activeScriptIndex = (_p5.env.activeScriptIndex + 1 + _p5.env.scripts.length) % _p5.env.scripts.length;
+  _p5.env.setScript(_p5.env.activeScriptIndex);
 }
 
 function prevScript() {
-  activeScriptIndex = (activeScriptIndex - 1 + scripts.length) % scripts.length;
-  setScript(activeScriptIndex);
+  _p5.env.activeScriptIndex = (_p5.env.activeScriptIndex - 1 + _p5.env.scripts.length) % _p5.env.scripts.length;
+  _p5.env.setScript(_p5.env.activeScriptIndex);
 }
 
 function resetScript() {
-  if (activeScriptIndex < defaultScriptFiles.length) {
+  if (_p5.env.activeScriptIndex < _p5.env.defaultScriptFiles.length) {
     // Restore the default preset script from the original loaded data
-    scripts[activeScriptIndex] = new Script(defaultScriptFiles[activeScriptIndex]);
-    activeScript = scripts[activeScriptIndex];
+    _p5.env.scripts[_p5.env.activeScriptIndex] = new _p5.env.Script(_p5.env.defaultScriptFiles[_p5.env.activeScriptIndex]);
+    _p5.env.activeScript = _p5.env.scripts[_p5.env.activeScriptIndex];
   } else {
-    // For custom created or imported scripts, perform a clean reset
-    activeScript.reset();
+    // For custom created or imported _p5.env.scripts, perform a clean reset
+    _p5.env.activeScript.reset();
   }
 
   // Fully update the interface and the glyph editor to reflect the changes
@@ -206,42 +206,42 @@ function resetScript() {
     _p5.env.glyphEditor.reloadActiveGlyph();
     _p5.env.glyphEditor.repositionGuides();
   }
-  updateInterface_scriptName();
-  updateInterface_glyphSet_boxes();
-  updateInterface_scriptList_state();
-  updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_glyphSet_boxes();
+  _p5.env.updateInterface_scriptList_state();
+  _p5.env.updateInterface_scriptList_label();
 }
 
 function addNewScript() {
-  scripts.push(new Script());
-  activeScriptIndex = scripts.length - 1;
-  setScript(activeScriptIndex);
+  _p5.env.scripts.push(new _p5.env.Script());
+  _p5.env.activeScriptIndex = _p5.env.scripts.length - 1;
+  _p5.env.setScript(_p5.env.activeScriptIndex);
 }
 
 function setScriptName(value) {
-  activeScript.name = value;
-  updateInterface_scriptName();
-  updateInterface_scriptList_label();
+  _p5.env.activeScript.name = value;
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_scriptList_label();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-// textBox
+// _p5.env.textBox
 
 function switchTextBoxDisplayInfo() {
-  textBox.displayInfo = !textBox.displayInfo;
-  updateInterface_textBoxTools_state();
+  _p5.env.textBox.displayInfo = !_p5.env.textBox.displayInfo;
+  _p5.env.updateInterface_textBoxTools_state();
 }
 
 function setTextBoxDisplayInfo(value) {
   
   if (value == 'hide') {
-    textBox.displayInfo = false;
+    _p5.env.textBox.displayInfo = false;
   } else {
-    textBox.displayInfo = true;
+    _p5.env.textBox.displayInfo = true;
   }
 
-  updateInterface_textBoxTools_state();
+  _p5.env.updateInterface_textBoxTools_state();
 }
 
 
@@ -251,104 +251,104 @@ function setTextBoxDisplayInfo(value) {
 
 function setText() {
   var textInput = document.getElementById("textInput").value;
-  textBox.setText(textToArray(textInput));
-  updateInterface_glyphSet_state();
+  _p5.env.textBox.setText(_p5.env.textToArray(textInput));
+  _p5.env.updateInterface_glyphSet_state();
 }
 
 function setLineHeight(value) {
-  lineHeight = _p5.map(value, 0, 100, lineHeightMin, lineHeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.lineHeight = _p5.map(value, 0, 100, _p5.env.lineHeightMin, _p5.env.lineHeightMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setScriptStrokeWeight(value) {
-  scriptStrokeWeight = _p5.map(value, 0, 100, scriptStrokeWeightMin, scriptStrokeWeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.scriptStrokeWeight = _p5.map(value, 0, 100, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setSize(value) {
-  size = _p5.map(value, 0, 100, sizeMin, sizeMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.size = _p5.map(value, 0, 100, _p5.env.sizeMin, _p5.env.sizeMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setWordSpace(value) { // direct translation
-  wordSpace = _p5.map(value, 0, 100, wordSpaceMin, wordSpaceMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.wordSpace = _p5.map(value, 0, 100, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 // function setWordSpace(value) { // animation value
-//   animations.push({
-//     variable: new AnimatedVariable(wordSpace, _p5.map(value, 0, 100, wordSpaceMin, wordSpaceMax)),
+//   _p5.env.animations.push({
+//     variable: new AnimatedVariable(_p5.env.wordSpace, _p5.map(value, 0, 100, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax)),
 //     complete: false,
 //     update: function() {
-//       wordSpace = this.variable.update();
+//       _p5.env.wordSpace = this.variable.update();
 //       updateInterface_textBoxSettings_state();
-//       updateInterface_textBoxSettings_label();
+//       _p5.env.updateInterface_textBoxSettings_label();
 //       this.complete = this.variable.complete;
 //     }
 //   });
 // }
 
 function setLetterSpace(value) {
-  letterSpace = _p5.map(value, 0, 100, letterSpaceMin, letterSpaceMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.letterSpace = _p5.map(value, 0, 100, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setLetterWidth(value) {
-  letterWidth = _p5.map(value, 0, 100, letterWidthMin, letterWidthMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.letterWidth = _p5.map(value, 0, 100, _p5.env.letterWidthMin, _p5.env.letterWidthMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setLetterHeight(value) {
-  letterHeight = _p5.map(value, 0, 100, letterHeightMin, letterHeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.letterHeight = _p5.map(value, 0, 100, _p5.env.letterHeightMin, _p5.env.letterHeightMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setSlant(value) {
-  slant = _p5.map(value, 0, 100, slantMin, slantMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.slant = _p5.map(value, 0, 100, _p5.env.slantMin, _p5.env.slantMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomSize(value) {
-  randomSize = _p5.map(value, 0, 100, randomSizeMin, randomSizeMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.randomSize = _p5.map(value, 0, 100, _p5.env.randomSizeMin, _p5.env.randomSizeMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomLetterSpace(value) {
-  randomLetterSpace = _p5.map(value, 0, 100, randomLetterSpaceMin, randomLetterSpaceMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.randomLetterSpace = _p5.map(value, 0, 100, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomLetterWidth(value) {
-  randomLetterWidth = _p5.map(value, 0, 100, randomLetterWidthMin, randomLetterWidthMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.randomLetterWidth = _p5.map(value, 0, 100, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomLetterHeight(value) {
-  randomLetterHeight = _p5.map(value, 0, 100, randomLetterHeightMin, randomLetterHeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.randomLetterHeight = _p5.map(value, 0, 100, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomSlant(value) {
-  randomSlant = _p5.map(value, 0, 100, randomSlantMin, randomSlantMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.randomSlant = _p5.map(value, 0, 100, _p5.env.randomSlantMin, _p5.env.randomSlantMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomBaselineOffset(value) {
-  randomBaselineOffset = _p5.map(value, 0, 100, randomBaselineOffsetMin, randomBaselineOffsetMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.randomBaselineOffset = _p5.map(value, 0, 100, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setPrecision(value) {
-  precision = _p5.map(value, 0, 100, precisionMin, precisionMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.precision = _p5.map(value, 0, 100, _p5.env.precisionMin, _p5.env.precisionMax);
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function randomTextBoxSettings() {
-  setupAnimation_textBoxSettings("_p5.random");
+  _p5.env.setupAnimation_textBoxSettings("_p5.random");
 }
 
 function resetTextBoxSettings() {
-  setupAnimation_textBoxSettings("default");
+  _p5.env.setupAnimation_textBoxSettings("default");
 }
 
 

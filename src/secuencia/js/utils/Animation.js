@@ -35,7 +35,7 @@ function anyActiveAnimation() {
 }
 
 function updateAnimation() {
-  for (let [index, animation] of [...animations].entries()) {
+  for (let [index, animation] of [..._p5.env.animations].entries()) {
     animation.update();
     if (animation.complete == true) {
       // remove animation object if animation is complete
@@ -63,132 +63,132 @@ function setupAnimation_textBoxSettings(mode) {
   // _p5.random algorithmus below
 
   //if (_p5.random(1) > 0.5) {
-  //  random_wordSpace = _p5.random(0, wordSpaceMax * maxFactor);
+  //  random_wordSpace = _p5.random(0, _p5.env.wordSpaceMax * maxFactor);
   //}
   let randomValWordSpace = _p5.random(1.0);
   if (randomValWordSpace > 0.6) {
-    random_wordSpace = _p5.random(0, wordSpaceMax * (maxFactor/2));
-  } else if (randomValWordSpace > 0.3) {
+    random_wordSpace = _p5.random(0, _p5.env.wordSpaceMax * (maxFactor/2));
+  } else if (randomValWordSpace > 0.3) {
     random_wordSpace  = 0.0;
   } else {
     random_wordSpace = _p5.env.wordSpace;
   }   
   
   //if (_p5.random(1) > 0.5) {
-  //  random_letterSpace = _p5.random(0, letterSpaceMax * maxFactor);
+  //  random_letterSpace = _p5.random(0, _p5.env.letterSpaceMax * maxFactor);
   //}
   let randomValSpace = _p5.random(1.0);
   if (randomValSpace > 0.6) {
-    random_letterSpace = _p5.random(0, letterSpaceMax * maxFactor);
-  } else if (randomValSpace > 0.3) {
+    random_letterSpace = _p5.random(0, _p5.env.letterSpaceMax * maxFactor);
+  } else if (randomValSpace > 0.3) {
     random_letterSpace  = 0.0;
   } else {
     random_letterSpace = _p5.env.letterSpace;
   }  
   
   //if (_p5.random(1) > 0.5) {
-  //  random_letterWidth = _p5.random(1, letterWidthMax * maxFactor);
+  //  random_letterWidth = _p5.random(1, _p5.env.letterWidthMax * maxFactor);
   //}
     let randomValWidth = _p5.random(1.0);
   if (randomValWidth > 0.6) {
-    random_letterWidth = _p5.random(1, letterWidthMax * maxFactor);
-  } else if (randomValWidth > 0.3) {
+    random_letterWidth = _p5.random(1, _p5.env.letterWidthMax * maxFactor);
+  } else if (randomValWidth > 0.3) {
     random_letterWidth  = 1.0;
   } else {
     random_letterWidth = _p5.env.letterWidth;
   }   
   
   //if (_p5.random(1) > 0.5) {
-  //  random_letterHeight = _p5.random(1, letterHeightMax * maxFactor);
+  //  random_letterHeight = _p5.random(1, _p5.env.letterHeightMax * maxFactor);
   //}
     let randomValHeight = _p5.random(1.0);
   if (randomValHeight > 0.6) {
-    random_letterHeight = _p5.random(1, letterHeightMax * maxFactor);
-  } else if (randomValHeight > 0.3) {
+    random_letterHeight = _p5.random(1, _p5.env.letterHeightMax * maxFactor);
+  } else if (randomValHeight > 0.3) {
     random_letterHeight  = 1.0;
   } else {
     random_letterHeight = _p5.env.letterHeight;
   }   
   
   //if (_p5.random(1) > 0.5) {
-  //  random_slant = _p5.random(slantMin, slantMax * maxFactor);
+  //  random_slant = _p5.random(_p5.env.slantMin, _p5.env.slantMax * maxFactor);
   //}
    let randomValSlant = _p5.random(1.0);
   if (randomValSlant > 0.6) {
-    random_slant = _p5.random(slantMin, slantMax * maxFactor);
-  } else if (randomValSlant > 0.3) {
+    random_slant = _p5.random(_p5.env.slantMin, _p5.env.slantMax * maxFactor);
+  } else if (randomValSlant > 0.3) {
     random_slant  = 0.0;
   } else {
     random_slant = _p5.env.slant;
   }  
 
   //if (_p5.random(1) > 0.5) {
-  //  random_randomSize = _p5.random(randomSizeMin, randomSizeMax * maxFactor);
+  //  random_randomSize = _p5.random(_p5.env.randomSizeMin, _p5.env.randomSizeMax * maxFactor);
   //}
  let randomValRandomSize = _p5.random(1.0);
   if (randomValRandomSize > 0.6) {
-    random_randomSize = _p5.random(randomSizeMin, randomSizeMax *  (maxFactor*2));
-  } else if (randomValRandomSize > 0.3) {
+    random_randomSize = _p5.random(_p5.env.randomSizeMin, _p5.env.randomSizeMax *  (maxFactor*2));
+  } else if (randomValRandomSize > 0.3) {
     random_randomSize  = 0.0;
   } else {
     random_randomSize = _p5.env.randomSize;
   }   
   
  //  if (_p5.random(1) > 0.5) {
- //   random_randomLetterSpace = _p5.random(randomLetterSpaceMin, randomLetterSpaceMax * maxFactor);
+ //   random_randomLetterSpace = _p5.random(_p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax * maxFactor);
  // }
  let randomValRandomSpace = _p5.random(1.0);
   if (randomValRandomSpace > 0.6) {
-    random_randomLetterSpace = _p5.random(randomLetterSpaceMin, randomLetterSpaceMax * (maxFactor/2));
-  } else if (randomValRandomSpace > 0.3) {
+    random_randomLetterSpace = _p5.random(_p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax * (maxFactor/2));
+  } else if (randomValRandomSpace > 0.3) {
     random_randomLetterSpace  = 0.0;
   } else {
     random_randomLetterSpace = _p5.env.randomLetterSpace;
   }
 
 //  if (_p5.random(1) > 0.5) {
-//    random_randomLetterWidth = _p5.random(randomLetterWidthMin, randomLetterWidthMax * maxFactor);
+//    random_randomLetterWidth = _p5.random(_p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax * maxFactor);
 //  } 
   let randomValRandomWidth = _p5.random(1.0);
   if (randomValRandomWidth > 0.6) {
-    random_randomLetterWidth = _p5.random(randomLetterWidthMin, randomLetterWidthMax * maxFactor);
-  } else if (randomValRandomWidth > 0.3) {
+    random_randomLetterWidth = _p5.random(_p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax * maxFactor);
+  } else if (randomValRandomWidth > 0.3) {
     random_randomLetterWidth  = 0.0;
   } else {
     random_randomLetterWidth = _p5.env.randomLetterWidth;
   }
   
  //  if (_p5.random(1) > 0.5) {
- //   random_randomLetterHeight = _p5.random(randomLetterHeightMin, randomLetterHeightMax * maxFactor);
+ //   random_randomLetterHeight = _p5.random(_p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax * maxFactor);
  //}
      let randomValRandomHeight = _p5.random(1.0);
   if (randomValRandomHeight > 0.6) {
-    random_randomLetterHeight = _p5.random(randomLetterHeightMin, randomLetterHeightMax * maxFactor);
-  } else if (randomValRandomHeight > 0.3) {
+    random_randomLetterHeight = _p5.random(_p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax * maxFactor);
+  } else if (randomValRandomHeight > 0.3) {
     random_randomLetterHeight  = 0.0;
   } else {
     random_randomLetterHeight = _p5.env.randomLetterHeight;
   }  
   
  // if (_p5.random(1) > 0.5) {
- //   random_randomSlant = _p5.random(randomSlantMin, randomSlantMax * maxFactor);
+ //   random_randomSlant = _p5.random(_p5.env.randomSlantMin, _p5.env.randomSlantMax * maxFactor);
  // }
    let randomValRandomSlant = _p5.random(1.0);
   if (randomValRandomSlant > 0.6) {
-    random_randomSlant = _p5.random(randomSlantMin, randomSlantMax * maxFactor);
-  } else if (randomValRandomSlant > 0.3) {
+    random_randomSlant = _p5.random(_p5.env.randomSlantMin, _p5.env.randomSlantMax * maxFactor);
+  } else if (randomValRandomSlant > 0.3) {
     random_randomSlant  = 0.0;
   } else {
     random_randomSlant = _p5.env.randomSlant;
   }
  
  // if (_p5.random(1) > 0.5) {
- //   random_randomBaselineOffset = _p5.random(randomBaselineOffsetMin, randomBaselineOffsetMax * maxFactor);
+ //   random_randomBaselineOffset = _p5.random(_p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax * maxFactor);
  // }
   let randomValRandomBase = _p5.random(1.0);
   if (randomValRandomBase > 0.6) {
-    random_randomBaselineOffset = _p5.random(randomBaselineOffsetMin, randomBaselineOffsetMax * (maxFactor*2));
-  } else if (randomValRandomBase > 0.3) {
+    random_randomBaselineOffset = _p5.random(_p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax * (maxFactor*2));
+  } else if (randomValRandomBase > 0.3) {
     random_randomBaselineOffset  = 0.0;
   } else {
     random_randomBaselineOffset = _p5.env.precision;
@@ -196,8 +196,8 @@ function setupAnimation_textBoxSettings(mode) {
   
   let randomValRandomPrec = _p5.random(1.0);
   if (randomValRandomPrec > 0.9) {
-    random_precision  = _p5.random(precisionMax, precisionMin * (maxFactor/2));
-  } else if (randomValRandomPrec > 0.2) {
+    random_precision  = _p5.random(_p5.env.precisionMax, _p5.env.precisionMin * (maxFactor/2));
+  } else if (randomValRandomPrec > 0.2) {
     random_precision  = 0.0;
   } else {
     random_precision = _p5.env.randomBaselineOffset;
@@ -205,7 +205,7 @@ function setupAnimation_textBoxSettings(mode) {
 
   // no more changes here
 
-  textBoxSettings_animation = {
+  _p5.env.textBoxSettings_animation = {
     wordSpace: new AnimatedVariable(_p5.env.wordSpace, mode == "_p5.random" ? random_wordSpace : _p5.env.wordSpace_DEFAULT),
     letterSpace: new AnimatedVariable(_p5.env.letterSpace, mode == "_p5.random" ? random_letterSpace : _p5.env.letterSpace_DEFAULT),
     letterWidth: new AnimatedVariable(_p5.env.letterWidth, mode == "_p5.random" ? random_letterWidth : _p5.env.letterWidth_DEFAULT),
@@ -243,7 +243,7 @@ function setupAnimation_textBoxSettings(mode) {
     }
   };
 
-  _p5.env.animations.push(textBoxSettings_animation);
+  _p5.env.animations.push(_p5.env.textBoxSettings_animation);
 }
 
   return {

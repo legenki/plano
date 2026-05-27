@@ -9,7 +9,7 @@ export function createInterfaceFunctions(_p5) {
 
 function setupCanvas() {
 
-  secuenciaCanvas = _p5.createCanvas(canvasWidth, canvasHeight, _p5.P2D);
+  _p5.env.secuenciaCanvas = _p5.createCanvas(_p5.env.canvasWidth, _p5.env.canvasHeight, _p5.P2D);
   _p5.canvas.id = 'secuencia';
   updateCanvas_dimensions();
 }
@@ -19,65 +19,65 @@ _p5.windowResized = function() {
 }
 
 function updateCanvas_dimensions() {
-  // canvasWidth = _p5.windowWidth;
-  // canvasHeight = _p5.windowHeight;
-  canvasWidth = document.body.getBoundingClientRect().width;
-  canvasHeight = document.body.getBoundingClientRect().height;
+  // _p5.env.canvasWidth = _p5.windowWidth;
+  // _p5.env.canvasHeight = _p5.windowHeight;
+  _p5.env.canvasWidth = document.body.getBoundingClientRect().width;
+  _p5.env.canvasHeight = document.body.getBoundingClientRect().height;
 
   updateCanvas_layout();
-  _p5.resizeCanvas(canvasWidth, canvasHeight);
+  _p5.resizeCanvas(_p5.env.canvasWidth, _p5.env.canvasHeight);
   _p5.pixelDensity(2);
 }
 
 function updateCanvas_layout() {
 
   // set _p5.height of glyph editor based on canvas _p5.height
-  glyphEditor_height = _p5.round(_p5.min(glyphEditor_heightMax, canvasHeight * 0.6) / 100) * 100;
-  glyphEditor_height = _p5.constrain(glyphEditor_height, glyphEditor_heightMin, glyphEditor_heightMax);
+  _p5.env.glyphEditor_height = _p5.round(_p5.min(_p5.env.glyphEditor_heightMax, _p5.env.canvasHeight * 0.6) / 100) * 100;
+  _p5.env.glyphEditor_height = _p5.constrain(_p5.env.glyphEditor_height, _p5.env.glyphEditor_heightMin, _p5.env.glyphEditor_heightMax);
 
   // set dimensios of container
-  document.documentElement.style.setProperty('--toolbar_buttonSize', toolbar_buttonSize + 'px');
-  document.documentElement.style.setProperty('--textBoxSettings_width', textBoxSettings_width + 'px');
-  document.documentElement.style.setProperty('--glyphEditor_width', glyphEditor_width + 'px');
-  document.documentElement.style.setProperty('--glyphEditor_height', glyphEditor_height + 'px');
-  document.documentElement.style.setProperty('--logo_size', textBoxSettings_width * 0.66 + 'px');
+  document.documentElement.style.setProperty('--_p5.env.toolbar_buttonSize', _p5.env.toolbar_buttonSize + 'px');
+  document.documentElement.style.setProperty('--_p5.env.textBoxSettings_width', _p5.env.textBoxSettings_width + 'px');
+  document.documentElement.style.setProperty('--_p5.env.glyphEditor_width', _p5.env.glyphEditor_width + 'px');
+  document.documentElement.style.setProperty('--_p5.env.glyphEditor_height', _p5.env.glyphEditor_height + 'px');
+  document.documentElement.style.setProperty('--logo_size', _p5.env.textBoxSettings_width * 0.66 + 'px');
 
   // rearrange glyphSetBoxes based on glyphset dimensions
-  let glyphSet_boxesPerRow = _p5.round(glyphEditor_width / glyphSet_boxSize);
-  let glyphSet_boxSizeFit = (glyphEditor_width / glyphSet_boxesPerRow) + ((glyphSet_boxesPerRow - 1) * 0.1);
-  document.documentElement.style.setProperty('--glyphSet_boxSize', glyphSet_boxSizeFit + 'px');
+  let glyphSet_boxesPerRow = _p5.round(_p5.env.glyphEditor_width / _p5.env.glyphSet_boxSize);
+  let glyphSet_boxSizeFit = (_p5.env.glyphEditor_width / glyphSet_boxesPerRow) + ((glyphSet_boxesPerRow - 1) * 0.1);
+  document.documentElement.style.setProperty('--_p5.env.glyphSet_boxSize', glyphSet_boxSizeFit + 'px');
 
   // reposition _p5.env.glyphEditor
   if (_p5.env.glyphEditor != null) {
-    let glyphEditor_xPosition = glyphEditorElement.getBoundingClientRect().left;
-    let glyphEditor_yPosition = glyphEditorElement.getBoundingClientRect().top;
-    _p5.env.glyphEditor.setDimensions(glyphEditor_xPosition, glyphEditor_yPosition, glyphEditor_width, glyphEditor_height);
+    let glyphEditor_xPosition = _p5.env.glyphEditorElement.getBoundingClientRect().left;
+    let glyphEditor_yPosition = _p5.env.glyphEditorElement.getBoundingClientRect().top;
+    _p5.env.glyphEditor.setDimensions(glyphEditor_xPosition, glyphEditor_yPosition, _p5.env.glyphEditor_width, _p5.env.glyphEditor_height);
   }
 
-  // reposition textBox
-  let textBox_xPosition = glyphEditor_width + (interfaceMargin * 2);
-  let textBox_yPosition = interfaceMargin + 50;
-  let textBox_width = canvasWidth - glyphEditor_width - textBoxSettings_width - interfaceMargin * 4;
-  let textBox_height = canvasHeight - interfaceMargin * 2 - 50;
-  if (textBox != null) {
-    textBox.setDimensions(textBox_xPosition, textBox_yPosition, textBox_width, textBox_height, interfaceMargin);
+  // reposition _p5.env.textBox
+  let textBox_xPosition = _p5.env.glyphEditor_width + (_p5.env.interfaceMargin * 2);
+  let textBox_yPosition = _p5.env.interfaceMargin + 50;
+  let textBox_width = _p5.env.canvasWidth - _p5.env.glyphEditor_width - _p5.env.textBoxSettings_width - _p5.env.interfaceMargin * 4;
+  let textBox_height = _p5.env.canvasHeight - _p5.env.interfaceMargin * 2 - 50;
+  if (_p5.env.textBox != null) {
+    _p5.env.textBox.setDimensions(textBox_xPosition, textBox_yPosition, textBox_width, textBox_height, _p5.env.interfaceMargin);
   }
   document.documentElement.style.setProperty('--textBox_width', textBox_width + 'px');
   document.documentElement.style.setProperty('--textBox_height', textBox_height + 'px');
-  document.getElementById('textBox').style.left = textBox_xPosition + 'px'; 
-  document.getElementById('textBox').style.top = textBox_yPosition + 'px';
+  document.getElementById('_p5.env.textBox').style.left = textBox_xPosition + 'px'; 
+  document.getElementById('_p5.env.textBox').style.top = textBox_yPosition + 'px';
 }
 
 function updateCanvas_parameter() {
-  document.documentElement.style.setProperty('--backgroundColor', backgroundColor);
-  document.documentElement.style.setProperty('--textColor', scriptColor);
-  document.documentElement.style.setProperty('--textColorRGB', _p5.red(scriptColor) + ', ' + _p5.green(scriptColor) + ', ' + _p5.blue(scriptColor));
-  document.documentElement.style.setProperty('--hoverColor', hoverColor);
-  document.documentElement.style.setProperty('--activeColor', activeColor);
-  document.documentElement.style.setProperty('--emptyColor', emptyColor);
-  document.documentElement.style.setProperty('--missingColor', missingColor);
-  document.documentElement.style.setProperty('--logoColor', emptyColor);
-  document.documentElement.style.setProperty('--logoColorHover', missingColor);
+  document.documentElement.style.setProperty('--_p5.env.backgroundColor', _p5.env.backgroundColor);
+  document.documentElement.style.setProperty('--textColor', _p5.env.scriptColor);
+  document.documentElement.style.setProperty('--textColorRGB', _p5.red(_p5.env.scriptColor) + ', ' + _p5.green(_p5.env.scriptColor) + ', ' + _p5.blue(_p5.env.scriptColor));
+  document.documentElement.style.setProperty('--_p5.env.hoverColor', _p5.env.hoverColor);
+  document.documentElement.style.setProperty('--_p5.env.activeColor', _p5.env.activeColor);
+  document.documentElement.style.setProperty('--_p5.env.emptyColor', _p5.env.emptyColor);
+  document.documentElement.style.setProperty('--_p5.env.missingColor', _p5.env.missingColor);
+  document.documentElement.style.setProperty('--logoColor', _p5.env.emptyColor);
+  document.documentElement.style.setProperty('--logoColorHover', _p5.env.missingColor);
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -86,16 +86,16 @@ function setupInterface() {
   updateCanvas_parameter();
   updateCanvas_layout();
 
-  updateInterface_glyphSet_boxes();
+  _p5.env.updateInterface_glyphSet_boxes();
   updateInterface_textBoxSettings_state();
-  updateInterface_textBoxSettings_label();
-  updateInterface_glyphEditorTools_state();
-  updateInterface_glyphEditorContext_state();
-  updateInterface_glyphSet_state();
-  updateInterface_scriptName();
-  updateInterface_scriptList_label();
-  updateInterface_scriptList_state();
-  updateInterface_textBoxTools_state();
+  _p5.env.updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_glyphEditorTools_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphSet_state();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptList_state();
+  _p5.env.updateInterface_textBoxTools_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -175,12 +175,12 @@ function updateInterface_glyphEditorContext_state() {
 }
 
 function updateInterface_glyphSet_boxes() {
-  glyphSetElement.setAttribute("role", "listbox");
-  glyphSetElement.setAttribute("aria-live", "polite");
+  _p5.env.glyphSetElement.setAttribute("role", "listbox");
+  _p5.env.glyphSetElement.setAttribute("aria-live", "polite");
 
-  diffAndUpdateDOM(
-    glyphSetElement,
-    activeScript.glyphs,
+  _p5.env.diffAndUpdateDOM(
+    _p5.env.glyphSetElement,
+    _p5.env.activeScript.glyphs,
     (glyph, idx) => {
       const box = document.createElement('div');
       box.className = 'glyphSet_box';
@@ -193,7 +193,7 @@ function updateInterface_glyphSet_boxes() {
       box.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          setGlyph(box.id);
+          _p5.env.setGlyph(box.id);
         } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
           e.preventDefault();
           if (box.nextElementSibling) box.nextElementSibling.focus();
@@ -203,15 +203,15 @@ function updateInterface_glyphSet_boxes() {
         }
       });
       
-      box.addEventListener('click', () => setGlyph(box.id));
-      if (developerMode == true) {
+      box.addEventListener('click', () => _p5.env.setGlyph(box.id));
+      if (_p5.env.developerMode == true) {
         box.addEventListener('dblclick', () => showPrompt('setGlyphNamePrompt'));
       }
       return box;
     },
     (box, glyph, idx) => {
       const name = glyph.name;
-      const char = (name.length > 1 && name.match(/\?/)) ? glyphSet_missingLink : name; 
+      const char = (name.length > 1 && name.match(/\?/)) ? _p5.env.glyphSet_missingLink : name; 
       
       box.id = name;
       box.querySelector('label').textContent = char;
@@ -267,7 +267,7 @@ function updateInterface_glyphSet_boxes() {
   }
 
   // update current state
-  updateInterface_glyphSet_state();
+  _p5.env.updateInterface_glyphSet_state();
 }
 
 function updateInterface_glyphSet_state() {
@@ -276,7 +276,7 @@ function updateInterface_glyphSet_state() {
   if (glyphSet_boxObjects.length > 0) {
     glyphSet_boxObjects.forEach((box) => {
       let character = box.id;
-      let glyph = activeScript.getGlyph(character);
+      let glyph = _p5.env.activeScript.getGlyph(character);
       if (glyph == _p5.env.glyphEditor.activeGlyph) {
         setActive(box);
       } else if (glyph.paths.length == 0) {
@@ -294,7 +294,7 @@ function updateInterface_glyphSet_state() {
 
 function updateInterface_scriptName() {
   const scriptNameElement = document.getElementById("scriptName");
-  document.getElementById("scriptName").value = activeScript.name;
+  document.getElementById("scriptName").value = _p5.env.activeScript.name;
 }
 
 function updateInterface_scriptList_label() {
@@ -303,19 +303,19 @@ function updateInterface_scriptList_label() {
   
   scriptListElement.setAttribute("role", "listbox");
 
-  diffAndUpdateDOM(
+  _p5.env.diffAndUpdateDOM(
     scriptListElement,
-    scripts,
+    _p5.env.scripts,
     (script, index) => {
       const li = document.createElement('li');
       li.setAttribute("role", "option");
       li.tabIndex = 0; // Make focusable
       
-      li.addEventListener('click', () => setScript(index));
+      li.addEventListener('click', () => _p5.env.setScript(index));
       li.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          setScript(index);
+          _p5.env.setScript(index);
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();
           if (li.nextElementSibling) li.nextElementSibling.focus();
@@ -328,11 +328,11 @@ function updateInterface_scriptList_label() {
     },
     (li, script, index) => {
       li.textContent = script.name;
-      li.setAttribute('aria-selected', index === activeScriptIndex);
+      li.setAttribute('aria-selected', index === _p5.env.activeScriptIndex);
     }
   );
  
-  updateInterface_scriptList_state();
+  _p5.env.updateInterface_scriptList_state();
 }
 
 function updateInterface_scriptList_state() {
@@ -342,7 +342,7 @@ function updateInterface_scriptList_state() {
   // Convert to array and use forEach
   Array.from(scriptList_elements).forEach((element, index) => {
 
-    if (index == activeScriptIndex) {
+    if (index == _p5.env.activeScriptIndex) {
       setActive(element);
     } else {
       resetState(element);
@@ -358,7 +358,7 @@ function updateInterface_textBoxTools_state() {
     return;
   }
 
-  if(textBox.displayInfo == true) {
+  if(_p5.env.textBox.displayInfo == true) {
     setHidden(textBoxDisplayInfoShowElement);
     setDisplay(textBoxDisplayInfoHideElement);
   } else {
@@ -369,61 +369,61 @@ function updateInterface_textBoxTools_state() {
 }
 
 function updateInterface_textBoxSettings_state() {
-  document.getElementById("textInput").value = arrayToText(textBox.textLines);
+  document.getElementById("textInput").value = _p5.env.arrayToText(_p5.env.textBox.textLines);
   
   // Sliders (0..100 _p5.map)
-  document.getElementById("size").value = _p5.map(size, sizeMin, sizeMax, 0, 100);
-  document.getElementById("scriptStrokeWeight").value = _p5.map(scriptStrokeWeight, scriptStrokeWeightMin, scriptStrokeWeightMax, 0, 100);
-  document.getElementById("wordSpace").value = _p5.map(wordSpace, wordSpaceMin, wordSpaceMax, 0, 100);
-  document.getElementById("letterSpace").value = _p5.map(letterSpace, letterSpaceMin, letterSpaceMax, 0, 100);
-  document.getElementById("lineHeight").value = _p5.map(lineHeight, lineHeightMin, lineHeightMax, 0, 100);
-  document.getElementById("letterWidth").value = _p5.map(letterWidth, letterWidthMin, letterWidthMax, 0, 100);
-  document.getElementById("letterHeight").value = _p5.map(letterHeight, letterHeightMin, letterHeightMax, 0, 100);
-  document.getElementById("slant").value = _p5.map(slant, slantMin, slantMax, 0, 100);
+  document.getElementById("_p5.env.size").value = _p5.map(_p5.env.size, _p5.env.sizeMin, _p5.env.sizeMax, 0, 100);
+  document.getElementById("_p5.env.scriptStrokeWeight").value = _p5.map(_p5.env.scriptStrokeWeight, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax, 0, 100);
+  document.getElementById("_p5.env.wordSpace").value = _p5.map(_p5.env.wordSpace, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax, 0, 100);
+  document.getElementById("_p5.env.letterSpace").value = _p5.map(_p5.env.letterSpace, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax, 0, 100);
+  document.getElementById("_p5.env.lineHeight").value = _p5.map(_p5.env.lineHeight, _p5.env.lineHeightMin, _p5.env.lineHeightMax, 0, 100);
+  document.getElementById("_p5.env.letterWidth").value = _p5.map(_p5.env.letterWidth, _p5.env.letterWidthMin, _p5.env.letterWidthMax, 0, 100);
+  document.getElementById("_p5.env.letterHeight").value = _p5.map(_p5.env.letterHeight, _p5.env.letterHeightMin, _p5.env.letterHeightMax, 0, 100);
+  document.getElementById("_p5.env.slant").value = _p5.map(_p5.env.slant, _p5.env.slantMin, _p5.env.slantMax, 0, 100);
   
-  document.getElementById("randomSize").value = _p5.map(randomSize, randomSizeMin, randomSizeMax, 0, 100);
-  document.getElementById("randomLetterSpace").value = _p5.map(randomLetterSpace, randomLetterSpaceMin, randomLetterSpaceMax, 0, 100);
-  document.getElementById("randomLetterWidth").value = _p5.map(randomLetterWidth, randomLetterWidthMin, randomLetterWidthMax, 0, 100);
-  document.getElementById("randomLetterHeight").value = _p5.map(randomLetterHeight, randomLetterHeightMin, randomLetterHeightMax, 0, 100);
-  document.getElementById("randomSlant").value = _p5.map(randomSlant, randomSlantMin, randomSlantMax, 0, 100);
-  document.getElementById("randomBaselineOffset").value = _p5.map(randomBaselineOffset, randomBaselineOffsetMin, randomBaselineOffsetMax, 0, 100);
-  document.getElementById("precision").value = _p5.map(precision, precisionMin, precisionMax, 0, 100);
+  document.getElementById("_p5.env.randomSize").value = _p5.map(_p5.env.randomSize, _p5.env.randomSizeMin, _p5.env.randomSizeMax, 0, 100);
+  document.getElementById("_p5.env.randomLetterSpace").value = _p5.map(_p5.env.randomLetterSpace, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax, 0, 100);
+  document.getElementById("_p5.env.randomLetterWidth").value = _p5.map(_p5.env.randomLetterWidth, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax, 0, 100);
+  document.getElementById("_p5.env.randomLetterHeight").value = _p5.map(_p5.env.randomLetterHeight, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax, 0, 100);
+  document.getElementById("_p5.env.randomSlant").value = _p5.map(_p5.env.randomSlant, _p5.env.randomSlantMin, _p5.env.randomSlantMax, 0, 100);
+  document.getElementById("_p5.env.randomBaselineOffset").value = _p5.map(_p5.env.randomBaselineOffset, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax, 0, 100);
+  document.getElementById("_p5.env.precision").value = _p5.map(_p5.env.precision, _p5.env.precisionMin, _p5.env.precisionMax, 0, 100);
   
-  if (document.getElementById("rotateAll")) {
-    document.getElementById("rotateAll").value = rotateAll;
+  if (document.getElementById("_p5.env.rotateAll")) {
+    document.getElementById("_p5.env.rotateAll").value = _p5.env.rotateAll;
   }
 
   // Sync Numeric Inputs
-  document.getElementById("sizeNum").value = Math.round(size);
-  document.getElementById("lineHeightNum").value = Math.round(lineHeight);
-  document.getElementById("scriptStrokeWeightNum").value = parseFloat(scriptStrokeWeight.toFixed(1));
-  document.getElementById("wordSpaceNum").value = Math.round((wordSpace + 1) * 100);
-  document.getElementById("letterSpaceNum").value = Math.round((letterSpace + 1) * 100);
-  document.getElementById("letterWidthNum").value = Math.round(letterWidth * 100);
-  document.getElementById("letterHeightNum").value = Math.round(letterHeight * 100);
-  document.getElementById("slantNum").value = Math.round(slant * 45); // convert to _p5.degrees approximately
+  document.getElementById("sizeNum").value = Math.round(_p5.env.size);
+  document.getElementById("lineHeightNum").value = Math.round(_p5.env.lineHeight);
+  document.getElementById("scriptStrokeWeightNum").value = parseFloat(_p5.env.scriptStrokeWeight.toFixed(1));
+  document.getElementById("wordSpaceNum").value = Math.round((_p5.env.wordSpace + 1) * 100);
+  document.getElementById("letterSpaceNum").value = Math.round((_p5.env.letterSpace + 1) * 100);
+  document.getElementById("letterWidthNum").value = Math.round(_p5.env.letterWidth * 100);
+  document.getElementById("letterHeightNum").value = Math.round(_p5.env.letterHeight * 100);
+  document.getElementById("slantNum").value = Math.round(_p5.env.slant * 45); // convert to _p5.degrees approximately
 
-  document.getElementById("randomSizeNum").value = Math.round(randomSize);
-  document.getElementById("randomLetterSpaceNum").value = Math.round(randomLetterSpace * 100);
-  document.getElementById("randomLetterWidthNum").value = Math.round(randomLetterWidth * 100);
-  document.getElementById("randomLetterHeightNum").value = Math.round(randomLetterHeight * 100);
-  document.getElementById("randomSlantNum").value = Math.round(randomSlant * 100);
-  document.getElementById("randomBaselineOffsetNum").value = Math.round(randomBaselineOffset * 100);
-  document.getElementById("precisionNum").value = Math.round(precision);
+  document.getElementById("randomSizeNum").value = Math.round(_p5.env.randomSize);
+  document.getElementById("randomLetterSpaceNum").value = Math.round(_p5.env.randomLetterSpace * 100);
+  document.getElementById("randomLetterWidthNum").value = Math.round(_p5.env.randomLetterWidth * 100);
+  document.getElementById("randomLetterHeightNum").value = Math.round(_p5.env.randomLetterHeight * 100);
+  document.getElementById("randomSlantNum").value = Math.round(_p5.env.randomSlant * 100);
+  document.getElementById("randomBaselineOffsetNum").value = Math.round(_p5.env.randomBaselineOffset * 100);
+  document.getElementById("precisionNum").value = Math.round(_p5.env.precision);
   
   if (document.getElementById("rotateAllNum")) {
-    document.getElementById("rotateAllNum").value = rotateAll;
+    document.getElementById("rotateAllNum").value = _p5.env.rotateAll;
   }
 
   // Update Color Pickers
-  if (document.getElementById("bgColorPicker") && typeof backgroundColor !== 'undefined') {
-    let hex = colorToHex(backgroundColor);
+  if (document.getElementById("bgColorPicker") && typeof _p5.env.backgroundColor !== 'undefined') {
+    let hex = _p5.env.colorToHex(_p5.env.backgroundColor);
     document.getElementById("bgColorPicker").value = hex;
     let lbl = document.getElementById('label-bg');
     if (lbl) lbl.innerText = hex.toUpperCase();
   }
-  if (document.getElementById("textColorPicker") && typeof scriptColor !== 'undefined') {
-    let hex = colorToHex(scriptColor);
+  if (document.getElementById("textColorPicker") && typeof _p5.env.scriptColor !== 'undefined') {
+    let hex = _p5.env.colorToHex(_p5.env.scriptColor);
     document.getElementById("textColorPicker").value = hex;
     let lbl = document.getElementById('label-text');
     if (lbl) lbl.innerText = hex.toUpperCase();
@@ -466,11 +466,6 @@ function setActive(element) {
   element.classList.add('active');
 }
 
-function setActive(element) {
-  // reset state and add active state
-  resetState(element);
-  element.classList.add('active');
-}
 
 function setEmpty(element) {
   // reset state and add empty state
@@ -511,9 +506,9 @@ function closePrompt(id) {
 }
 
 function updateFileName() {
-  document.getElementById('exportScriptFileName').value = activeScript.name;
-  document.getElementById('exportTextBoxSettingsFileName').value = textBoxSettingsFileName;
-  document.getElementById('exportGraphicFileName').value = graphicFileName;
+  document.getElementById('exportScriptFileName').value = _p5.env.activeScript.name;
+  document.getElementById('exportTextBoxSettingsFileName').value = _p5.env.textBoxSettingsFileName;
+  document.getElementById('exportGraphicFileName').value = _p5.env.graphicFileName;
 }
 
 function toggleDropDown(id) {
@@ -522,12 +517,12 @@ function toggleDropDown(id) {
 }
 
 function setHover(state, id) {
-  isHovering = state;
+  _p5.env.isHovering = state;
 
   // Automatisches Schließen, wenn der Cursor den Button und die Liste verlässt
-  if (!isHovering) {
+  if (!_p5.env.isHovering) {
     setTimeout(() => {
-      if (!isHovering) {
+      if (!_p5.env.isHovering) {
 
         const element = document.getElementById(id);
 

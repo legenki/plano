@@ -224,7 +224,7 @@ class GlyphEditor {
       let connectionToPrev = path.connectionToPrev;
       let connectionToNext = path.connectionToNext;
 
-      absolutePaths.push(new Path(j, absoluteAnchors, connectionToPrev, connectionToNext));
+      absolutePaths.push(new Path(i, absoluteAnchors, connectionToPrev, connectionToNext));
     }
 
     this.activeGlyph.updatePaths(absolutePaths);
@@ -918,8 +918,8 @@ class GlyphEditor {
   }
 
   displayGrid() {
-    _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.stroke(gridColorLight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
+    _p5.stroke(_p5.env.gridColorLight);
 
     for (let x = 0; x < this.width; x += this.gridSize) {
       _p5.line(this.position.x + x, this.position.y, this.position.x + x, this.position.y + this.height);
@@ -940,14 +940,14 @@ class GlyphEditor {
 
   displayBox() {
     _p5.stroke(_p5.env.gridColor);
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     _p5.noFill();
     _p5.rect(this.position.x + (this.width * 0.5), this.position.y + (this.height * 0.5), this.width, this.height);
   }
 
   displayGuides() {
 
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     _p5.stroke(this.displayInfo == true ? _p5.env.glyphEditor_guideColor : _p5.env.gridColor);
 
     // x-_p5.height
@@ -968,7 +968,7 @@ class GlyphEditor {
     // right bounding
     _p5.line(this.rightBounding, this.position.y, this.rightBounding, this.position.y + this.height);
 
-    // display buttons
+    // _p5.env.display buttons
     if (this.displayInfo) {
       this.xHeightButton.display();
       this.ascenderHeightButton.display();

@@ -58,10 +58,10 @@ function exportJSON(data, fileName) {
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 function importScript() {
-  importJSON(scriptFileExtension)
+  importJSON(_p5.env.scriptFileExtension)
     .then((data) => {
-      _p5.env.scripts.push(new Script(data));
-      setScript(_p5.env.scripts.length - 1);
+      _p5.env.scripts.push(new _p5.env.Script(data));
+      _p5.env.setScript(_p5.env.scripts.length - 1);
     })
     .catch((err) => {
       console.error("Failed to import JSON:", err.message);
@@ -69,27 +69,27 @@ function importScript() {
 }
 
 function importTextBoxSettings() {
-  importJSON(textBoxSettingsFileExtension)
+  importJSON(_p5.env.textBoxSettingsFileExtension)
     .then((data) => {
 
-      _p5.env.lineHeight = _p5.constrain(data.lineHeight, lineHeightMin, lineHeightMax) || lineHeight_DEFAULT;
-      _p5.env.scriptStrokeWeight = _p5.constrain(data.strokeWeight, scriptStrokeWeightMin, scriptStrokeWeightMax) || scriptStrokeWeight_DEFAULT;
-      _p5.env.size = _p5.constrain(data.size, sizeMin, sizeMax) || size_DEFAULT;
-      _p5.env.wordSpace = _p5.constrain(data.wordSpace, wordSpaceMin, wordSpaceMax) || _p5.env.wordSpace_DEFAULT;
-      _p5.env.letterSpace = _p5.constrain(data.letterSpace, letterSpaceMin, letterSpaceMax) || _p5.env.letterSpace_DEFAULT;
-      _p5.env.letterWidth = _p5.constrain(data.letterWidth, letterWidthMin, letterWidthMax) || _p5.env.letterWidth_DEFAULT;
-      _p5.env.letterHeight = _p5.constrain(data.letterHeight, letterHeightMin, letterHeightMax) || _p5.env.letterHeight_DEFAULT;
-      _p5.env.slant = _p5.constrain(data.slant, slantMin, slantMax) || _p5.env.slant_DEFAULT;
+      _p5.env.lineHeight = _p5.constrain(data.lineHeight, _p5.env.lineHeightMin, _p5.env.lineHeightMax) || _p5.env.lineHeight_DEFAULT;
+      _p5.env.scriptStrokeWeight = _p5.constrain(data.strokeWeight, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax) || _p5.env.scriptStrokeWeight_DEFAULT;
+      _p5.env.size = _p5.constrain(data.size, _p5.env.sizeMin, _p5.env.sizeMax) || _p5.env.size_DEFAULT;
+      _p5.env.wordSpace = _p5.constrain(data.wordSpace, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax) || _p5.env.wordSpace_DEFAULT;
+      _p5.env.letterSpace = _p5.constrain(data.letterSpace, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax) || _p5.env.letterSpace_DEFAULT;
+      _p5.env.letterWidth = _p5.constrain(data.letterWidth, _p5.env.letterWidthMin, _p5.env.letterWidthMax) || _p5.env.letterWidth_DEFAULT;
+      _p5.env.letterHeight = _p5.constrain(data.letterHeight, _p5.env.letterHeightMin, _p5.env.letterHeightMax) || _p5.env.letterHeight_DEFAULT;
+      _p5.env.slant = _p5.constrain(data.slant, _p5.env.slantMin, _p5.env.slantMax) || _p5.env.slant_DEFAULT;
 
       _p5.print("data.slant: " + data.slant + "slant: " + _p5.env.slant);
-      _p5.env.randomSize = _p5.constrain(data.randomSize, randomSizeMin, randomSizeMax) || _p5.env.randomSize_DEFAULT;
-      _p5.env.randomLetterSpace = _p5.constrain(data.randomLetterSpace, randomLetterSpaceMin, randomLetterSpaceMax) || _p5.env.randomLetterSpace_DEFAULT;
-      _p5.env.randomLetterWidth = _p5.constrain(data.randomLetterWidth, randomLetterWidthMin, randomLetterWidthMax) || _p5.env.randomLetterWidth_DEFAULT;
-      _p5.env.randomLetterHeight = _p5.constrain(data.randomLetterHeight, randomLetterHeightMin, randomLetterHeightMax) || _p5.env.randomLetterHeight_DEFAULT;
-      _p5.env.randomSlant = _p5.constrain(data.randomSlant, randomSlantMin, randomSlantMax) || _p5.env.randomSlant_DEFAULT;
-      _p5.env.randomBaselineOffset = _p5.constrain(data.randomBaselineOffset, randomBaselineOffsetMin, randomBaselineOffsetMax) || _p5.env.randomBaselineOffset_DEFAULT;
-      _p5.env.precision = _p5.constrain(data.precision, precisionMax, precisionMin) || _p5.env.precision_DEFAULT;
-      textBox.seed = data.seed || _p5.random(1000);
+      _p5.env.randomSize = _p5.constrain(data.randomSize, _p5.env.randomSizeMin, _p5.env.randomSizeMax) || _p5.env.randomSize_DEFAULT;
+      _p5.env.randomLetterSpace = _p5.constrain(data.randomLetterSpace, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax) || _p5.env.randomLetterSpace_DEFAULT;
+      _p5.env.randomLetterWidth = _p5.constrain(data.randomLetterWidth, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax) || _p5.env.randomLetterWidth_DEFAULT;
+      _p5.env.randomLetterHeight = _p5.constrain(data.randomLetterHeight, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax) || _p5.env.randomLetterHeight_DEFAULT;
+      _p5.env.randomSlant = _p5.constrain(data.randomSlant, _p5.env.randomSlantMin, _p5.env.randomSlantMax) || _p5.env.randomSlant_DEFAULT;
+      _p5.env.randomBaselineOffset = _p5.constrain(data.randomBaselineOffset, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax) || _p5.env.randomBaselineOffset_DEFAULT;
+      _p5.env.precision = _p5.constrain(data.precision, _p5.env.precisionMax, _p5.env.precisionMin) || _p5.env.precision_DEFAULT;
+      _p5.env.textBox.seed = data.seed || _p5.random(1000);
 
       _p5.env.updateInterface_textBoxSettings_state();
       _p5.env.updateInterface_textBoxSettings_label();
@@ -103,7 +103,7 @@ function importTextBoxSettings() {
 
 function exportAs(value) {
 
-  let stamp = timestamp();
+  let stamp = _p5.env.timestamp();
 
   // generate file name and format
   let fileName;
@@ -112,13 +112,13 @@ function exportAs(value) {
       fileName = document.getElementById('exportScriptFileName').value || _p5.env.activeScript.name;
       break;
     case 'settings':
-      textBoxSettingsFileName = document.getElementById('exportTextBoxSettingsFileName').value || textBoxSettingsFileName;
-      fileName = textBoxSettingsFileName;
+      _p5.env.textBoxSettingsFileName = document.getElementById('exportTextBoxSettingsFileName').value || _p5.env.textBoxSettingsFileName;
+      fileName = _p5.env.textBoxSettingsFileName;
       break;
     case 'textAsSVG':
     case 'textAsPNG':
-      graphicFileName = document.getElementById('exportGraphicFileName').value || graphicFileName;
-      fileName = graphicFileName;
+      _p5.env.graphicFileName = document.getElementById('exportGraphicFileName').value || _p5.env.graphicFileName;
+      fileName = _p5.env.graphicFileName;
       break;
   }
   fileName = fileName.replace(/ /g, "_");
@@ -157,17 +157,17 @@ function exportScript(fileName, localDownload, serverUpload, uploadFolder) {
 
   if (localDownload == true) {
     // _p5.save locally
-    exportJSON(data, fileName + scriptFileExtension);
+    exportJSON(data, fileName + _p5.env.scriptFileExtension);
   }
 
   if (serverUpload == true) {
     // upload to server
     const jsonString = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonString], { type: "application/json" });
-    uploadToServer(blob, fileName + scriptFileExtension, uploadFolder);
+    uploadToServer(blob, fileName + _p5.env.scriptFileExtension, uploadFolder);
   }
 
-  closePrompt('exportScriptPrompt');
+  _p5.env.closePrompt('exportScriptPrompt');
 }
 
 function exportTextBoxSettings(fileName, localDownload, serverUpload, uploadFolder) {
@@ -188,46 +188,46 @@ function exportTextBoxSettings(fileName, localDownload, serverUpload, uploadFold
     randomSlant: _p5.env.randomSlant,
     randomBaselineOffset: _p5.env.randomBaselineOffset,
     precision: _p5.env.precision,
-    seed: textBox.seed
+    seed: _p5.env.textBox.seed
   };
 
   if (localDownload == true) {
     // _p5.save locally
-    exportJSON(data, fileName + textBoxSettingsFileExtension);
+    exportJSON(data, fileName + _p5.env.textBoxSettingsFileExtension);
   }
 
   if (serverUpload == true) {
     // upload to server
     const jsonString = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonString], { type: "application/json" });
-    uploadToServer(blob, fileName + textBoxSettingsFileExtension, uploadFolder);
+    uploadToServer(blob, fileName + _p5.env.textBoxSettingsFileExtension, uploadFolder);
   }
 
-  closePrompt('exportTextBoxSettingsPrompt');
+  _p5.env.closePrompt('exportTextBoxSettingsPrompt');
 }
 
 function exportText_SVG(fileName, localDownload, serverUpload, uploadFolder) {
 
-  exportActive = true;
-  exportSVGActive = true;
+  _p5.env.exportActive = true;
+  _p5.env.exportSVGActive = true;
   // Create a temporary graphics buffer with the desired _p5.env.size based on exportSize
-  svgCanvas = _p5.createGraphics(textBox.width, textBox.height, _p5.SVG);
+  _p5.env.svgCanvas = _p5.createGraphics(_p5.env.textBox.width, _p5.env.textBox.height, _p5.SVG);
 
-  // _p5.translate the temporary canvas to fit the textBox position
-  svgCanvas.translate(-textBox.position.x, -textBox.position.y);
+  // _p5.translate the temporary canvas to fit the _p5.env.textBox position
+  _p5.env.svgCanvas.translate(-_p5.env.textBox.position.x, -_p5.env.textBox.position.y);
 
-  // display and _p5.save
-  display();
+  // _p5.env.display and _p5.save
+  _p5.env.display();
 
   if (localDownload == true) {
     // _p5.save locally
-    _p5.save(svgCanvas, fileName + '.svg');
+    _p5.save(_p5.env.svgCanvas, fileName + '.svg');
   }
 
   if (serverUpload == true) {
     // convert _p5.SVG canvas to blob and upload to server
     // access the _p5.SVG element
-    const svgElement = svgCanvas._renderer.svg;
+    const svgElement = _p5.env.svgCanvas._renderer.svg;
     // serialize the _p5.SVG element
     const svgString = new XMLSerializer().serializeToString(svgElement);
     // cCreate the Blob from the serialized _p5.SVG string
@@ -236,24 +236,24 @@ function exportText_SVG(fileName, localDownload, serverUpload, uploadFolder) {
     uploadToServer(svgBlob, fileName + '.svg', uploadFolder);
   }
 
-  exportActive = false;
-  exportSVGActive = false;
+  _p5.env.exportActive = false;
+  _p5.env.exportSVGActive = false;
 
-  closePrompt('exportTextPrompt');
+  _p5.env.closePrompt('exportTextPrompt');
 }
 
 function exportText_PNG(fileName, localDownload, serverUpload, uploadFolder) {
 
-  exportActive = true;
+  _p5.env.exportActive = true;
 
   // Create a temporary graphics buffer with the desired _p5.env.size based on exportSize
-  let exportGraphic = _p5.createGraphics(textBox.width, textBox.height, _p5.P2D);
+  let exportGraphic = _p5.createGraphics(_p5.env.textBox.width, _p5.env.textBox.height, _p5.P2D);
 
-  // update current display state
-  display();
+  // update current _p5.env.display state
+  _p5.env.display();
 
   // Scale the original canvas content to fit the export _p5.env.size
-  exportGraphic.image(secuenciaCanvas, -textBox.position.x, -textBox.position.y, canvasWidth, canvasHeight);
+  exportGraphic.image(_p5.env.secuenciaCanvas, -_p5.env.textBox.position.x, -_p5.env.textBox.position.y, _p5.env.canvasWidth, _p5.env.canvasHeight);
 
   if (localDownload == true) {
     // _p5.save locally
@@ -267,8 +267,8 @@ function exportText_PNG(fileName, localDownload, serverUpload, uploadFolder) {
     });
   }
 
-  exportActive = false;
-  closePrompt('exportTextPrompt');
+  _p5.env.exportActive = false;
+  _p5.env.closePrompt('exportTextPrompt');
 
 }
 
@@ -278,7 +278,7 @@ function exportText_TXT(fileName, localDownload, serverUpload, uploadFolder) {
   if (localDownload == true) {
     // _p5.save locally
   
-    _p5.saveStrings(textToArray(data), fileName + '.txt')
+    _p5.saveStrings(_p5.env.textToArray(data), fileName + '.txt')
   }
 
   if (serverUpload == true) {

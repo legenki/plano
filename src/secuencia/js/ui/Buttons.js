@@ -171,7 +171,7 @@ class GuideButton extends Button {
   display() {
     _p5.push();
     _p5.stroke(_p5.env.glyphEditor_guideColor);
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     _p5.fill(this.isHovered == true ? _p5.env.glyphEditor_guideColor : _p5.env.backgroundColor);
     _p5.ellipse(this.position.x, this.position.y, this.size, this.size);
     _p5.pop();
@@ -466,15 +466,15 @@ class PathButton extends Button {
       let secondAnchor = this.anchors.length > 1 ? this.anchors[1] : firstAnchor;
       shift = calcCenterDirection(firstAnchor.handleToPrev.position, firstAnchor.position, secondAnchor.position, 0);
     }
-    shift.mult(interfaceFontSize);
+    shift.mult(_p5.env.interfaceFontSize);
 
     let x = firstAnchor.position.x + shift.x;
     let y = firstAnchor.position.y + shift.y;
 
     _p5.noStroke();
     _p5.fill(_p5.env.scriptColor);
-    _p5.textFont(interfaceFont);
-    _p5.textSize(interfaceFontSize);
+    _p5.textFont(_p5.env.interfaceFont);
+    _p5.textSize(_p5.env.interfaceFontSize);
     _p5.textAlign(_p5.CENTER, _p5.CENTER);
     _p5.text(this.index + 1, x, y);
 
@@ -493,15 +493,15 @@ class PathButton extends Button {
       let secondAnchor = this.anchors.length > 1 ? this.anchors[1] : anchor;
       shift = calcCenterDirection(anchor.handleToPrev.position, anchor.position, secondAnchor.position, 0);
     }
-    shift.mult(interfaceFontSize * 2);
+    shift.mult(_p5.env.interfaceFontSize * 2);
 
     let x = anchor.position.x + shift.x;
     let y = anchor.position.y + shift.y;
 
     _p5.noStroke();
     _p5.fill(_p5.env.scriptColor);
-    _p5.textFont(interfaceFont);
-    _p5.textSize(interfaceFontSize);
+    _p5.textFont(_p5.env.interfaceFont);
+    _p5.textSize(_p5.env.interfaceFontSize);
     _p5.textAlign(_p5.CENTER, _p5.CENTER);
     if (anchor.first == true) {
       _p5.text('toPrev', x, y);
@@ -515,7 +515,7 @@ class PathButton extends Button {
     _p5.push();
     _p5.rectMode(_p5.CORNER);
     _p5.stroke(_p5.env.scriptColor);
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     _p5.noFill();
     _p5.rect(this.xMin, this.yMin, this.xMax - this.xMin, this.yMax - this.yMin);
     _p5.pop();
@@ -634,14 +634,14 @@ class AnchorButton extends Button {
 
     if (displayHandle == true) {
       // _p5.line from anchor to handle
-      _p5.strokeWeight(interfaceStrokeWeight);
+      _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
       _p5.stroke(_p5.env.glyphEditor_anchorColor);
       _p5.noFill();
       _p5.line(this.handleToPrev.position.x, this.handleToPrev.position.y, this.position.x, this.position.y);
       _p5.line(this.handleToNext.position.x, this.handleToNext.position.y, this.position.x, this.position.y);
     }
 
-    // display settings
+    // _p5.env.display settings
     _p5.stroke(_p5.env.glyphEditor_anchorColor);
     if (this.active == true) {
       _p5.fill(_p5.env.activeColor);
@@ -655,13 +655,13 @@ class AnchorButton extends Button {
       _p5.rect(this.position.x, this.position.y, this.size * 0.9, this.size * 0.9);
       if (this.first == true || this.last == true) {
         _p5.noFill();
-        _p5.rect(this.position.x, this.position.y, (this.size * 0.9) + (interfaceStrokeWeight * 6), (this.size * 0.9) + (interfaceStrokeWeight * 6));
+        _p5.rect(this.position.x, this.position.y, (this.size * 0.9) + (_p5.env.interfaceStrokeWeight * 6), (this.size * 0.9) + (_p5.env.interfaceStrokeWeight * 6));
       }
     } else {
       _p5.ellipse(this.position.x, this.position.y, this.size, this.size);
       if (this.first == true || this.last == true) {
         _p5.noFill();
-        _p5.ellipse(this.position.x, this.position.y, this.size + (interfaceStrokeWeight * 6), this.size + (interfaceStrokeWeight * 6));
+        _p5.ellipse(this.position.x, this.position.y, this.size + (_p5.env.interfaceStrokeWeight * 6), this.size + (_p5.env.interfaceStrokeWeight * 6));
       }
     }
 
@@ -680,7 +680,7 @@ class AnchorButton extends Button {
   displayConnection() {
     if ((this.first == true && this.path.connectionToPrev == true) || (this.last == true && this.path.connectionToNext == true)) {
 
-      _p5.strokeWeight(interfaceStrokeWeight);
+      _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
       if (this.active == true) {
         _p5.stroke(_p5.env.backgroundColor);
       } else if (this.isHovered == true) {
@@ -777,7 +777,7 @@ class HandleButton extends Button {
 
   display() {
     _p5.stroke(_p5.env.scriptColor);
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     if (this.anchor.active == true) {
       _p5.fill(_p5.env.activeColor);
     } else if (this.isHovered == true) {
@@ -819,20 +819,6 @@ function mouseOverBezier(p1, p2, p3, p4, tolerance) {
   return false;
 }
 
-function mouseOverBezier(p1, p2, p3, p4, tolerance) {
-  // Check points along the Bézier _p5.curve
-  for (let t = 0; t <= 1; t += 0.01) {
-    let x = _p5.bezierPoint(p1.x, p2.x, p3.x, p4.x, t);
-    let y = _p5.bezierPoint(p1.y, p2.y, p3.y, p4.y, t);
-
-    // If _p5.cursor is within the tolerance range of a _p5.point, return true
-    if (mouseOverEllipse(x, y, tolerance)) {
-      return true;
-    }
-
-  }
-  return false;
-}
 
 function rhombus(x, y, w, h) {
   _p5.beginShape();

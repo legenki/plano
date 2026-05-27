@@ -115,7 +115,7 @@ class TextBox {
 
     this.update();
 
-    if (exportActive == false) {
+    if (_p5.env.exportActive == false) {
       if (this.displayInfo) {
         this.displayLines();
         this.displayMissingGlyphs();
@@ -128,7 +128,7 @@ class TextBox {
 
   displayLines() {
 
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     _p5.stroke(_p5.env.gridColor);
 
     let totalLines = _p5.floor((this.height - this.padding * 2) / (_p5.env.lineHeight));
@@ -140,7 +140,7 @@ class TextBox {
 
   displayBox() {
     _p5.noFill();
-    _p5.strokeWeight(interfaceStrokeWeight);
+    _p5.strokeWeight(_p5.env.interfaceStrokeWeight);
     _p5.stroke(_p5.env.gridColor);
     _p5.rect(this.position.x + (this.width * 0.5), this.position.y + (this.height * 0.5), this.width, this.height);
   }
@@ -169,24 +169,24 @@ class TextBox {
     _p5.strokeCap(_p5.ROUND);
     _p5.strokeJoin(_p5.ROUND);
 
-    if (exportActive == true && exportSVGActive == true) {
-      svgCanvas.stroke(_p5.env.scriptColor);
-      // svgCanvas.strokeWeight(_p5.env.scriptStrokeWeight * _p5.env.size / 100);
-      svgCanvas.strokeWeight(_p5.env.scriptStrokeWeight);
-      svgCanvas.noFill();
-      svgCanvas.strokeCap(_p5.ROUND);
-      svgCanvas.strokeJoin(_p5.ROUND);
+    if (_p5.env.exportActive == true && _p5.env.exportSVGActive == true) {
+      _p5.env.svgCanvas.stroke(_p5.env.scriptColor);
+      // _p5.env.svgCanvas.strokeWeight(_p5.env.scriptStrokeWeight * _p5.env.size / 100);
+      _p5.env.svgCanvas.strokeWeight(_p5.env.scriptStrokeWeight);
+      _p5.env.svgCanvas.noFill();
+      _p5.env.svgCanvas.strokeCap(_p5.ROUND);
+      _p5.env.svgCanvas.strokeJoin(_p5.ROUND);
     }
 
     for (let path of this.displayPathsCollection) {
 
-      if (exportActive == true && exportSVGActive == true) {
-        svgCanvas.beginShape();
+      if (_p5.env.exportActive == true && _p5.env.exportSVGActive == true) {
+        _p5.env.svgCanvas.beginShape();
       } else {
         _p5.beginShape();
       }
 
-      // display points based on type
+      // _p5.env.display points based on type
       for (var i = 0; i < path.length - 3; i += 3) {
 
         let p1 = path[i];
@@ -195,23 +195,23 @@ class TextBox {
         let p4 = path[i + 3];
 
         if (i == 0) {
-          if (exportActive == true && exportSVGActive == true) {
-            svgCanvas.vertex(p1.x, p1.y);
+          if (_p5.env.exportActive == true && _p5.env.exportSVGActive == true) {
+            _p5.env.svgCanvas.vertex(p1.x, p1.y);
           } else {
             _p5.vertex(p1.x, p1.y);
           }
         }
 
-        if (exportActive == true && exportSVGActive == true) {
-          svgCanvas.bezierVertex(p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
+        if (_p5.env.exportActive == true && _p5.env.exportSVGActive == true) {
+          _p5.env.svgCanvas.bezierVertex(p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
         } else {
           _p5.bezierVertex(p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
         }
 
       }
 
-      if (exportActive == true && exportSVGActive == true) {
-        svgCanvas.endShape();
+      if (_p5.env.exportActive == true && _p5.env.exportSVGActive == true) {
+        _p5.env.svgCanvas.endShape();
       } else {
         _p5.endShape();
       }
@@ -272,22 +272,22 @@ class TextBox {
             }
 
             this.tempSize += (_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomSize;
-            this.tempSize = _p5.max(this.tempSize, sizeMin);
+            this.tempSize = _p5.max(this.tempSize, _p5.env.sizeMin);
 
             this.temBaselineOffset = (_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomBaselineOffset;
 
             this.tempLetterSpace = _p5.env.letterSpace + ((_p5.noise(this.getNoiseIndex()) - 0.5) * (_p5.env.randomLetterSpace));
-            this.tempLetterSpace = _p5.max(this.tempLetterSpace, letterSpaceMin);
+            this.tempLetterSpace = _p5.max(this.tempLetterSpace, _p5.env.letterSpaceMin);
 
             this.tempLetterWidth = _p5.env.letterWidth + ((_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomLetterWidth);
-            this.tempLetterWidth = _p5.max(this.tempLetterWidth, letterWidthMin);
+            this.tempLetterWidth = _p5.max(this.tempLetterWidth, _p5.env.letterWidthMin);
 
             this.tempLetterHeight = _p5.env.letterHeight + ((_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomLetterHeight);
-            this.tempLetterHeight = _p5.max(this.tempLetterHeight, letterHeightMin);
+            this.tempLetterHeight = _p5.max(this.tempLetterHeight, _p5.env.letterHeightMin);
 
             this.tempSlant = _p5.env.slant + ((_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomSlant);
-            // this.tempSlant = _p5.min(_p5.max(this.tempSlant, slantMin), slantMax);
-            this.tempSlant = _p5.constrain(this.tempSlant, slantMin, slantMax) * -1; 
+            // this.tempSlant = _p5.min(_p5.max(this.tempSlant, _p5.env.slantMin), _p5.env.slantMax);
+            this.tempSlant = _p5.constrain(this.tempSlant, _p5.env.slantMin, _p5.env.slantMax) * -1; 
 
             if (this.currGlyph.paths.length > 0) {
               this.addGlyph();
@@ -385,8 +385,8 @@ class TextBox {
         // calc current anchor and handle position
         let currentAnchorX, currentAnchorY, currHandleToPrevX, currHandleToPrevY, currHandleToNextX, currHandleToNextY;
 
-        if (typeof rotateAll !== 'undefined' && rotateAll !== 0) {
-          let angle = _p5.radians(rotateAll);
+        if (typeof _p5.env.rotateAll !== 'undefined' && _p5.env.rotateAll !== 0) {
+          let angle = _p5.radians(_p5.env.rotateAll);
           let cosA = _p5.cos(angle);
           let sinA = _p5.sin(angle);
           
