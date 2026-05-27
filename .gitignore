@@ -21,3 +21,4 @@ screenshot_*.png
 test_*.js
 check_*.js
 compare_*.js
+dist/
