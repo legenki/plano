@@ -1,5 +1,6 @@
 import { grafemaSketch } from '../grafema/js/app.js';
 import { verticeSketch } from '../vertice/js/app.js';
+import { secuenciaSketch } from '../secuencia/js/app.js';
 
 let currentApp = 'grafema';
 let currentTheme = 'light';
@@ -8,6 +9,7 @@ const apps = ['grafema', 'vertice', 'secuencia'];
 // Store instances if we need to call methods on them
 let grafemaInstance = null;
 let verticeInstance = null;
+let secuenciaInstance = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize p5 instances
@@ -20,6 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (verticeContainer) {
     verticeInstance = new p5(verticeSketch, verticeContainer);
   }
+
+  const secuenciaContainer = document.getElementById('app-secuencia');
+  if (secuenciaContainer) {
+    secuenciaInstance = new p5(secuenciaSketch, secuenciaContainer);
+  }
+
+  // Initial pause for non-active apps (grafema is active by default)
+  if (verticeInstance) verticeInstance.noLoop();
+  if (secuenciaInstance) secuenciaInstance.noLoop();
 
   // 2. Setup tab switching
   apps.forEach(app => {
@@ -38,18 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Keyboard shortcuts
   window.addEventListener('keydown', handleGlobalKeys);
   
-  // 5. Listen to messages from Secuencia iframe
-  window.addEventListener('message', (event) => {
-    if (!event.data) return;
-    if (event.data.type === 'KEYDOWN_EVENT') {
-      // Re-dispatch global keys coming from iframe
-      handleGlobalKeys({
-        altKey: event.data.altKey,
-        key: event.data.key,
-        preventDefault: () => {}
-      });
-    }
-  });
+  // Listen to messages
+  // Window event listeners are already connected locally since no iframe
+
 });
 
 function switchApp(appName) {
@@ -66,17 +68,21 @@ function switchApp(appName) {
         view.style.display = 'block';
         view.classList.add('active');
         
-        // If it's an iframe, try to focus it
-        if (app === 'secuencia') {
-          const iframe = document.getElementById('iframe-secuencia');
-          if (iframe) iframe.focus();
-        }
+        // Resume loop for the active p5 instance
+        if (app === 'grafema' && grafemaInstance) grafemaInstance.loop();
+        if (app === 'vertice' && verticeInstance) verticeInstance.loop();
+        if (app === 'secuencia' && secuenciaInstance) secuenciaInstance.loop();
       }
     } else {
       if (btn) btn.classList.remove('active');
       if (view) {
         view.style.display = 'none';
         view.classList.remove('active');
+
+        // Pause loop for inactive p5 instances
+        if (app === 'grafema' && grafemaInstance) grafemaInstance.noLoop();
+        if (app === 'vertice' && verticeInstance) verticeInstance.noLoop();
+        if (app === 'secuencia' && secuenciaInstance) secuenciaInstance.noLoop();
       }
     }
   });
@@ -108,10 +114,15 @@ function toggleGlobalTheme() {
     verticeInstance.applyTheme(currentTheme);
   }
 
-  // Forward theme to Secuencia iframe
-  const iframe = document.getElementById('iframe-secuencia');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage({ type: 'SYNC_THEME', theme: currentTheme }, '*');
+  // Update Secuencia instance
+  if (secuenciaInstance && typeof secuenciaInstance.applyTheme === 'function') {
+    secuenciaInstance.applyTheme(currentTheme);
+  } else {
+    // Manually pass a message like the iframe expected
+    const simulatedEvent = new MessageEvent('message', {
+      data: { type: 'SYNC_THEME', theme: currentTheme }
+    });
+    window.dispatchEvent(simulatedEvent);
   }
 }
 

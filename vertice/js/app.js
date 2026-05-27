@@ -750,6 +750,333 @@ export function verticeSketch(p) {
 
   // --- INITIALIZATION ---
 
+
+  function translateSelectedGlyph(dx, dy) {
+    if (!selected_glyph) return;
+    selected_glyph.translate(parseFloat(dx || 0), parseFloat(dy || 0));
+    saveHistoryState();
+    updateLayersUI();
+  }
+
+  function scaleSelectedGlyph(factor) {
+    if (!selected_glyph || selected_glyph.corners.length === 0) return;
+    
+    // Берем в качестве опорной точки центр первой вершины глифа
+    const pivot = selected_glyph.corners[0];
+    selected_glyph.scale(factor, pivot);
+    saveHistoryState();
+  }
+
+  function rotateSelectedGlyphFromUI(angleDegrees) {
+    if (!selected_glyph || selected_glyph.corners.length === 0) return;
+  
+    const angle = p.radians(parseFloat(angleDegrees));
+    const pivot = selected_glyph.corners[0];
+    
+    // Сбрасываем к исходному состоянию перед вращением, вращаем на дельту
+    // или просто применяем вращение от текущего значения слайдера
+    if (DOM.valGlyphRotation) DOM.valGlyphRotation.innerText = `${angleDegrees}°`;
+    
+    // Для плавной регулировки вращаем от центральной точки глифа
+    selected_glyph.rotate(p.radians(angleDegrees - (selected_glyph.lastRotationSliderVal || 0)), pivot);
+    selected_glyph.lastRotationSliderVal = angleDegrees;
+  }
+
+  function rotateAllGlyphsFromUI(angleDegrees) {
+    const targetAngle = parseFloat(angleDegrees);
+    const deltaDegrees = targetAngle - globalRotationValue;
+    const deltaRad = p.radians(deltaDegrees);
+  
+    scene_glyphs.forEach(glyph => {
+      if (glyph.corners.length > 0) {
+        // Каждый глиф вращается вокруг своей первой вершины (локального центра)
+        const pivot = glyph.corners[0];
+        glyph.rotate(deltaRad, pivot);
+      }
+    });
+  
+    globalRotationValue = targetAngle;
+    if (DOM.valGlobalRotation) DOM.valGlobalRotation.innerText = `${targetAngle}°`;
+  }
+
+  function createNewGlyphFromUI() {
+    const newGlyph = new Glyph();
+    
+    // Создаем начальную вершину в текущем центре видимой области холста
+    const centerOfCanvas = p.createVector(p.width / 2 - scene_center.x, p.height / 2 - scene_center.y);
+    centerOfCanvas.div(scene_scale);
+    centerOfCanvas.rotate(-scene_rotation);
+  
+    const newCorner = new Corner(centerOfCanvas, 40, newGlyph);
+    newGlyph.addCorner(newCorner);
+    scene_glyphs.push(newGlyph);
+    
+    clearSelection();
+    selected_glyph = newGlyph;
+    selected_glyph.setActive(true);
+    selected_corner = newCorner;
+    selected_corner.setActive(true);
+    
+    setAppMode("corner"); // Переключаемся на редактирование вершины нового глифа
+    
+    saveHistoryState();
+    updateUISidebarVisibility();
+    updateLayersUI();
+    showSnackbar("New glyph created at center");
+  }
+
+  function saveProjectJSON() {
+    const filename = (DOM.exportFilename.value.trim() || "project") + ".json";
+    
+    const projectData = {
+      version: "1.0",
+      backgroundColor: backgroundColor,
+      shapeColor: shapeColor,
+      strokeCapRounded: strokeCapRounded,
+      pattern: {
+        visibility: pattern_visibility,
+        alpha: pattern_alpha,
+        xOffset: pattern_xOffset,
+        yOffset: pattern_yOffset,
+        rotation: pattern_rotation
+      },
+      glyphs: scene_glyphs.map(glyph => {
+        // Сохраняем вершины
+        const cornersData = glyph.corners.map(corner => ({
+          x: corner.center.x,
+          y: corner.center.y,
+          radians: corner.radians,
+          scale: corner.scale
+        }));
+  
+        // Сохраняем индексы связей
+        const connectionsData = [];
+        glyph.connections.forEach((neighbors, corner) => {
+          const cIndex = glyph.corners.indexOf(corner);
+          const nIndices = neighbors.map(n => glyph.corners.indexOf(n));
+          connectionsData.push({
+            cornerIndex: cIndex,
+            neighborIndices: nIndices
+          });
+        });
+  
+        return {
+          corners: cornersData,
+          connections: connectionsData
+        };
+      })
+    };
+  
+    // Скачивание файла
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", filename);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    
+    showSnackbar("Project saved!");
+  }
+
+  function loadProjectJSON() {
+    document.getElementById("import-json-file").click();
+  }
+
+  function handleImportJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        
+        // Загружаем глобальные стили
+        if (data.backgroundColor) backgroundColor = data.backgroundColor;
+        if (data.shapeColor) shapeColor = data.shapeColor;
+        if (data.strokeCapRounded !== undefined) strokeCapRounded = data.strokeCapRounded;
+        
+        if (data.pattern) {
+          pattern_visibility = data.pattern.visibility;
+          pattern_alpha = data.pattern.alpha;
+          pattern_xOffset = data.pattern.xOffset;
+          pattern_yOffset = data.pattern.yOffset;
+          pattern_rotation = data.pattern.rotation;
+        }
+  
+        // Воссоздаем глифы
+        const loadedGlyphs = [];
+        data.glyphs.forEach(glyphData => {
+          const glyph = new Glyph();
+          
+          // Воссоздаем вершины
+          glyphData.corners.forEach(cData => {
+            const corner = new Corner(p.createVector(cData.x, cData.y), cData.radians, glyph);
+            corner.scale = cData.scale;
+            glyph.addCorner(corner);
+          });
+  
+          // Воссоздаем связи
+          glyphData.connections.forEach(conn => {
+            const mainCorner = glyph.corners[conn.cornerIndex];
+            conn.neighborIndices.forEach(nIndex => {
+              const neighborCorner = glyph.corners[nIndex];
+              // Поскольку connections в классе двунаправленные, проверяем, чтобы не дублировать
+              if (!glyph.isConnected(mainCorner, neighborCorner)) {
+                glyph.connectCorners(mainCorner, neighborCorner);
+              }
+            });
+          });
+  
+          loadedGlyphs.push(glyph);
+        });
+  
+        // Перезаписываем сцену
+        scene_glyphs = loadedGlyphs;
+        clearSelection();
+        
+        // Сбрасываем историю на новое состояние
+        undoHistory = [];
+        saveHistoryState();
+  
+        // Сбрасываем глобальный поворот на 0, так как импортируется новая сцена
+        globalRotationValue = 0;
+        if (DOM.slideGlobalRotation) DOM.slideGlobalRotation.value = 0;
+        if (DOM.valGlobalRotation) DOM.valGlobalRotation.innerText = "0°";
+  
+        // Синхронизируем UI элементы
+        updateUIColors();
+        updateColorsFromUI();
+        syncPatternToUI();
+        
+        if (DOM.checkPatternVisible) DOM.checkPatternVisible.checked = pattern_visibility;
+        if (DOM.checkStrokeRounded) DOM.checkStrokeRounded.checked = strokeCapRounded;
+        if (DOM.slidePatternAlpha) DOM.slidePatternAlpha.value = pattern_alpha;
+        
+        updateUISidebarVisibility();
+        updateLayersUI();
+        
+        showSnackbar("Project imported successfully!");
+      } catch (err) {
+        showSnackbar("Error reading JSON project file!");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+    // Очищаем значение, чтобы можно было загрузить тот же файл повторно
+    event.target.value = "";
+  }
+
+  function showModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = "flex";
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = "none";
+  }
+
+  function handleBgImageUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      p.loadImage(dataUrl, img => {
+        bgImage = img;
+        
+        // Показываем кнопку удаления
+        if (DOM.btnRemoveBgImage) DOM.btnRemoveBgImage.style.display = "block";
+        
+        showSnackbar("Background image loaded successfully!");
+        p.redraw();
+      }, () => {
+        showSnackbar("Failed to load image!");
+      });
+    };
+    reader.readAsDataURL(file);
+    
+    // Сбрасываем значение инпута
+    input.value = "";
+  }
+
+  function updateBgImageSettingsFromUI() {
+    if (DOM.slideBgOpacity) {
+      bgImageOpacity = parseFloat(DOM.slideBgOpacity.value);
+      if (DOM.valBgOpacity) DOM.valBgOpacity.innerText = bgImageOpacity + "%";
+    }
+    
+    if (DOM.slideBgScale) {
+      bgImageScale = parseFloat(DOM.slideBgScale.value);
+      if (DOM.valBgScale) DOM.valBgScale.innerText = bgImageScale + "%";
+    }
+    
+    if (DOM.slideBgRotation) {
+      bgImageRotation = parseFloat(DOM.slideBgRotation.value);
+      if (DOM.valBgRotation) DOM.valBgRotation.innerText = bgImageRotation + "°";
+    }
+    
+    if (DOM.inputBgX) {
+      bgImageX = parseFloat(DOM.inputBgX.value) || 0;
+    }
+    
+    if (DOM.inputBgY) {
+      bgImageY = parseFloat(DOM.inputBgY.value) || 0;
+    }
+  
+    p.redraw();
+  }
+
+  function removeBgImage() {
+    bgImage = null;
+    
+    // Сбрасываем значения стейта
+    bgImageOpacity = 50;
+    bgImageScale = 100;
+    bgImageRotation = 0;
+    bgImageX = 0;
+    bgImageY = 0;
+    
+    // Синхронизируем UI
+    if (DOM.slideBgOpacity) DOM.slideBgOpacity.value = 50;
+    if (DOM.valBgOpacity) DOM.valBgOpacity.innerText = "50%";
+    if (DOM.slideBgScale) DOM.slideBgScale.value = 100;
+    if (DOM.valBgScale) DOM.valBgScale.innerText = "100%";
+    if (DOM.slideBgRotation) DOM.slideBgRotation.value = 0;
+    if (DOM.valBgRotation) DOM.valBgRotation.innerText = "0°";
+    if (DOM.inputBgX) DOM.inputBgX.value = 0;
+    if (DOM.inputBgY) DOM.inputBgY.value = 0;
+    
+    // Скрываем кнопку удаления
+    if (DOM.btnRemoveBgImage) DOM.btnRemoveBgImage.style.display = "none";
+    
+    showSnackbar("Background image removed.");
+    p.redraw();
+  }
+
+
+  function togglePatternVisible(visible) {
+    pattern_visibility = visible;
+  }
+
+  function toggleStrokeCapRounded(rounded) {
+    strokeCapRounded = rounded;
+  }
+
+  function updateColorsFromUI() {
+    backgroundColor = DOM.pickerBgColor.value;
+    shapeColor = DOM.pickerStrokeColor.value;
+    
+    // Принудительно обновляем цвет заднего фона у контейнера canvas
+    const canvasContainer = document.getElementById("canvas-container");
+    if (canvasContainer) {
+      canvasContainer.style.backgroundColor = backgroundColor;
+    }
+  }
+
   function cacheDomElements() {
     DOM = {
       cardCorner: document.getElementById("v-card-corner"),
@@ -838,4 +1165,31 @@ export function verticeSketch(p) {
     // Keyboard
     window.addEventListener('keydown', handleKeyDown);
   }
+
+  // Expose UI functions to global window for inline HTML handlers
+  window.appClearScene = appClearScene;
+  window.appUndo = appUndo;
+  window.closeModal = closeModal;
+  window.createNewGlyphFromUI = createNewGlyphFromUI;
+  window.deleteSelectedGlyph = deleteSelectedGlyph;
+  window.deleteSelectedVertex = deleteSelectedVertex;
+  window.disconnectSelectedVertex = disconnectSelectedVertex;
+  window.exportAsFormat = exportAsFormat;
+  window.handleBgImageUpload = handleBgImageUpload;
+  window.loadProjectJSON = loadProjectJSON;
+  window.removeBgImage = removeBgImage;
+  window.rotateAllGlyphsFromUI = rotateAllGlyphsFromUI;
+  window.rotateSelectedGlyphFromUI = rotateSelectedGlyphFromUI;
+  window.saveHistoryState = saveHistoryState;
+  window.saveProjectJSON = saveProjectJSON;
+  window.scaleSelectedGlyph = scaleSelectedGlyph;
+  window.setAppMode = setAppMode;
+  window.showModal = showModal;
+  window.togglePatternVisible = togglePatternVisible;
+  window.toggleStrokeCapRounded = toggleStrokeCapRounded;
+  window.translateSelectedGlyph = translateSelectedGlyph;
+  window.updateBgImageSettingsFromUI = updateBgImageSettingsFromUI;
+  window.updateColorsFromUI = updateColorsFromUI;
+  window.updatePatternFromUI = updatePatternFromUI;
+  window.updateSelectedVertexFromUI = updateSelectedVertexFromUI;
 }

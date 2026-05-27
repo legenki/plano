@@ -1,55 +1,71 @@
 const fs = require('fs');
+const cheerio = require('cheerio');
 
-// Read grafema
-let grafemaHtml = fs.readFileSync('grafema/index.html', 'utf8');
-const grafemaBodyMatch = grafemaHtml.match(/<body>([\s\S]*?)<\/body>/);
-let grafemaContent = grafemaBodyMatch[1];
-// Prefix IDs
-grafemaContent = grafemaContent.replace(/id="([^"]+)"/g, (match, p1) => {
-  if (p1 === "app-container" || p1 === "snackbar" || p1 === "helpModal" || p1.startsWith("btn-") || p1.startsWith("input-") || p1.startsWith("slide-") || p1.startsWith("val-") || p1.startsWith("color-") || p1.startsWith("label-") || p1.startsWith("stats-") || p1.startsWith("active-") || p1.startsWith("no-active-") || p1.startsWith("layers-") || p1.startsWith("letter-") || p1 === "toggle-grid") {
-    if (!p1.startsWith("g-")) return `id="g-${p1}"`;
-  }
-  if (p1 === "snackbar") return `id="grafema-snackbar"`;
-  if (p1 === "canvas-container") return `id="grafema-canvas"`;
-  return match;
+// --- Helper to process an HTML file ---
+function processHtml(filePath, prefix, specialIds) {
+  const html = fs.readFileSync(filePath, 'utf8');
+  const $ = cheerio.load(html);
+
+  // Remove script tags
+  $('script').remove();
+
+  // Prefix IDs
+  $('[id]').each((i, el) => {
+    const id = $(el).attr('id');
+    if (!id) return;
+
+    if (specialIds[id]) {
+      $(el).attr('id', specialIds[id]);
+      return;
+    }
+
+    // Only prefix if it doesn't already have it
+    if (!id.startsWith(prefix)) {
+      $(el).attr('id', prefix + id);
+    }
+  });
+
+  // Prefix 'for' attributes in labels matching the logic
+  $('[for]').each((i, el) => {
+    const f = $(el).attr('for');
+    if (f && !f.startsWith(prefix)) {
+      $(el).attr('for', prefix + f);
+    }
+  });
+
+  return $('body').html();
+}
+
+// 1. Process Grafema
+const grafemaContent = processHtml('grafema/index.html', 'g-', {
+  'snackbar': 'grafema-snackbar',
+  'canvas-container': 'grafema-canvas',
+  'helpModal': 'g-helpModal',
+  'app-container': 'g-app-container'
 });
-// Replace for attribute in labels
-grafemaContent = grafemaContent.replace(/for="([^"]+)"/g, (match, p1) => {
-  if (p1.startsWith("color-")) return `for="g-${p1}"`;
-  return match;
+
+// 2. Process Vertice
+const verticeContent = processHtml('vertice/index.html', 'v-', {
+  'snackbar': 'vertice-snackbar',
+  'canvas-container': 'vertice-canvas',
+  'helpModal': 'v-helpModal',
+  'app-container': 'v-app-container',
+  'sidebar': 'v-sidebar',
+  'export-filename': 'v-export-filename',
+  'dom-layers-list': 'v-dom-layers-list'
 });
 
-// Remove script tags from grafemaContent
-grafemaContent = grafemaContent.replace(/<script[\s\S]*?<\/script>/g, '');
-
-
-// Read vertice
-let verticeHtml = fs.readFileSync('vertice/index.html', 'utf8');
-const verticeBodyMatch = verticeHtml.match(/<body>([\s\S]*?)<\/body>/);
-let verticeContent = verticeBodyMatch[1];
-// Prefix IDs
-verticeContent = verticeContent.replace(/id="([^"]+)"/g, (match, p1) => {
-  if (p1 === "sidebar" || p1.startsWith("card-") || p1.startsWith("btn-") || p1.startsWith("input-") || p1.startsWith("slide-") || p1.startsWith("val-") || p1.startsWith("picker-") || p1.startsWith("label-") || p1.startsWith("check-") || p1 === "export-filename" || p1 === "dom-layers-list") {
-    if (!p1.startsWith("v-")) return `id="v-${p1}"`;
-  }
-  if (p1 === "snackbar") return `id="vertice-snackbar"`;
-  if (p1 === "canvas-container") return `id="vertice-canvas"`;
-  if (p1 === "app-container") return `id="v-app-container"`;
-  if (p1 === "helpModal") return `id="v-helpModal"`;
-  return match;
-});
-// Replace for attribute in labels
-verticeContent = verticeContent.replace(/for="([^"]+)"/g, (match, p1) => {
-  if (p1.startsWith("picker-")) return `for="v-${p1}"`;
-  return match;
+// 3. Process Secuencia
+const secuenciaContent = processHtml('secuencia/index.html', 's-', {
+  'snackbar': 'secuencia-snackbar',
+  'canvas-container': 'secuencia-canvas',
+  'helpModal': 's-helpModal',
+  'scriptEditor': 's-scriptEditor',
+  'textBox': 's-textBox',
+  'textBoxSettings': 's-textBoxSettings',
+  'glyphEditorContext': 's-glyphEditorContext'
 });
 
-// Remove script tags from verticeContent
-verticeContent = verticeContent.replace(/<script[\s\S]*?<\/script>/g, '');
-
-// Clean up some inner HTML issues (like duplicate snackbar/modals)
-grafemaContent = grafemaContent.replace('id="g-snackbar"', 'id="grafema-snackbar"');
-verticeContent = verticeContent.replace('id="v-snackbar"', 'id="vertice-snackbar"');
 
 const finalHtml = `<!DOCTYPE html>
 <html lang="en">
@@ -67,6 +83,15 @@ const finalHtml = `<!DOCTYPE html>
   <!-- LIBRARIES -->
   <script src="lib/p5.min.js"></script>
   <script src="lib/p5.svg.js"></script>
+  <!-- SECUENCIA PRESETS -->
+  <script src="secuencia/presets/script/01.js"></script>
+  <script src="secuencia/presets/script/02.js"></script>
+  <script src="secuencia/presets/script/03.js"></script>
+  <script src="secuencia/presets/script/04.js"></script>
+  <script src="secuencia/presets/script/05.js"></script>
+  <script src="secuencia/presets/script/06.js"></script>
+  <script src="secuencia/presets/script/07.js"></script>
+  <script src="secuencia/presets/script/08.js"></script>
 </head>
 <body class="theme-light">
 
@@ -100,7 +125,7 @@ const finalHtml = `<!DOCTYPE html>
     
     <!-- Secuencia -->
     <div id="app-secuencia" class="app-view" style="width:100%; height:100%; display:none;">
-      <iframe id="iframe-secuencia" src="secuencia/index.html" class="app-iframe" style="width:100%; height:100%; border:none;"></iframe>
+      ${secuenciaContent}
     </div>
     
   </div>

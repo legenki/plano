@@ -250,7 +250,7 @@ body.theme-dark .sidebar, body.theme-dark .secuencia-panel {
 }
 
 /* Left panel for Secuencia script editor */
-#scriptEditor {
+#scriptEditor, #s-scriptEditor {
   position: absolute;
   width: var(--glyphEditor_width);
   height: calc(100vh - (var(--margin-xlarge) * 2));
@@ -273,7 +273,7 @@ body.theme-dark .sidebar, body.theme-dark .secuencia-panel {
   box-sizing: border-box;
 }
 
-#textBoxSettings {
+#textBoxSettings, #s-textBoxSettings {
   width: var(--textBoxSettings_width);
   height: calc(100vh - (var(--margin-xlarge) * 2));
   right: 0;
@@ -281,7 +281,7 @@ body.theme-dark .sidebar, body.theme-dark .secuencia-panel {
 }
 
 /* Central Canvas Area Textbox for Secuencia */
-#textBox {
+#textBox, #s-textBox {
   position: absolute;
   width: var(--textBox_width);
   height: var(--textBox_height);
@@ -292,7 +292,7 @@ body.theme-dark .sidebar, body.theme-dark .secuencia-panel {
   z-index: 5;
 }
 
-#textBoxButtons {
+#textBoxButtons, #s-textBoxButtons {
   position: absolute;
   bottom: 12px;
   left: 12px;
@@ -1105,6 +1105,14 @@ input[type="color"]::-webkit-color-swatch {
   height: 28px;
 }
 
+.font-script-row .btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
 /* Scroll containers */
 .scroll-box-container {
   flex: 1;
@@ -1120,18 +1128,22 @@ input[type="color"]::-webkit-color-swatch {
   padding-right: 4px;
 }
 
-/* Glyph selection grid in Secuencia */
-#glyphSetScrollBox {
+/* GLYPH SET GRID */
+#glyphSetScrollBox, #s-glyphSetScrollBox {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   background: var(--bg-input);
   border-radius: 6px;
   padding: 6px;
   box-sizing: border-box;
 }
 
-#glyphSet {
+#glyphSet, #s-glyphSet {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--glyphSet_boxSize), 1fr));
   gap: 4px;
+  padding-bottom: 20px;
 }
 
 .glyphSet_box {
