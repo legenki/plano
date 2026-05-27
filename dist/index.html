@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  
+  <!-- LIBRARIES -->
+  <script src="lib/p5.min.js"></script>
+  <script src="lib/p5.svg.js"></script>
+  <!-- SECUENCIA PRESETS -->
+  <script src="src/secuencia/presets/script/01.js"></script>
+  <script src="src/secuencia/presets/script/02.js"></script>
+  <script src="src/secuencia/presets/script/03.js"></script>
+  <script src="src/secuencia/presets/script/04.js"></script>
+  <script src="src/secuencia/presets/script/05.js"></script>
+  <script src="src/secuencia/presets/script/06.js"></script>
+  <script src="src/secuencia/presets/script/07.js"></script>
+  <script src="src/secuencia/presets/script/08.js"></script>
+  <script type="module" crossorigin src="/assets/index-BweBQkKF.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DVUhVtN5.css">
+</head>
+<body class="theme-light">
+
+  <!-- Top-Center Tab Switcher Capsule -->
+  <div class="app-switcher-container" style="display: flex; gap: 8px; align-items: center;">
+    <div class="app-switcher">
+      <button id="tab-grafema" class="switcher-tab active" data-target="grafema">GRAFEMA</button>
+      <button id="tab-vertice" class="switcher-tab" data-target="vertice">VERTICE</button>
+      <button id="tab-secuencia" class="switcher-tab" data-target="secuencia">SECUENCIA</button>
+    </div>
+    <div class="app-switcher" style="padding: 3px;">
+      <button id="btn-global-theme" class="switcher-tab" style="padding: 8px; display: flex; align-items: center; justify-content: center;" title="Toggle Theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="apps-container" style="width:100vw; height:100vh; position:absolute; top:0; left:0; z-index:0; overflow:hidden;">
+    
+    <!-- Grafema -->
+    <div id="app-grafema" class="app-view active" style="width:100%; height:100%;">
+      
+
+  <div class="app-container">
+    
+    <!-- Sidebar Control Panel -->
+    <aside class="sidebar secuencia-panel right-sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+            <line x1="6" y1="8" x2="6" y2="8"></line>
+            <line x1="10" y1="8" x2="10" y2="8"></line>
+            <line x1="14" y1="8" x2="14" y2="8"></line>
+            <line x1="18" y1="8" x2="18" y2="8"></line>
+            <line x1="6" y1="12" x2="6" y2="12"></line>
+            <line x1="10" y1="12" x2="10" y2="12"></line>
+            <line x1="14" y1="12" x2="14" y2="12"></line>
+            <line x1="18" y1="12" x2="18" y2="12"></line>
+            <line x1="7" y1="16" x2="17" y2="16"></line>
+          </svg>
+          <span class="logo-text">Grafema</span>
+        </div>
+        <span class="version-tag">v1.0</span>
+      </div>
+
+      <!-- Sidebar scrollable content -->
+      <div class="sidebar-content">
+
+        <!-- Section: Active Glyph -->
+        <section class="panel-section active-glyph-section">
+          <h2 class="section-title">
+            <span>Active Glyph</span>
+            <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </h2>
+          <div class="section-content">
+            <div id="g-no-active-glyph-message" class="empty-state">
+              Select a glyph on the canvas or click "Add Glyph"
+            </div>
+            
+            <div id="g-active-glyph-controls" class="controls-grid hidden">
+              <!-- Active Glyph Header -->
+              <div class="control-row glyph-title-row">
+                <span id="g-active-glyph-label" class="glyph-label">Glyph #1: Letter A</span>
+                <button id="g-btn-duplicate-glyph" class="btn-icon" title="Duplicate Glyph (Alt + C)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <button id="g-btn-delete-glyph" class="btn-icon btn-danger" title="Delete Glyph (Backspace / Del)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
+              </div>
+
+              <!-- Letter Selector Grid -->
+              <div class="control-group">
+                <label>Letter Selector</label>
+                <div class="letter-grid" id="g-letter-selector-grid">
+                  <!-- A-Z and '.' buttons generated dynamically -->
+                </div>
+              </div>
+
+              <!-- Position sliders -->
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label">Position X</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-pos-x-num" class="figma-num-input" min="0" max="2000" step="1">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-pos-x" class="custom-slider" min="0" max="2000" step="1">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label">Position Y</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-pos-y-num" class="figma-num-input" min="0" max="2000" step="1">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-pos-y" class="custom-slider" min="0" max="2000" step="1">
+              </div>
+
+              <!-- Size and Rotation -->
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label">Size</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-size-num" class="figma-num-input" min="100" max="500" step="1">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-size" class="custom-slider" min="100" max="500" step="1">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label">Rotation</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-rotation-num" class="figma-num-input" min="0" max="360" step="1">
+                    <span class="unit">°</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-rotation" class="custom-slider" min="0" max="360" step="1">
+              </div>
+
+              <!-- Generative Font Parameters 1-4 -->
+              <div class="parameter-row border-top">
+                <div class="parameter-header">
+                  <span class="parameter-label" title="Controls width or horizontal stretch">Width</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-par1-num" class="figma-num-input" min="0" max="100" step="1">
+                    <span class="unit">%</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-par1" class="custom-slider" min="0" max="1" step="0.01">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label" title="Controls bar height or curvature">Height</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-par2-num" class="figma-num-input" min="0" max="100" step="1">
+                    <span class="unit">%</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-par2" class="custom-slider" min="0" max="1" step="0.01">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label" title="Controls ratio or balance of details">Ratio</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-par3-num" class="figma-num-input" min="0" max="100" step="1">
+                    <span class="unit">%</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-par3" class="custom-slider" min="0" max="1" step="0.01">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label" title="Controls end caps or tails length">Details</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-par4-num" class="figma-num-input" min="0" max="100" step="1">
+                    <span class="unit">%</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-par4" class="custom-slider" min="0" max="1" step="0.01">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label">Line Weight</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="g-input-glyph-weight-num" class="figma-num-input" min="1" max="50" step="1" value="7">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <input type="range" id="g-input-glyph-weight" class="custom-slider" min="1" max="50" step="1" value="7">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Layers -->
+        <section class="panel-section">
+          <h2 class="section-title">
+            <span>Layers</span>
+            <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </h2>
+          <div class="section-content">
+            <div class="layers-container" id="g-layers-list">
+              <!-- Layers generated dynamically -->
+            </div>
+            <button id="g-btn-add-glyph" class="btn btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Add Glyph
+            </button>
+          </div>
+        </section>
+
+        <!-- Section: Background Image -->
+        <section class="panel-section">
+          <h2 class="section-title">
+            <span>Background Image</span>
+            <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </h2>
+          <div class="section-content">
+            <div class="parameter-row">
+              <div class="input-file-btn-wrapper">
+                <button class="btn btn-accent">Choose Image...</button>
+                <input type="file" id="g-input-bg-image" accept="image/*">
+              </div>
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Opacity</span>
+                <span class="parameter-value-badge" id="g-val-bg-opacity">50%</span>
+              </div>
+              <input type="range" id="g-slide-bg-opacity" class="custom-slider" min="0" max="100" value="50">
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Scale</span>
+                <span class="parameter-value-badge" id="g-val-bg-scale">100%</span>
+              </div>
+              <input type="range" id="g-slide-bg-scale" class="custom-slider" min="10" max="500" value="100">
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Rotation</span>
+                <span class="parameter-value-badge" id="g-val-bg-rotation">0°</span>
+              </div>
+              <input type="range" id="g-slide-bg-rotation" class="custom-slider" min="-180" max="180" value="0">
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Offset X / Y</span>
+              </div>
+              <div class="figma-input-row">
+                <div class="figma-input-wrapper">
+                  <span class="figma-input-prefix">X</span>
+                  <input type="number" id="g-input-bg-x" class="figma-num-input" value="0">
+                </div>
+                <div class="figma-input-wrapper">
+                  <span class="figma-input-prefix">Y</span>
+                  <input type="number" id="g-input-bg-y" class="figma-num-input" value="0">
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-danger" id="g-btn-remove-bg-image" style="display: none;">Remove Image</button>
+          </div>
+        </section>
+
+        <!-- Section: Canvas & Style -->
+        <section class="panel-section">
+          <h2 class="section-title">
+            <span>Canvas &amp; Style</span>
+            <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </h2>
+          <div class="section-content">
+            <div class="control-group color-pickers-row">
+              <div>
+                <label for="g-color-bg">Background Color</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="g-color-bg" value="#000000">
+                  <span id="g-label-bg" class="color-code">#000000</span>
+                </div>
+              </div>
+              <div>
+                <label for="g-color-text">Line Color</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="g-color-text" value="#ffffff">
+                  <span id="g-label-text" class="color-code">#FFFFFF</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-group checkbox-row">
+              <label class="checkbox-container">
+                <input type="checkbox" id="g-toggle-grid" checked="">
+                <span class="custom-checkbox"></span>
+                <span>Show grid background</span>
+              </label>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Sidebar Footer / Actions -->
+      <footer class="sidebar-footer">
+        <button id="g-btn-save" class="btn btn-accent" style="width: 100%;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 13 7 8"></polyline><line x1="12" y1="13" x2="12" y2="3"></line></svg>
+          Export as PNG
+        </button>
+        <div class="btn-group" style="width: 100%;">
+          <button id="g-btn-reset" class="btn btn-danger" title="Reset composition">Reset All</button>
+          <button id="g-btn-help" class="btn" title="Shortcuts help">Shortcuts</button>
+        </div>
+      </footer>
+    </aside>
+
+    <!-- Canvas Viewport -->
+    <main class="canvas-viewport" id="grafema-canvas">
+      <!-- p5.js canvas injected here -->
+      
+
+    </main>
+
+  </div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="modal" id="g-helpModal">
+    <div class="modal-content">
+      <div class="modal-title">Keyboard Shortcuts</div>
+      
+      <p style="font-family: var(--font-sans); font-size: 11px; line-height: 1.5; color: var(--text-secondary);">
+        • <kbd>A-Z</kbd> / <kbd>.</kbd> — Change active glyph's character<br>
+        • <kbd>Space</kbd> — Create new glyph at center<br>
+        • <kbd>Del</kbd> / <kbd>Backspace</kbd> — Delete selected glyph<br>
+        • <kbd>Alt + C</kbd> / <kbd>Ctrl + D</kbd> — Duplicate selected glyph<br>
+        • <kbd>Esc</kbd> — Deselect all layers<br>
+        • <kbd>Arrows (↑/↓/←/→)</kbd> — Nudge active glyph by 1px<br>
+        • <kbd>Shift + Arrows</kbd> — Nudge active glyph by 10px<br>
+        • <kbd>Double Click</kbd> — Create glyph at mouse position<br>
+        • <kbd>Drag</kbd> — Move glyph around<br>
+        • <kbd>Top handle</kbd> — Rotate selected glyph<br>
+        • <kbd>Corner handle</kbd> — Scale selected glyph
+      </p>
+
+      <div class="gap-v-small"></div>
+      <button class="btn btn-accent" id="g-btn-close-modal">Close</button>
+    </div>
+  </div>
+
+  <!-- Snackbar Notifications -->
+  <div id="grafema-snackbar">Notification</div>
+
+  <!-- Libraries -->
+  
+  
+  
+  
+
+
+
+    </div>
+    
+    <!-- Vertice -->
+    <div id="app-vertice" class="app-view" style="width:100%; height:100%; display:none;">
+      
+
+  <div id="v-app-container">
+    
+    <!-- Sidebar Control Panel -->
+    <aside id="v-sidebar" class="sidebar secuencia-panel right-sidebar">
+      
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-width="16">
+            <circle cx="150" cy="150" r="80"></circle>
+            <line x1="70" y1="70" x2="230" y2="230"></line>
+            <line x1="230" y1="70" x2="70" y2="230"></line>
+          </svg>
+          <span class="logo-text">VERTICE</span>
+        </div>
+        <span class="version-tag">v1.0</span>
+      </div>
+
+      <!-- Scrollable Content -->
+      <div class="sidebar-content">
+
+        <!-- Section 1: Edit Mode -->
+        <section class="control-card">
+          <div class="card-title">
+            <span>Edit Mode</span>
+            <span class="title-aside">[1 / 2 / 3]</span>
+          </div>
+          <div class="mode-selector">
+            <button type="button" id="v-btn-mode-corner" class="mode-btn active" onclick="setAppMode('corner')">
+              <span>Vertices</span>
+              <span class="key-hint">1 (cmd)</span>
+            </button>
+            <button type="button" id="v-btn-mode-glyph" class="mode-btn" onclick="setAppMode('glyph')">
+              <span>Glyphs</span>
+              <span class="key-hint">2 (alt)</span>
+            </button>
+            <button type="button" id="v-btn-mode-scene" class="mode-btn" onclick="setAppMode('scene')">
+              <span>Scene</span>
+              <span class="key-hint">3 (ctrl)</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Section 2: Global Transform -->
+        <section class="control-card">
+          <div class="card-title">Global Transform</div>
+          
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Rotate All Glyphs</span>
+              <span class="parameter-value-badge" id="v-val-global-rotation">0°</span>
+            </div>
+            <input type="range" id="v-slide-global-rotation" min="-180" max="180" value="0" oninput="rotateAllGlyphsFromUI(this.value)" onchange="saveHistoryState()">
+          </div>
+        </section>
+
+        <!-- Section 3: Selected Vertex -->
+        <section class="control-card" id="v-card-corner">
+          <div class="card-title">Selected Vertex</div>
+          
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Position X / Y</span>
+            </div>
+            <div class="figma-input-row">
+              <div class="figma-input-wrapper">
+                <span class="figma-input-prefix">X</span>
+                <input type="number" id="v-input-vertex-x" oninput="updateSelectedVertexFromUI()">
+              </div>
+              <div class="figma-input-wrapper">
+                <span class="figma-input-prefix">Y</span>
+                <input type="number" id="v-input-vertex-y" oninput="updateSelectedVertexFromUI()">
+              </div>
+            </div>
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Radius</span>
+              <span class="parameter-value-badge" id="v-val-vertex-radius">20</span>
+            </div>
+            <input type="range" id="v-slide-vertex-radius" min="12" max="150" value="20" oninput="updateSelectedVertexFromUI()">
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-danger" onclick="deleteSelectedVertex()">Delete [Del]</button>
+            <button class="btn" onclick="disconnectSelectedVertex()">Disconnect</button>
+          </div>
+        </section>
+
+        <!-- Section 4: Selected Glyph -->
+        <section class="control-card" id="v-card-glyph">
+          <div class="card-title">Selected Glyph</div>
+          
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Translation Offset X / Y</span>
+            </div>
+            <div class="figma-input-row">
+              <div class="figma-input-wrapper">
+                <span class="figma-input-prefix">X</span>
+                <input type="number" id="v-input-glyph-dx" placeholder="Offset" onchange="translateSelectedGlyph(this.value, 0); this.value=''">
+              </div>
+              <div class="figma-input-wrapper">
+                <span class="figma-input-prefix">Y</span>
+                <input type="number" id="v-input-glyph-dy" placeholder="Offset" onchange="translateSelectedGlyph(0, this.value); this.value=''">
+              </div>
+            </div>
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Scale</span>
+            </div>
+            <div class="btn-group">
+              <button class="btn" onclick="scaleSelectedGlyph(-0.1)">- 10%</button>
+              <button class="btn" onclick="scaleSelectedGlyph(0.1)">+ 10%</button>
+            </div>
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Rotation</span>
+              <span class="parameter-value-badge" id="v-val-glyph-rotation">0°</span>
+            </div>
+            <input type="range" id="v-slide-glyph-rotation" min="-180" max="180" value="0" oninput="rotateSelectedGlyphFromUI(this.value)">
+          </div>
+
+          <button class="btn btn-danger" onclick="deleteSelectedGlyph()">Delete Glyph</button>
+        </section>
+
+        <!-- Section 5: Background Reference Image -->
+        <section class="control-card">
+          <div class="card-title">Background Image</div>
+          
+          <div class="parameter-row">
+            <div class="input-file-btn-wrapper">
+              <button class="btn btn-accent">Choose Image...</button>
+              <input type="file" id="v-input-bg-image" accept="image/*" onchange="handleBgImageUpload(this)">
+            </div>
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Opacity</span>
+              <span class="parameter-value-badge" id="v-val-bg-opacity">50%</span>
+            </div>
+            <input type="range" id="v-slide-bg-opacity" min="0" max="100" value="50" oninput="updateBgImageSettingsFromUI()">
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Scale</span>
+              <span class="parameter-value-badge" id="v-val-bg-scale">100%</span>
+            </div>
+            <input type="range" id="v-slide-bg-scale" min="10" max="500" value="100" oninput="updateBgImageSettingsFromUI()">
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Rotation</span>
+              <span class="parameter-value-badge" id="v-val-bg-rotation">0°</span>
+            </div>
+            <input type="range" id="v-slide-bg-rotation" min="-180" max="180" value="0" oninput="updateBgImageSettingsFromUI()">
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Offset X / Y</span>
+            </div>
+            <div class="figma-input-row">
+              <div class="figma-input-wrapper">
+                <span class="figma-input-prefix">X</span>
+                <input type="number" id="v-input-bg-x" value="0" oninput="updateBgImageSettingsFromUI()">
+              </div>
+              <div class="figma-input-wrapper">
+                <span class="figma-input-prefix">Y</span>
+                <input type="number" id="v-input-bg-y" value="0" oninput="updateBgImageSettingsFromUI()">
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-danger" id="v-btn-remove-bg-image" style="display: none;" onclick="removeBgImage()">Remove Image</button>
+        </section>
+
+        <!-- Section 6: Grid Pattern -->
+        <section class="control-card">
+          <div class="card-title">Grid Pattern</div>
+          
+          <label class="checkbox-container">
+            <input type="checkbox" id="v-check-pattern-visible" checked="" onchange="togglePatternVisible(this.checked)">
+            <span class="custom-checkbox"></span>
+            <span>Show pattern grid [X]</span>
+          </label>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Interval X</span>
+              <span class="parameter-value-badge" id="v-val-pattern-x-offset">400</span>
+            </div>
+            <input type="range" id="v-slide-pattern-x-offset" min="100" max="1000" value="400" oninput="updatePatternFromUI()">
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Interval Y</span>
+              <span class="parameter-value-badge" id="v-val-pattern-y-offset">400</span>
+            </div>
+            <input type="range" id="v-slide-pattern-y-offset" min="100" max="1000" value="400" oninput="updatePatternFromUI()">
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Grid Rotation</span>
+              <span class="parameter-value-badge" id="v-val-pattern-rotation">0°</span>
+            </div>
+            <input type="range" id="v-slide-pattern-rotation" min="-180" max="180" value="0" oninput="updatePatternFromUI()">
+          </div>
+
+          <div class="parameter-row">
+            <div class="parameter-label-container">
+              <span class="parameter-label">Copy Opacity</span>
+              <span class="parameter-value-badge" id="v-val-pattern-alpha">100</span>
+            </div>
+            <input type="range" id="v-slide-pattern-alpha" min="0" max="255" value="100" oninput="updatePatternFromUI()">
+          </div>
+        </section>
+
+        <!-- Section 7: Styles & Colors -->
+        <section class="control-card">
+          <div class="card-title">Styles &amp; Colors</div>
+          
+          <label class="checkbox-container">
+            <input type="checkbox" id="v-check-stroke-rounded" checked="" onchange="toggleStrokeCapRounded(this.checked)">
+            <span class="custom-checkbox"></span>
+            <span>Rounded line joints</span>
+          </label>
+
+          <div class="control-group color-pickers-row">
+            <div>
+              <label for="v-picker-bg-color">Background Color</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="v-picker-bg-color" value="#ffffff" oninput="updateColorsFromUI()">
+                <span id="v-label-bg" class="color-code">#FFFFFF</span>
+              </div>
+            </div>
+            <div>
+              <label for="v-picker-stroke-color">Stroke Color</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="v-picker-stroke-color" value="#000000" oninput="updateColorsFromUI()">
+                <span id="v-label-stroke" class="color-code">#000000</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 8: Layers -->
+        <section class="control-card">
+          <div class="card-title">
+            <span>Layers</span>
+            <span class="title-aside" id="v-val-layers-count">Glyphs: 0</span>
+          </div>
+          <div class="layers-list" id="v-dom-layers-list">
+            <!-- Dynamically populated -->
+            <div class="layer-item">No glyphs created</div>
+          </div>
+          <button type="button" class="btn btn-accent" onclick="createNewGlyphFromUI()">+ New Glyph</button>
+        </section>
+
+        <!-- Section 9: History -->
+        <section class="control-card">
+          <div class="card-title">History</div>
+          <div class="btn-group">
+            <button class="btn" id="v-btn-undo" onclick="appUndo()">Undo [Ctrl+Z]</button>
+            <button class="btn" id="v-btn-clear" onclick="appClearScene()">Clear All</button>
+          </div>
+        </section>
+
+        <!-- Section 10: Save & Export -->
+        <section class="control-card">
+          <div class="card-title">Save &amp; Export</div>
+          
+          <div class="parameter-row">
+            <input type="text" id="v-export-filename" value="myGraphic" placeholder="File name" spellcheck="false">
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-accent" onclick="exportAsFormat('SVG')">Export SVG</button>
+            <button class="btn btn-accent" onclick="exportAsFormat('PNG')">Export PNG</button>
+          </div>
+
+          <div class="gap-v-small"></div>
+          
+          <div class="btn-group">
+            <button class="btn" onclick="saveProjectJSON()">Save Project</button>
+            <button class="btn" onclick="loadProjectJSON()">Load Project</button>
+            <input type="file" id="import-json-file" accept=".json" style="display:none;" onchange="handleImportJSON(event)">
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button class="btn" style="width: 100%;" onclick="showModal('v-helpModal')">Keyboard Shortcuts</button>
+      </div>
+
+    </aside>
+
+    <!-- Canvas Container -->
+    <main id="vertice-canvas">
+      <!-- p5.js canvas injected here -->
+    </main>
+
+  </div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="modal" id="v-helpModal">
+    <div class="modal-content">
+      <div class="modal-title">Keyboard Shortcuts</div>
+      
+      <p>
+        <b>Vertices Mode (1):</b><br>
+        • Click empty space — Add vertex<br>
+        • Drag vertex — Move vertex<br>
+        • Double click vertex — Toggle connections<br>
+        • Scroll over vertex — Change radius<br>
+        • Backspace/Delete — Delete vertex<br>
+        <br>
+        <b>Glyphs Mode (2):</b><br>
+        • Double click empty space — Create new glyph<br>
+        • Drag — Move selected glyph<br>
+        • Scroll over vertex — Scale glyph<br>
+        • Shift + scroll — Rotate glyph around vertex<br>
+        • Backspace/Delete — Delete selected glyph<br>
+        <br>
+        <b>Scene Mode (3):</b><br>
+        • Drag — Pan camera<br>
+        • Scroll — Zoom camera<br>
+        • Shift + scroll over vertex — Rotate scene<br>
+        • Shift + drag — Adjust grid pattern offset<br>
+        • Shift + scroll on background — Rotate grid pattern<br>
+        • Press X — Toggle pattern grid<br>
+        • Backspace/Delete — Clear all glyphs
+      </p>
+
+      <div class="gap-v-small"></div>
+      <button class="btn btn-accent" onclick="closeModal('v-helpModal')">Close</button>
+    </div>
+  </div>
+
+  <!-- Snackbar Notifications -->
+  <div id="vertice-snackbar">Notification</div>
+
+
+
+
+    </div>
+    
+    <!-- Secuencia -->
+    <div id="app-secuencia" class="app-view" style="width:100%; height:100%; display:none;">
+      
+
+  <!-- LEFT PANEL: GLYPH EDITOR & GLYPH SET (Container is transparent, subpanels are white) -->
+  <div id="s-scriptEditor">
+
+    <!-- Active Glyph Drawing Area Placeholder (Transparent with borders) -->
+    <div id="s-glyphEditor" class="editor-canvas-container">
+      <!-- Floating Toolbar Capsule -->
+      <div id="s-glyphEditorTools" class="floating-toolbar">
+        <button class="toolbar-btn active" id="s-editPathMode" onclick="switchMode('editPath')" title="Edit Path (V)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+            <path d="M13 13l6 6"></path>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="s-editAnchorMode" onclick="switchMode('editAnchor')" title="Edit Anchor (A)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="6" height="6" rx="1"></rect>
+            <path d="M3 18c2-4 4-6 6-6"></path>
+            <path d="M15 12c2 0 4 2 6 6"></path>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="s-editHandleMode" onclick="switchMode('editHandle')" title="Edit Handle (H)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="10" y="10" width="4" height="4" rx="0.5"></rect>
+            <line x1="12" y1="12" x2="19" y2="5"></line>
+            <circle cx="19" cy="5" r="2.5"></circle>
+            <line x1="12" y1="12" x2="5" y2="19"></line>
+            <circle cx="5" cy="19" r="2.5"></circle>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="s-drawPathMode" onclick="switchMode('drawPath')" title="Draw Path (P)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Subpanel: Fonts & Glyphs Set -->
+    <div class="secuencia-subpanel" style="flex-grow: 1; min-height: 0; overflow: hidden;">
+      <!-- Font presets selector -->
+      <div class="section-title" style="margin-top: 0;">Font Script</div>
+      <div class="font-script-row">
+        <!-- Dropdown Selector -->
+        <div id="s-script" class="dropdown-wrapper">
+          <div class="dropdown-header">
+            <input type="text" id="s-scriptName" spellcheck="false" oninput="setScriptName(this.value)">
+            <button id="s-dropDownButton" class="dropdown-toggle" onclick="toggleDropDown('scriptList')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 40 40">
+                <path d="M20,27.8c-.2,0-.5,0-.6-.2l-10.8-10.8c-.3-.3-.3-.9,0-1.2s.9-.3,1.2,0l10.2,10.2,10.2-10.2c.3-.3.9-.3,1.2,0s.3.9,0,1.2l-10.8,10.8c-.2.2-.4.2-.6.2h0Z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
+          <ul id="s-scriptList" class="dropdown-menu"></ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <button class="btn btn-icon" onclick="resetScript()" title="Reset Script">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+        </button>
+        <button class="btn btn-icon" onclick="addNewScript()" title="New Script">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button class="btn btn-icon" onclick="importScript()" title="Load Script">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </button>
+        <button class="btn btn-accent btn-text" onclick="showPrompt('exportScriptPrompt')">Save</button>
+      </div>
+
+      <!-- Glyph selection grid -->
+      <div class="section-title" style="margin-top: 14px;">Glyphs Set</div>
+      <div class="scroll-box-container" style="flex-grow: 1;">
+        <div class="scrollBox" id="s-glyphSetScrollBox">
+          <div id="s-glyphSet"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXT BOX CONTROL HEADER (FLOATING TOP) -->
+  <div id="s-textBox" class="secuencia-panel top-panel">
+    <div class="top-panel-actions" id="s-textBoxButtons">
+      <button class="btn" id="s-saveTextButton" onclick="showPrompt('exportTextPrompt')">Export Text</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: TEXT LAYOUT & DESIGN SYSTEM -->
+  <div id="s-textBoxSettings" class="sidebar right-sidebar">
+    
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="21" y1="12" x2="3" y2="12"></line>
+          <line x1="12" y1="3" x2="12" y2="21"></line>
+        </svg>
+        <span class="logo-text">SECUENCIA</span>
+      </div>
+      <span class="version-tag">v1.0</span>
+    </div>
+
+    <!-- Sidebar Scrollable Content -->
+    <div class="sidebar-content">
+      
+      <!-- Section 1: Text Input -->
+      <section class="control-card">
+        <div class="card-title">Text Input</div>
+        <div class="textarea-wrapper">
+          <textarea id="s-textInput" rows="4" placeholder="Type text here..." oninput="setText()"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 2: Typography Parameters -->
+      <section class="control-card">
+        <div class="card-title">Typography</div>
+
+        <!-- Size -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Size</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-sizeNum" class="figma-num-input" min="20" max="400" step="1">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-size" oninput="setSize(this.value)">
+        </div>
+
+        <!-- Line Height -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Line Height</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-lineHeightNum" class="figma-num-input" min="20" max="500" step="1">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-lineHeight" oninput="setLineHeight(this.value)">
+        </div>
+
+        <!-- Stroke Weight -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Stroke Weight</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-scriptStrokeWeightNum" class="figma-num-input" min="1" max="10" step="0.1">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-scriptStrokeWeight" oninput="setScriptStrokeWeight(this.value)">
+        </div>
+
+        <!-- Word Space -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Word Space</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-wordSpaceNum" class="figma-num-input" min="100" max="300" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-wordSpace" oninput="setWordSpace(this.value)">
+        </div>
+
+        <!-- Letter Space -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Letter Space</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-letterSpaceNum" class="figma-num-input" min="100" max="200" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-letterSpace" oninput="setLetterSpace(this.value)">
+        </div>
+
+        <!-- Letter Width -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Letter Width</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-letterWidthNum" class="figma-num-input" min="25" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-letterWidth" oninput="setLetterWidth(this.value)">
+        </div>
+
+        <!-- Letter Height -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Letter Height</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-letterHeightNum" class="figma-num-input" min="25" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-letterHeight" oninput="setLetterHeight(this.value)">
+        </div>
+
+        <!-- Slant -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Slant</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-slantNum" class="figma-num-input" min="-45" max="45" step="1">
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-slant" oninput="setSlant(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 3: Random Variations -->
+      <section class="control-card">
+        <div class="card-title">Random Variations</div>
+
+        <!-- Random Size -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Size</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-randomSizeNum" class="figma-num-input" min="0" max="200" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-randomSize" oninput="setRandomSize(this.value)">
+        </div>
+
+        <!-- Random Letter Space -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Space</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-randomLetterSpaceNum" class="figma-num-input" min="0" max="150" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-randomLetterSpace" oninput="setRandomLetterSpace(this.value)">
+        </div>
+
+        <!-- Random Letter Width -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Width</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-randomLetterWidthNum" class="figma-num-input" min="0" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-randomLetterWidth" oninput="setRandomLetterWidth(this.value)">
+        </div>
+
+        <!-- Random Letter Height -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Height</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-randomLetterHeightNum" class="figma-num-input" min="0" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-randomLetterHeight" oninput="setRandomLetterHeight(this.value)">
+        </div>
+
+        <!-- Random Slant -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Slant</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-randomSlantNum" class="figma-num-input" min="0" max="200" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-randomSlant" oninput="setRandomSlant(this.value)">
+        </div>
+
+        <!-- Random Baseline Offset -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Baseline</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-randomBaselineOffsetNum" class="figma-num-input" min="0" max="100" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-randomBaselineOffset" oninput="setRandomBaselineOffset(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 4: Global Controls -->
+      <section class="control-card">
+        <div class="card-title">Global Controls</div>
+
+        <!-- Precision -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Precision</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-precisionNum" class="figma-num-input" min="0" max="100" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="s-precision" oninput="setPrecision(this.value)">
+        </div>
+        
+        <!-- Rotate All Glyphs -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Rotate All Glyphs</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-rotateAllNum" class="figma-num-input" min="-180" max="180" step="1" value="0">
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-180" max="180" value="0" id="s-rotateAll" oninput="setRotateAll(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 5: Background Reference Image -->
+      <section class="control-card">
+        <div class="card-title">Background Image</div>
+
+        <!-- File upload -->
+        <div class="parameter-row">
+          <div style="display: flex; gap: 8px; width: 100%;">
+            <div class="input-file-btn-wrapper" style="flex: 1; position: relative; overflow: hidden; display: inline-block;">
+              <button class="btn btn-accent" style="width: 100%;">Choose Image...</button>
+              <input type="file" id="s-bgImageInput" accept="image/*" style="position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;">
+            </div>
+            <button class="btn" onclick="removeBgImage()" style="flex: 0 0 28px; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Remove background image">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Opacity -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Opacity</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-bgOpacityNum" class="figma-num-input" min="0" max="100" step="1" value="50">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="50" id="s-bgOpacity" oninput="setBgOpacity(this.value)">
+        </div>
+
+        <!-- Scale -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Scale</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-bgScaleNum" class="figma-num-input" min="10" max="400" step="1" value="100">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="10" max="400" value="100" id="s-bgScale" oninput="setBgScale(this.value)">
+        </div>
+
+        <!-- Rotation -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Rotation</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-bgRotationNum" class="figma-num-input" min="-180" max="180" step="1" value="0">
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-180" max="180" value="0" id="s-bgRotation" oninput="setBgRotation(this.value)">
+        </div>
+
+        <!-- Offset X -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Offset X</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-bgOffsetXNum" class="figma-num-input" min="-1000" max="1000" step="1" value="0">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-1000" max="1000" value="0" id="s-bgOffsetX" oninput="setBgOffsetX(this.value)">
+        </div>
+
+        <!-- Offset Y -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Offset Y</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="s-bgOffsetYNum" class="figma-num-input" min="-1000" max="1000" step="1" value="0">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-1000" max="1000" value="0" id="s-bgOffsetY" oninput="setBgOffsetY(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 6: Canvas Style -->
+      <section class="control-card">
+        <div class="card-title">Canvas Style</div>
+        
+        <div class="control-group color-pickers-row">
+          <div>
+            <label for="s-bgColorPicker">Background Color</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="s-bgColorPicker" value="#ffffff">
+              <span id="s-label-bg" class="color-code">#FFFFFF</span>
+            </div>
+          </div>
+          <div>
+            <label for="s-textColorPicker">Line Color</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="s-textColorPicker" value="#000000">
+              <span id="s-label-text" class="color-code">#000000</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Sidebar Footer -->
+    <footer class="sidebar-footer">
+      <div class="btn-group-row" style="grid-template-columns: auto 1fr 1fr; width: 100%;">
+        <button class="btn btn-icon" onclick="randomTextBoxSettings()" title="Randomize Parameters">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 3 21 3 21 8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21 16 21 21 16 21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+        </button>
+        <button class="btn btn-danger" onclick="resetTextBoxSettings()">Reset</button>
+        <button class="btn" onclick="importTextBoxSettings()">Load Presets</button>
+      </div>
+      <button class="btn btn-accent" style="width: 100%;" onclick="showPrompt('exportTextBoxSettingsPrompt')">Save Presets</button>
+    </footer>
+  </div>
+
+  <!-- CONTEXT MENU FOR GLYPH EDITOR PATHS -->
+  <div id="s-glyphEditorContext" class="secuencia-context-menu" style="display: none;">
+    <button type="button" id="s-connectionToPrev" onclick="switchConnectionToPrev()">Connect to Previous</button>
+    <button type="button" id="s-connectionToNext" onclick="switchConnectionToNext()">Connect to Next</button>
+    <div id="s-glyphEditorContextMainPath" class="context-separator">
+      <button type="button" id="s-mainPath" onclick="switchMainPath()">Set Main Stroke</button>
+    </div>
+  </div>
+
+  <!-- MODALS / PROMPTS -->
+  
+  <!-- Export Script Modal -->
+  <div id="s-exportScriptPrompt" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">Export Script</div>
+      <p>Enter file name:</p>
+      <input type="text" id="s-exportScriptFileName" spellcheck="false" value="">
+      <div class="btn-group-row">
+        <button class="btn btn-accent" onclick="exportAs('script')">Save</button>
+        <button class="btn" onclick="closePrompt('exportScriptPrompt')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Settings Modal -->
+  <div id="s-exportTextBoxSettingsPrompt" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">Export Settings</div>
+      <p>Enter file name:</p>
+      <input type="text" id="s-exportTextBoxSettingsFileName" value="" spellcheck="false">
+      <div class="btn-group-row">
+        <button class="btn btn-accent" onclick="exportAs('settings')">Save</button>
+        <button class="btn" onclick="closePrompt('exportTextBoxSettingsPrompt')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Graphics Modal -->
+  <div id="s-exportTextPrompt" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">Export Artwork</div>
+      <p>Enter file name:</p>
+      <input type="text" id="s-exportGraphicFileName" value="" spellcheck="false">
+      <div class="btn-group-row">
+        <button class="btn btn-accent" onclick="exportAs('textAsSVG')">Save SVG</button>
+        <button class="btn btn-accent" onclick="exportAs('textAsPNG')">Save PNG</button>
+      </div>
+      <button class="btn" onclick="closePrompt('exportTextPrompt')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- JS Scripts Setup (Libraries are loaded in head) -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+    </div>
+    
+  </div>
+
+</body>
+</html>
