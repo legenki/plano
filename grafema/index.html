@@ -116,7 +116,7 @@
               <!-- Generative Font Parameters 1-4 -->
               <div class="parameter-row border-top">
                 <div class="parameter-header">
-                  <span class="parameter-label" title="Controls width or horizontal stretch">Parameter 1 (Width)</span>
+                  <span class="parameter-label" title="Controls width or horizontal stretch">Width</span>
                   <div class="num-input-wrapper">
                     <input type="number" id="input-par1-num" class="figma-num-input" min="0" max="100" step="1">
                     <span class="unit">%</span>
@@ -127,7 +127,7 @@
 
               <div class="parameter-row">
                 <div class="parameter-header">
-                  <span class="parameter-label" title="Controls bar height or curvature">Parameter 2 (Height)</span>
+                  <span class="parameter-label" title="Controls bar height or curvature">Height</span>
                   <div class="num-input-wrapper">
                     <input type="number" id="input-par2-num" class="figma-num-input" min="0" max="100" step="1">
                     <span class="unit">%</span>
@@ -138,7 +138,7 @@
 
               <div class="parameter-row">
                 <div class="parameter-header">
-                  <span class="parameter-label" title="Controls ratio or balance of details">Parameter 3 (Ratio)</span>
+                  <span class="parameter-label" title="Controls ratio or balance of details">Ratio</span>
                   <div class="num-input-wrapper">
                     <input type="number" id="input-par3-num" class="figma-num-input" min="0" max="100" step="1">
                     <span class="unit">%</span>
@@ -149,13 +149,24 @@
 
               <div class="parameter-row">
                 <div class="parameter-header">
-                  <span class="parameter-label" title="Controls end caps or tails length">Parameter 4 (Details)</span>
+                  <span class="parameter-label" title="Controls end caps or tails length">Details</span>
                   <div class="num-input-wrapper">
                     <input type="number" id="input-par4-num" class="figma-num-input" min="0" max="100" step="1">
                     <span class="unit">%</span>
                   </div>
                 </div>
                 <input type="range" id="input-par4" class="custom-slider" min="0" max="1" step="0.01">
+              </div>
+
+              <div class="parameter-row">
+                <div class="parameter-header">
+                  <span class="parameter-label">Line Weight</span>
+                  <div class="num-input-wrapper">
+                    <input type="number" id="input-glyph-weight-num" class="figma-num-input" min="1" max="50" step="1" value="7">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <input type="range" id="input-glyph-weight" class="custom-slider" min="1" max="50" step="1" value="7">
               </div>
             </div>
           </div>
@@ -243,17 +254,6 @@
             <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </h2>
           <div class="section-content">
-            <div class="parameter-row">
-              <div class="parameter-header">
-                <span class="parameter-label">Line Weight</span>
-                <div class="num-input-wrapper">
-                  <input type="number" id="input-glyph-weight-num" class="figma-num-input" min="1" max="50" step="1" value="7">
-                  <span class="unit">px</span>
-                </div>
-              </div>
-              <input type="range" id="input-glyph-weight" class="custom-slider" min="1" max="50" step="1" value="7">
-            </div>
-
             <div class="control-group color-pickers-row">
               <div>
                 <label for="color-bg">Background Color</label>
@@ -279,10 +279,6 @@
               </label>
             </div>
 
-            <div class="btn-group">
-              <button class="btn" id="btn-theme-dark">Dark Theme</button>
-              <button class="btn" id="btn-theme-light">Light Theme</button>
-            </div>
           </div>
         </section>
 

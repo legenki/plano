@@ -359,7 +359,8 @@ body.theme-dark .sidebar, body.theme-dark .secuencia-panel {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 0;
+  padding: 0 6px 0 0;
+  margin: 0 -6px 0 0;
   display: flex;
   flex-direction: column;
 }

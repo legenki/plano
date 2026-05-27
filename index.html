@@ -9,11 +9,18 @@
 <body class="theme-light">
 
   <!-- Top-Center Tab Switcher Capsule -->
-  <div class="app-switcher-container">
+  <div class="app-switcher-container" style="display: flex; gap: 8px; align-items: center;">
     <div class="app-switcher">
       <button id="tab-grafema" class="switcher-tab active" onclick="switchApp('grafema')">GRAFEMA</button>
       <button id="tab-vertice" class="switcher-tab" onclick="switchApp('vertice')">VERTICE</button>
       <button id="tab-secuencia" class="switcher-tab" onclick="switchApp('secuencia')">SECUENCIA</button>
+    </div>
+    <div class="app-switcher" style="padding: 3px;">
+      <button id="btn-global-theme" class="switcher-tab" onclick="toggleGlobalTheme()" style="padding: 8px; display: flex; align-items: center; justify-content: center;" title="Toggle Theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
     </div>
   </div>
 
@@ -52,6 +59,27 @@
     window.addEventListener('keydown', (e) => {
       handleGlobalKeys(e);
     });
+
+    function toggleGlobalTheme() {
+      const isDark = document.body.classList.contains('theme-dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      
+      if (newTheme === 'dark') {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light');
+      } else {
+        document.body.classList.add('theme-light');
+        document.body.classList.remove('theme-dark');
+      }
+      
+      // Forward theme to all iframes
+      apps.forEach(app => {
+        const iframe = document.getElementById(`iframe-${app}`);
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage({ type: 'SYNC_THEME', theme: newTheme }, '*');
+        }
+      });
+    }
 
     function handleGlobalKeys(e) {
       if (e.altKey) {
