@@ -1,5 +1,7 @@
 import { diffAndUpdateDOM } from '../../js/ui-utils.js';
 import { createGlyphClasses } from './models/Glyph.js';
+import { createUIManager } from './ui/UIManager.js';
+import { bindEvents } from './controllers/Events.js';
 import { createScriptClass } from './models/Script.js';
 import { createTextBoxClass } from './models/TextBox.js';
 import { createGlyphEditorClass } from './ui/GlyphEditor.js';
@@ -33,7 +35,6 @@ export const secuenciaSketch = (_p5) => {
     set script_defaultWordSpace(v) { script_defaultWordSpace = v; },
     get basicLatin() { return typeof basicLatin !== 'undefined' ? basicLatin : undefined; },
     set basicLatin(v) { basicLatin = v; },
-    get updateInterface_glyphSet_boxes() { return typeof updateInterface_glyphSet_boxes !== 'undefined' ? updateInterface_glyphSet_boxes : undefined; },
     get activeScript() { return typeof activeScript !== 'undefined' ? activeScript : undefined; },
     set activeScript(v) { activeScript = v; },
     get size() { return typeof size !== 'undefined' ? size : undefined; },
@@ -60,8 +61,6 @@ export const secuenciaSketch = (_p5) => {
     set glyphEditor_buttonSizeBig_DEFAULT(v) { glyphEditor_buttonSizeBig_DEFAULT = v; },
     get glyphEditor_buttonSizeSmall_DEFAULT() { return typeof glyphEditor_buttonSizeSmall_DEFAULT !== 'undefined' ? glyphEditor_buttonSizeSmall_DEFAULT : undefined; },
     set glyphEditor_buttonSizeSmall_DEFAULT(v) { glyphEditor_buttonSizeSmall_DEFAULT = v; },
-    get updateInterface_glyphEditorContext_state() { return typeof updateInterface_glyphEditorContext_state !== 'undefined' ? updateInterface_glyphEditorContext_state : undefined; },
-    get updateInterface_glyphEditorTools_state() { return typeof updateInterface_glyphEditorTools_state !== 'undefined' ? updateInterface_glyphEditorTools_state : undefined; },
     get glyphEditor_guideColor() { return typeof glyphEditor_guideColor !== 'undefined' ? glyphEditor_guideColor : undefined; },
     set glyphEditor_guideColor(v) { glyphEditor_guideColor = v; },
     get backgroundColor() { return typeof backgroundColor !== 'undefined' ? backgroundColor : undefined; },
@@ -74,8 +73,6 @@ export const secuenciaSketch = (_p5) => {
     set activeColor(v) { activeColor = v; },
     get scripts() { return typeof scripts !== 'undefined' ? scripts : undefined; },
     set scripts(v) { scripts = v; },
-    get updateInterface_textBoxSettings_state() { return typeof updateInterface_textBoxSettings_state !== 'undefined' ? updateInterface_textBoxSettings_state : undefined; },
-    get updateInterface_textBoxSettings_label() { return typeof updateInterface_textBoxSettings_label !== 'undefined' ? updateInterface_textBoxSettings_label : undefined; },
     get wordSpace_DEFAULT() { return typeof wordSpace_DEFAULT !== 'undefined' ? wordSpace_DEFAULT : undefined; },
     set wordSpace_DEFAULT(v) { wordSpace_DEFAULT = v; },
     get letterSpace_DEFAULT() { return typeof letterSpace_DEFAULT !== 'undefined' ? letterSpace_DEFAULT : undefined; },
@@ -134,7 +131,6 @@ export const secuenciaSketch = (_p5) => {
     set canvasHeight(v) { canvasHeight = v; },
     get canvasWidth() { return typeof canvasWidth !== 'undefined' ? canvasWidth : undefined; },
     set canvasWidth(v) { canvasWidth = v; },
-    get closePrompt() { return typeof closePrompt !== 'undefined' ? closePrompt : undefined; },
     get colorToHex() { return typeof colorToHex !== 'undefined' ? colorToHex : undefined; },
     get defaultScriptFiles() { return typeof defaultScriptFiles !== 'undefined' ? defaultScriptFiles : undefined; },
     set defaultScriptFiles(v) { defaultScriptFiles = v; },
@@ -273,11 +269,6 @@ export const secuenciaSketch = (_p5) => {
     get timestamp() { return typeof timestamp !== 'undefined' ? timestamp : undefined; },
     get toolbar_buttonSize() { return typeof toolbar_buttonSize !== 'undefined' ? toolbar_buttonSize : undefined; },
     set toolbar_buttonSize(v) { toolbar_buttonSize = v; },
-    get updateInterface_glyphSet_state() { return typeof updateInterface_glyphSet_state !== 'undefined' ? updateInterface_glyphSet_state : undefined; },
-    get updateInterface_scriptList_label() { return typeof updateInterface_scriptList_label !== 'undefined' ? updateInterface_scriptList_label : undefined; },
-    get updateInterface_scriptList_state() { return typeof updateInterface_scriptList_state !== 'undefined' ? updateInterface_scriptList_state : undefined; },
-    get updateInterface_scriptName() { return typeof updateInterface_scriptName !== 'undefined' ? updateInterface_scriptName : undefined; },
-    get updateInterface_textBoxTools_state() { return typeof updateInterface_textBoxTools_state !== 'undefined' ? updateInterface_textBoxTools_state : undefined; },
     get wordSpaceMax() { return typeof wordSpaceMax !== 'undefined' ? wordSpaceMax : undefined; },
     set wordSpaceMax(v) { wordSpaceMax = v; },
     get wordSpaceMin() { return typeof wordSpaceMin !== 'undefined' ? wordSpaceMin : undefined; },
@@ -586,6 +577,9 @@ let animations = [];
 
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+  // Instantiate UIManager and add its methods to env
+  Object.assign(_p5.env, createUIManager(_p5));
+
 
 _p5.preload = function() {
 
@@ -1177,450 +1171,16 @@ function setupInterface() {
   updateCanvas_parameter();
   updateCanvas_layout();
 
-  updateInterface_glyphSet_boxes();
-  updateInterface_textBoxSettings_state();
-  updateInterface_textBoxSettings_label();
-  updateInterface_glyphEditorTools_state();
-  updateInterface_glyphEditorContext_state();
-  updateInterface_glyphSet_state();
-  updateInterface_scriptName();
-  updateInterface_scriptList_label();
-  updateInterface_scriptList_state();
-  updateInterface_textBoxTools_state();
-}
-
-// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-
-function updateInterface_glyphEditorTools_state() {
-
-  const editPathModeElement = document.getElementById("editPathMode");
-  const editAnchorModeElement = document.getElementById("editAnchorMode");
-  const editHandleModeElement = document.getElementById("editHandleMode");
-  const drawPathModeElement = document.getElementById("drawPathMode");
-
-  if (!editPathModeElement || !editAnchorModeElement || !editHandleModeElement || !drawPathModeElement) {
-    return;
-  }
-
-  resetState(editPathModeElement);
-  resetState(editAnchorModeElement);
-  resetState(editHandleModeElement);
-  resetState(drawPathModeElement);
-
-  switch (glyphEditor.mode) {
-    case 'editPath':
-      setActive(editPathModeElement);
-      break;
-    case 'editAnchor':
-      setActive(editAnchorModeElement);
-      break;
-    case 'editHandle':
-      setActive(editHandleModeElement);
-      break;
-    case 'drawPath':
-      setActive(drawPathModeElement);
-      break;
-  }
-}
-
-function updateInterface_glyphEditorContext_state() {
-
-  const glyphEditorContextElement = document.getElementById("glyphEditorContext");
-  const glyphEditorContextMainPathElement = document.getElementById("glyphEditorContextMainPath");
-
-  // update state
-  if (glyphEditor.contextMenu == true) {
-
-    setDisplay(glyphEditorContextElement);
-    glyphEditorContextElement.style.left = _p5.mouseX + 'px';
-    glyphEditorContextElement.style.top = _p5.mouseY + 'px';
-
-    if (glyphEditor.mode != 'drawPath') {
-
-      const connectionToPrevElement = document.getElementById("connectionToPrev");
-      const connectionToNextElement = document.getElementById("connectionToNext");
-
-      if (glyphEditor.activePath.connectionToPrev == true) {
-        setActive(connectionToPrevElement);
-      } else {
-        resetState(connectionToPrevElement);
-      }
-
-      if (glyphEditor.activePath.connectionToNext == true) {
-        setActive(connectionToNextElement);
-      } else {
-        resetState(connectionToNextElement);
-      }
-
-      if(glyphEditor.activePath.index != 0) {
-        setDisplay(glyphEditorContextMainPathElement);
-      } else {
-        setHidden(glyphEditorContextMainPathElement);
-      }
-
-    }
-
-  } else {
-    setHidden(glyphEditorContextElement);
-  }
-}
-
-function updateInterface_glyphSet_boxes() {
-  glyphSetElement.setAttribute("role", "listbox");
-  glyphSetElement.setAttribute("aria-live", "polite");
-
-  diffAndUpdateDOM(
-    glyphSetElement,
-    activeScript.glyphs,
-    (glyph, idx) => {
-      const box = document.createElement('div');
-      box.className = 'glyphSet_box';
-      box.setAttribute("role", "option");
-      box.tabIndex = 0; // Make focusable
-      
-      const label = document.createElement('label');
-      box.appendChild(label);
-      
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setGlyph(box.id);
-        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          e.preventDefault();
-          if (box.nextElementSibling) box.nextElementSibling.focus();
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          e.preventDefault();
-          if (box.previousElementSibling) box.previousElementSibling.focus();
-        }
-      });
-      
-      box.addEventListener('click', () => setGlyph(box.id));
-      if (developerMode == true) {
-        box.addEventListener('dblclick', () => showPrompt('setGlyphNamePrompt'));
-      }
-      return box;
-    },
-    (box, glyph, idx) => {
-      const name = glyph.name;
-      const char = (name.length > 1 && name.match(/\?/)) ? glyphSet_missingLink : name; 
-      
-      box.id = name;
-      box.querySelector('label').textContent = char;
-      box.setAttribute('aria-selected', glyphEditor && glyphEditor.activeGlyph === glyph);
-    }
-  );
-
-  // update box fit
-  const glyphSet_boxObjects = document.querySelectorAll('.glyphSet_box');
-  if (glyphSet_boxObjects.length > 0) {
-    const firstBox = glyphSet_boxObjects[0];
-    const firstBoxRect = firstBox.getBoundingClientRect();
-    let prevBox = null;
-    let maxBottom = 0;
-
-    glyphSet_boxObjects.forEach((box) => {
-
-      if (prevBox != null) {
-
-        const boxRect = box.getBoundingClientRect();
-        const prevBoxRect = prevBox.getBoundingClientRect();
-        maxBottom = Math.max(maxBottom, boxRect.bottom);
-
-        if (boxRect.top > prevBoxRect.top) {
-          prevBox.classList.add('glyphSet_last-box-in-_p5.line');
-          box.classList.add('glyphSet_first-box-in-_p5.line');
-        } else {
-          prevBox.classList.remove('glyphSet_last-box-in-_p5.line');
-          box.classList.remove('glyphSet_first-box-in-_p5.line')
-        }
-
-        if (boxRect.top == firstBoxRect.top) {
-          box.classList.add('glyphSet_first-row-boxes');
-        } else {
-          box.classList.remove('glyphSet_first-row-boxes')
-        }
-      }
-
-      prevBox = box;
-    });
-
-    glyphSet_boxObjects.forEach((box) => {
-      const boxRect = box.getBoundingClientRect();
-      if (boxRect.bottom == maxBottom) {
-        box.classList.add('glyphSet_last-row-boxes');
-      } else {
-        box.classList.remove('glyphSet_last-row-boxes');
-      }
-    });
-
-    firstBox.classList.add('glyphSet_first-box-in-_p5.line');
-    firstBox.classList.add('glyphSet_first-row-boxes');
-  }
-
-  // update current state
-  updateInterface_glyphSet_state();
-}
-
-function updateInterface_glyphSet_state() {
-  const glyphSet_boxObjects = document.querySelectorAll('.glyphSet_box');
-
-  if (glyphSet_boxObjects.length > 0) {
-    glyphSet_boxObjects.forEach((box) => {
-      let character = box.id;
-      let glyph = activeScript.getGlyph(character);
-      if (glyph == glyphEditor.activeGlyph) {
-        setActive(box);
-      } else if (glyph.paths.length == 0) {
-        if (document.getElementById("textInput").value.includes(glyph.name)) {
-          setMissing(box);
-        } else {
-          setEmpty(box);
-        }
-      } else {
-        resetState(box);
-      }
-    });
-  }
-}
-
-function updateInterface_scriptName() {
-  const scriptNameElement = document.getElementById("scriptName");
-  document.getElementById("scriptName").value = activeScript.name;
-}
-
-function updateInterface_scriptList_label() {
-  const scriptListElement = document.getElementById("scriptList");
-  if (!scriptListElement) return;
-  
-  scriptListElement.setAttribute("role", "listbox");
-
-  diffAndUpdateDOM(
-    scriptListElement,
-    scripts,
-    (script, index) => {
-      const li = document.createElement('li');
-      li.setAttribute("role", "option");
-      li.tabIndex = 0; // Make focusable
-      
-      li.addEventListener('click', () => setScript(index));
-      li.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setScript(index);
-        } else if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          if (li.nextElementSibling) li.nextElementSibling.focus();
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          if (li.previousElementSibling) li.previousElementSibling.focus();
-        }
-      });
-      return li;
-    },
-    (li, script, index) => {
-      li.textContent = script.name;
-      li.setAttribute('aria-selected', index === activeScriptIndex);
-    }
-  );
- 
-  updateInterface_scriptList_state();
-}
-
-function updateInterface_scriptList_state() {
-
-  const scriptList_elements = document.getElementById('scriptList').getElementsByTagName('li');
-
-  // Convert to array and use forEach
-  Array.from(scriptList_elements).forEach((element, index) => {
-
-    if (index == activeScriptIndex) {
-      setActive(element);
-    } else {
-      resetState(element);
-    }
-  });
-}
-
-function updateInterface_textBoxTools_state() {
-  const textBoxDisplayInfoHideElement = document.getElementById("textBoxDisplayInfoHide");
-  const textBoxDisplayInfoShowElement = document.getElementById("textBoxDisplayInfoShow");
-
-  if (!textBoxDisplayInfoHideElement || !textBoxDisplayInfoShowElement) {
-    return;
-  }
-
-  if(textBox.displayInfo == true) {
-    setHidden(textBoxDisplayInfoShowElement);
-    setDisplay(textBoxDisplayInfoHideElement);
-  } else {
-    setHidden(textBoxDisplayInfoHideElement);
-    setDisplay(textBoxDisplayInfoShowElement);
-  }
-
-}
-
-function updateInterface_textBoxSettings_state() {
-  document.getElementById("textInput").value = arrayToText(textBox.textLines);
-  
-  // Sliders (0..100 _p5.map)
-  document.getElementById("size").value = _p5.map(size, sizeMin, sizeMax, 0, 100);
-  document.getElementById("scriptStrokeWeight").value = _p5.map(scriptStrokeWeight, scriptStrokeWeightMin, scriptStrokeWeightMax, 0, 100);
-  document.getElementById("wordSpace").value = _p5.map(wordSpace, wordSpaceMin, wordSpaceMax, 0, 100);
-  document.getElementById("letterSpace").value = _p5.map(letterSpace, letterSpaceMin, letterSpaceMax, 0, 100);
-  document.getElementById("lineHeight").value = _p5.map(lineHeight, lineHeightMin, lineHeightMax, 0, 100);
-  document.getElementById("letterWidth").value = _p5.map(letterWidth, letterWidthMin, letterWidthMax, 0, 100);
-  document.getElementById("letterHeight").value = _p5.map(letterHeight, letterHeightMin, letterHeightMax, 0, 100);
-  document.getElementById("slant").value = _p5.map(slant, slantMin, slantMax, 0, 100);
-  
-  document.getElementById("randomSize").value = _p5.map(randomSize, randomSizeMin, randomSizeMax, 0, 100);
-  document.getElementById("randomLetterSpace").value = _p5.map(randomLetterSpace, randomLetterSpaceMin, randomLetterSpaceMax, 0, 100);
-  document.getElementById("randomLetterWidth").value = _p5.map(randomLetterWidth, randomLetterWidthMin, randomLetterWidthMax, 0, 100);
-  document.getElementById("randomLetterHeight").value = _p5.map(randomLetterHeight, randomLetterHeightMin, randomLetterHeightMax, 0, 100);
-  document.getElementById("randomSlant").value = _p5.map(randomSlant, randomSlantMin, randomSlantMax, 0, 100);
-  document.getElementById("randomBaselineOffset").value = _p5.map(randomBaselineOffset, randomBaselineOffsetMin, randomBaselineOffsetMax, 0, 100);
-  document.getElementById("precision").value = _p5.map(precision, precisionMin, precisionMax, 0, 100);
-  
-  if (document.getElementById("rotateAll")) {
-    document.getElementById("rotateAll").value = rotateAll;
-  }
-
-  // Sync Numeric Inputs
-  document.getElementById("sizeNum").value = Math.round(size);
-  document.getElementById("lineHeightNum").value = Math.round(lineHeight);
-  document.getElementById("scriptStrokeWeightNum").value = parseFloat(scriptStrokeWeight.toFixed(1));
-  document.getElementById("wordSpaceNum").value = Math.round((wordSpace + 1) * 100);
-  document.getElementById("letterSpaceNum").value = Math.round((letterSpace + 1) * 100);
-  document.getElementById("letterWidthNum").value = Math.round(letterWidth * 100);
-  document.getElementById("letterHeightNum").value = Math.round(letterHeight * 100);
-  document.getElementById("slantNum").value = Math.round(slant * 45); // convert to _p5.degrees approximately
-
-  document.getElementById("randomSizeNum").value = Math.round(randomSize);
-  document.getElementById("randomLetterSpaceNum").value = Math.round(randomLetterSpace * 100);
-  document.getElementById("randomLetterWidthNum").value = Math.round(randomLetterWidth * 100);
-  document.getElementById("randomLetterHeightNum").value = Math.round(randomLetterHeight * 100);
-  document.getElementById("randomSlantNum").value = Math.round(randomSlant * 100);
-  document.getElementById("randomBaselineOffsetNum").value = Math.round(randomBaselineOffset * 100);
-  document.getElementById("precisionNum").value = Math.round(precision);
-  
-  if (document.getElementById("rotateAllNum")) {
-    document.getElementById("rotateAllNum").value = rotateAll;
-  }
-
-  // Update Color Pickers
-  if (document.getElementById("bgColorPicker") && typeof backgroundColor !== 'undefined') {
-    let hex = colorToHex(backgroundColor);
-    document.getElementById("bgColorPicker").value = hex;
-    let lbl = document.getElementById('label-bg');
-    if (lbl) lbl.innerText = hex.toUpperCase();
-  }
-  if (document.getElementById("textColorPicker") && typeof scriptColor !== 'undefined') {
-    let hex = colorToHex(scriptColor);
-    document.getElementById("textColorPicker").value = hex;
-    let lbl = document.getElementById('label-text');
-    if (lbl) lbl.innerText = hex.toUpperCase();
-  }
-}
-
-function updateInterface_textBoxSettings_label() {
-  // Legacy labels replaced by secuencia inputs, keep empty to avoid breaking calls
-}
-
-// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-
-function setHidden(element) {
-  if (!element.dataset.originalDisplay) {
-    element.dataset.originalDisplay = getComputedStyle(element).display;
-  }
-  // Store child styles
-  element.querySelectorAll('*').forEach((child) => {
-    if (!child.dataset.originalDisplay) {
-      child.dataset.originalDisplay = getComputedStyle(child).display;
-    }
-  });
-  element.style.display = 'none';
-}
-
-function setDisplay(element) {
-  const originalDisplay = element.dataset.originalDisplay || 'block';
-  element.style.display = originalDisplay;
-  // Restore child styles
-  element.querySelectorAll('*').forEach((child) => {
-    if (child.dataset.originalDisplay) {
-      child.style.display = child.dataset.originalDisplay;
-    }
-  });
-}
-
-function setActive(element) {
-  // reset state and add active state
-  resetState(element);
-  element.classList.add('active');
-}
-
-
-function setEmpty(element) {
-  // reset state and add empty state
-  resetState(element);
-  element.classList.add('empty');
-}
-
-function setMissing(element) {
-  // reset state and add missing state
-  resetState(element);
-  element.classList.add('missing');
-}
-
-function resetState(element) {
-  // reset to basic state by removing all additional states
-  element.classList.remove('active', 'empty', 'missing');
-}
-
-// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-
-function showPrompt(id) {
-  const modal = document.getElementById(id);
-  if (modal) {
-    modal.style.display = 'flex';
-    updateFileName();
-  } else {
-    console.warn(`showPrompt: Element with id "${id}" not found.`);
-  }
-}
-
-function closePrompt(id) {
-  const modal = document.getElementById(id);
-  if (modal) {
-    modal.style.display = 'none';
-  } else {
-    console.warn(`closePrompt: Element with id "${id}" not found.`);
-  }
-}
-
-function updateFileName() {
-  document.getElementById('exportScriptFileName').value = activeScript.name;
-  document.getElementById('exportTextBoxSettingsFileName').value = textBoxSettingsFileName;
-  document.getElementById('exportGraphicFileName').value = graphicFileName;
-}
-
-function toggleDropDown(id) {
-  const dropdownElement = document.getElementById(id);
-  dropdownElement.classList.toggle('show');
-}
-
-function setHover(state, id) {
-  isHovering = state;
-
-  // Automatisches Schließen, wenn der Cursor den Button und die Liste verlässt
-  if (!isHovering) {
-    setTimeout(() => {
-      if (!isHovering) {
-
-        const element = document.getElementById(id);
-
-        element.classList.remove('show');
-      }
-    }, 0); // Kurzer Timeout, um ungewolltes Schließen zu verhindern
-  }
+  _p5.env.updateInterface_glyphSet_boxes();
+  _p5.env.updateInterface_textBoxSettings_state();
+  _p5.env.updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_glyphEditorTools_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphSet_state();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptList_state();
+  _p5.env.updateInterface_textBoxTools_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -1637,102 +1197,6 @@ function isTouchDevice() {
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-_p5.mousePressed = function() {
-
-  if (_p5.mouseButton == "right" || event.ctrlKey) {
-    if (glyphEditor.isHovered == true) {
-      glyphEditor.handleRightClick();
-    }
-  }
-
-}
-
-_p5.mouseDragged = function() {
-  glyphEditor.handleDrag();
-}
-
-_p5.mouseReleased = function() {
-
-}
-
-// --- TOUCH HANDLERS ---
-_p5.touchStarted = function() {
-  _p5.mousePressed();
-  if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
-};
-
-_p5.touchMoved = function() {
-  _p5.mouseDragged();
-  if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
-};
-
-_p5.touchEnded = function() {
-  _p5.mouseReleased();
-  if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
-};
-
-_p5.mouseClicked = function() {
-  if (glyphEditor.isHovered == true && event.ctrlKey == false) {
-    glyphEditor.handleClick();
-  }
-}
-
-function doubleClicked() {
-  if (glyphEditor.isHovered == true) {
-    glyphEditor.handleDoubleClick();
-  }
-}
-
-// –––––––––––––––––––––––––––––––––––
-
-_p5.keyPressed = function() {
-
-  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-    return;
-  }
-
-  if (_p5.key == 'Alt') {
-    if (glyphEditor) glyphEditor.handleAlt('pressed');
-  }
-
-  // Vector editing mode keyboard hotkeys
-  if (_p5.key === 'v' || _p5.key === 'V') {
-    switchMode('editPath');
-  } else if (_p5.key === 'a' || _p5.key === 'A') {
-    switchMode('editAnchor');
-  } else if (_p5.key === 'h' || _p5.key === 'H') {
-    switchMode('editHandle');
-  } else if (_p5.key === 'p' || _p5.key === 'P') {
-    switchMode('drawPath');
-  }
-}
-
-_p5.keyReleased = function() {
-
-  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-    return;
-  }
-
-  if (_p5.key == 'Backspace') {
-    if (glyphEditor) glyphEditor.handleDelete();
-  } else if (_p5.key == 'Escape') {
-    if (glyphEditor) glyphEditor.handleEscape();
-  } else if (_p5.key == 'Alt') {
-    if (glyphEditor) glyphEditor.handleAlt('released');
-  }
-}
-
-document.addEventListener('keydown', (event) => {
-
-  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-    return;
-  }
-
-  if ((event.key === 'z' || event.key === 'Z') && (event.metaKey || event.ctrlKey)) {
-    event.preventDefault();
-    glyphEditor.handleCmdZ();
-  }
-});
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
@@ -1740,12 +1204,12 @@ document.addEventListener('keydown', (event) => {
 
 function switchMode(value) {
   glyphEditor.setMode(value);
-  updateInterface_glyphEditorTools_state();
+  _p5.env.updateInterface_glyphEditorTools_state();
 }
 
 function switchGlyphEditorDisplayInfo() {
   glyphEditor.displayInfo = !glyphEditor.displayInfo;
-  updateInterface_glyphEditorTools_state();
+  _p5.env.updateInterface_glyphEditorTools_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -1754,17 +1218,17 @@ function switchGlyphEditorDisplayInfo() {
 
 function switchConnectionToPrev() {
   glyphEditor.switchConnectionToPrev();
-  updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
 }
 
 function switchConnectionToNext() {
   glyphEditor.switchConnectionToNext();
-  updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
 }
 
 function switchMainPath() {
   glyphEditor.switchMainPath();
-  updateInterface_glyphEditorContext_state();
+  _p5.env.updateInterface_glyphEditorContext_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -1773,7 +1237,7 @@ function switchMainPath() {
 
 function setGlyph(char) {
   glyphEditor.setActiveGlyph(char);
-  updateInterface_glyphSet_state();
+  _p5.env.updateInterface_glyphSet_state();
 }
 
 function setGlyphName() {
@@ -1786,9 +1250,9 @@ function setGlyphName() {
   }
 
   glyphEditor.setActiveGlyphName(char);
-  updateInterface_glyphSet_state();
+  _p5.env.updateInterface_glyphSet_state();
 
-  closePrompt('setGlyphNamePrompt');
+  _p5.env.closePrompt('setGlyphNamePrompt');
 }
 
 function clearGlyph() {
@@ -1805,10 +1269,10 @@ function setScript(value) {
   if (glyphEditor == null) return;
   glyphEditor.reloadActiveGlyph();
   glyphEditor.repositionGuides();
-  updateInterface_scriptName();
-  updateInterface_glyphSet_boxes();
-  updateInterface_scriptList_state();
-  updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_glyphSet_boxes();
+  _p5.env.updateInterface_scriptList_state();
+  _p5.env.updateInterface_scriptList_label();
 }
 
 function nextScript() {
@@ -1836,10 +1300,10 @@ function resetScript() {
     glyphEditor.reloadActiveGlyph();
     glyphEditor.repositionGuides();
   }
-  updateInterface_scriptName();
-  updateInterface_glyphSet_boxes();
-  updateInterface_scriptList_state();
-  updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_glyphSet_boxes();
+  _p5.env.updateInterface_scriptList_state();
+  _p5.env.updateInterface_scriptList_label();
 }
 
 function addNewScript() {
@@ -1850,8 +1314,8 @@ function addNewScript() {
 
 function setScriptName(value) {
   activeScript.name = value;
-  updateInterface_scriptName();
-  updateInterface_scriptList_label();
+  _p5.env.updateInterface_scriptName();
+  _p5.env.updateInterface_scriptList_label();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -1860,7 +1324,7 @@ function setScriptName(value) {
 
 function switchTextBoxDisplayInfo() {
   textBox.displayInfo = !textBox.displayInfo;
-  updateInterface_textBoxTools_state();
+  _p5.env.updateInterface_textBoxTools_state();
 }
 
 function setTextBoxDisplayInfo(value) {
@@ -1871,7 +1335,7 @@ function setTextBoxDisplayInfo(value) {
     textBox.displayInfo = true;
   }
 
-  updateInterface_textBoxTools_state();
+  _p5.env.updateInterface_textBoxTools_state();
 }
 
 
@@ -1882,27 +1346,27 @@ function setTextBoxDisplayInfo(value) {
 function setText() {
   var textInput = document.getElementById("textInput").value;
   textBox.setText(textToArray(textInput));
-  updateInterface_glyphSet_state();
+  _p5.env.updateInterface_glyphSet_state();
 }
 
 function setLineHeight(value) {
   lineHeight = _p5.map(value, 0, 100, lineHeightMin, lineHeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setScriptStrokeWeight(value) {
   scriptStrokeWeight = _p5.map(value, 0, 100, scriptStrokeWeightMin, scriptStrokeWeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setSize(value) {
   size = _p5.map(value, 0, 100, sizeMin, sizeMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setWordSpace(value) { // direct translation
   wordSpace = _p5.map(value, 0, 100, wordSpaceMin, wordSpaceMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 // function setWordSpace(value) { // animation value
@@ -1911,8 +1375,8 @@ function setWordSpace(value) { // direct translation
 //     complete: false,
 //     update: function() {
 //       wordSpace = this.variable.update();
-//       updateInterface_textBoxSettings_state();
-//       updateInterface_textBoxSettings_label();
+//       _p5.env.updateInterface_textBoxSettings_state();
+//       _p5.env.updateInterface_textBoxSettings_label();
 //       this.complete = this.variable.complete;
 //     }
 //   });
@@ -1920,57 +1384,57 @@ function setWordSpace(value) { // direct translation
 
 function setLetterSpace(value) {
   letterSpace = _p5.map(value, 0, 100, letterSpaceMin, letterSpaceMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setLetterWidth(value) {
   letterWidth = _p5.map(value, 0, 100, letterWidthMin, letterWidthMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setLetterHeight(value) {
   letterHeight = _p5.map(value, 0, 100, letterHeightMin, letterHeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setSlant(value) {
   slant = _p5.map(value, 0, 100, slantMin, slantMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomSize(value) {
   randomSize = _p5.map(value, 0, 100, randomSizeMin, randomSizeMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomLetterSpace(value) {
   randomLetterSpace = _p5.map(value, 0, 100, randomLetterSpaceMin, randomLetterSpaceMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomLetterWidth(value) {
   randomLetterWidth = _p5.map(value, 0, 100, randomLetterWidthMin, randomLetterWidthMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomLetterHeight(value) {
   randomLetterHeight = _p5.map(value, 0, 100, randomLetterHeightMin, randomLetterHeightMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomSlant(value) {
   randomSlant = _p5.map(value, 0, 100, randomSlantMin, randomSlantMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setRandomBaselineOffset(value) {
   randomBaselineOffset = _p5.map(value, 0, 100, randomBaselineOffsetMin, randomBaselineOffsetMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function setPrecision(value) {
   precision = _p5.map(value, 0, 100, precisionMin, precisionMax);
-  updateInterface_textBoxSettings_label();
+  _p5.env.updateInterface_textBoxSettings_label();
 }
 
 function randomTextBoxSettings() {
@@ -2009,14 +1473,11 @@ document.addEventListener('gestureend', function (e) {
 
 window.addNewScript = addNewScript;
 window.importScript = importScript;
-window.showPrompt = showPrompt;
-window.closePrompt = closePrompt;
 window.exportAs = exportAs;
 window.randomTextBoxSettings = randomTextBoxSettings;
 window.resetTextBoxSettings = resetTextBoxSettings;
 window.importTextBoxSettings = importTextBoxSettings;
 window.switchMode = switchMode;
-window.toggleDropDown = toggleDropDown;
 window.setScriptName = setScriptName;
 window.removeBgImage = removeBgImage;
 window.switchConnectionToPrev = switchConnectionToPrev;
@@ -2054,5 +1515,6 @@ window.nextScript = nextScript;
 window.prevScript = prevScript;
 window.switchTextBoxDisplayInfo = switchTextBoxDisplayInfo;
 window.setTextBoxDisplayInfo = setTextBoxDisplayInfo;
+bindEvents(_p5);
 
 };
