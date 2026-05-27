@@ -71,7 +71,48 @@ export function verticeSketch(p) {
     cacheDomElements();
     setupEventListeners();
     updateUIColors();
-    createInitialDemoScene();
+    
+    p.noLoop();
+    let redrawPending = false;
+    const triggerRedraw = () => {
+      if (!redrawPending) {
+        redrawPending = true;
+        requestAnimationFrame(() => {
+          p.redraw();
+          redrawPending = false;
+        });
+      }
+    };
+    window.addEventListener('pointermove', triggerRedraw);
+    window.addEventListener('pointerdown', triggerRedraw);
+    window.addEventListener('pointerup', triggerRedraw);
+    window.addEventListener('keydown', triggerRedraw);
+    window.addEventListener('keyup', triggerRedraw);
+    window.addEventListener('input', triggerRedraw);
+    window.addEventListener('wheel', triggerRedraw);
+    const saved = localStorage.getItem('vertice_autosave');
+    if (saved) {
+      try {
+        const snapshot = JSON.parse(saved);
+        if (snapshot && snapshot.length > 0) {
+          scene_glyphs = snapshot.map(data => Glyph.deserialize(data));
+          clearSelection();
+          if (scene_glyphs.length > 0) {
+            selected_glyph = scene_glyphs[scene_glyphs.length - 1];
+            if (selected_glyph.corners.length > 0) {
+              selected_corner = selected_glyph.corners[0];
+            }
+          }
+        } else {
+          createInitialDemoScene();
+        }
+      } catch (e) {
+        console.error("Auto-save load failed:", e);
+        createInitialDemoScene();
+      }
+    } else {
+      createInitialDemoScene();
+    }
     
     saveHistoryState();
     updateUISidebarVisibility();
@@ -594,6 +635,7 @@ export function verticeSketch(p) {
   function saveHistoryState() {
     const snapshot = scene_glyphs.map(g => g.serialize());
     history.save(snapshot);
+    localStorage.setItem('vertice_autosave', JSON.stringify(snapshot));
   }
 
   function appUndo() {

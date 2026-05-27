@@ -61,7 +61,45 @@ export function grafemaSketch(p) {
     applyTheme('light');
     buildLetterGrid();
     setupEventListeners();
-    resetCanvas();
+    
+    p.noLoop();
+    let redrawPending = false;
+    const triggerRedraw = () => {
+      if (!redrawPending) {
+        redrawPending = true;
+        requestAnimationFrame(() => {
+          p.redraw();
+          redrawPending = false;
+        });
+      }
+    };
+    window.addEventListener('pointermove', triggerRedraw);
+    window.addEventListener('pointerdown', triggerRedraw);
+    window.addEventListener('pointerup', triggerRedraw);
+    window.addEventListener('keydown', triggerRedraw);
+    window.addEventListener('keyup', triggerRedraw);
+    window.addEventListener('input', triggerRedraw);
+    window.addEventListener('wheel', triggerRedraw);
+    const saved = localStorage.getItem('grafema_autosave');
+    if (saved) {
+      try {
+        const snapshot = JSON.parse(saved);
+        if (snapshot && snapshot.length > 0) {
+          glyphs = snapshot.map(data => Glyph.deserialize(data));
+          setActiveGlyph(glyphs[glyphs.length - 1]);
+          updateLayersList();
+          history.clear();
+          history.save(snapshot);
+        } else {
+          resetCanvas();
+        }
+      } catch (e) {
+        console.error("Auto-save load failed:", e);
+        resetCanvas();
+      }
+    } else {
+      resetCanvas();
+    }
   };
 
   p.draw = function() {
@@ -332,6 +370,7 @@ export function grafemaSketch(p) {
   function saveHistoryState() {
     const snapshot = glyphs.map(g => g.serialize());
     history.save(snapshot);
+    localStorage.setItem('grafema_autosave', JSON.stringify(snapshot));
   }
 
   function appUndo() {

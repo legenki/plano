@@ -331,13 +331,106 @@ _p5.preload = function() {
   // interfaceFont = _p5.loadFont(interfaceFont); // Loaded via CSS @font-face
 }
 
+function saveSecuenciaState() {
+  const data = {
+    activeScriptIndex: activeScriptIndex,
+    scripts: scripts.map(s => s.toJSON()),
+    textBoxText: document.getElementById("textInput") ? document.getElementById("textInput").value : null,
+    textBoxSettings: {
+       size, wordSpace, letterSpace, lineHeight, letterWidth, letterHeight, slant,
+       randomSize, randomLetterSpace, randomLetterWidth, randomLetterHeight, randomSlant, randomBaselineOffset, precision,
+       scriptStrokeWeight, backgroundColor, scriptColor, rotateAll
+    }
+  };
+  localStorage.setItem('secuencia_autosave', JSON.stringify(data));
+}
+
+function loadSecuenciaState() {
+  const saved = localStorage.getItem('secuencia_autosave');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data && data.scripts && data.scripts.length > 0) {
+        scripts = [];
+        data.scripts.forEach(sData => {
+           let sc = new Script();
+           sc.fromJSON(sData);
+           scripts.push(sc);
+        });
+        activeScriptIndex = data.activeScriptIndex || 0;
+        
+        if (data.textBoxSettings) {
+           size = data.textBoxSettings.size !== undefined ? data.textBoxSettings.size : size;
+           wordSpace = data.textBoxSettings.wordSpace !== undefined ? data.textBoxSettings.wordSpace : wordSpace;
+           letterSpace = data.textBoxSettings.letterSpace !== undefined ? data.textBoxSettings.letterSpace : letterSpace;
+           lineHeight = data.textBoxSettings.lineHeight !== undefined ? data.textBoxSettings.lineHeight : lineHeight;
+           letterWidth = data.textBoxSettings.letterWidth !== undefined ? data.textBoxSettings.letterWidth : letterWidth;
+           letterHeight = data.textBoxSettings.letterHeight !== undefined ? data.textBoxSettings.letterHeight : letterHeight;
+           slant = data.textBoxSettings.slant !== undefined ? data.textBoxSettings.slant : slant;
+           randomSize = data.textBoxSettings.randomSize !== undefined ? data.textBoxSettings.randomSize : randomSize;
+           randomLetterSpace = data.textBoxSettings.randomLetterSpace !== undefined ? data.textBoxSettings.randomLetterSpace : randomLetterSpace;
+           randomLetterWidth = data.textBoxSettings.randomLetterWidth !== undefined ? data.textBoxSettings.randomLetterWidth : randomLetterWidth;
+           randomLetterHeight = data.textBoxSettings.randomLetterHeight !== undefined ? data.textBoxSettings.randomLetterHeight : randomLetterHeight;
+           randomSlant = data.textBoxSettings.randomSlant !== undefined ? data.textBoxSettings.randomSlant : randomSlant;
+           randomBaselineOffset = data.textBoxSettings.randomBaselineOffset !== undefined ? data.textBoxSettings.randomBaselineOffset : randomBaselineOffset;
+           precision = data.textBoxSettings.precision !== undefined ? data.textBoxSettings.precision : precision;
+           scriptStrokeWeight = data.textBoxSettings.scriptStrokeWeight !== undefined ? data.textBoxSettings.scriptStrokeWeight : scriptStrokeWeight;
+           backgroundColor = data.textBoxSettings.backgroundColor !== undefined ? data.textBoxSettings.backgroundColor : backgroundColor;
+           scriptColor = data.textBoxSettings.scriptColor !== undefined ? data.textBoxSettings.scriptColor : scriptColor;
+           if (data.textBoxSettings.rotateAll !== undefined && typeof rotateAll !== 'undefined') rotateAll = data.textBoxSettings.rotateAll;
+        }
+        if (data.textBoxText) {
+           setTimeout(() => {
+             const input = document.getElementById("textInput");
+             if (input) {
+               input.value = data.textBoxText;
+               if (typeof textBox !== 'undefined') {
+                 textBox.setText(textToArray(data.textBoxText));
+                 _p5.redraw();
+               }
+             }
+           }, 100);
+        }
+        return true;
+      }
+    } catch(e) {
+      console.error("Auto-save load failed:", e);
+    }
+  }
+  return false;
+}
+
 _p5.setup = function() {
+  _p5.noLoop();
+  let redrawPending = false;
+  let saveTimeout = null;
+  const triggerRedraw = () => {
+    if (!redrawPending) {
+      redrawPending = true;
+      requestAnimationFrame(() => {
+        _p5.redraw();
+        redrawPending = false;
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(saveSecuenciaState, 1000);
+      });
+    }
+  };
+  window.addEventListener('pointermove', triggerRedraw);
+  window.addEventListener('pointerdown', triggerRedraw);
+  window.addEventListener('pointerup', triggerRedraw);
+  window.addEventListener('keydown', triggerRedraw);
+  window.addEventListener('keyup', triggerRedraw);
+  window.addEventListener('input', triggerRedraw);
+  window.addEventListener('wheel', triggerRedraw);
+
   setupCanvas();
   // setupAsync();
 
-  // import scripts and set active script
-  for (let i = 0; i < defaultScriptFiles.length; i++) {
-    scripts.push(new Script(defaultScriptFiles[i]));
+  if (!loadSecuenciaState()) {
+    // import scripts and set active script
+    for (let i = 0; i < defaultScriptFiles.length; i++) {
+      scripts.push(new Script(defaultScriptFiles[i]));
+    }
   }
   setScript(activeScriptIndex);
 
