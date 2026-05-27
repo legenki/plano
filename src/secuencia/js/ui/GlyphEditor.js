@@ -611,7 +611,8 @@ class GlyphEditor {
 
   update() {
 
-    this.isHovered = mouseOverRect(this.position.x, this.position.y, this.width, this.height) && glyphEditorToolsElement.matches(':hover') == false;
+    const toolsElement = document.getElementById('glyphEditorTools');
+    this.isHovered = mouseOverRect(this.position.x, this.position.y, this.width, this.height) && (!toolsElement || toolsElement.matches(':hover') == false);
 
     this.updateButtonStates();
 
