@@ -148,7 +148,7 @@ function setGlyph(char) {
 
 function setGlyphName() {
 
-  var value = document.Id("setGlyphName").value;
+  var value = document.getElementById("setGlyphName").value;
   var char = _p5.env.glyphSet_missingLink;
 
   if (value.length > 0 && value != '') {

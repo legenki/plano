@@ -80,7 +80,7 @@ export function grafemaSketch(p) {
     window.addEventListener('keydown', triggerRedraw);
     window.addEventListener('keyup', triggerRedraw);
     window.addEventListener('input', triggerRedraw);
-    window.addEventListener('wheel', triggerRedraw);
+    p.canvas.addEventListener('wheel', triggerRedraw);
     const saved = localStorage.getItem('grafema_autosave');
     if (saved) {
       try {

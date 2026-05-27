@@ -244,6 +244,7 @@ function setupAnimation_textBoxSettings(mode) {
   };
 
   _p5.env.animations.push(_p5.env.textBoxSettings_animation);
+  _p5.loop();
 }
 
   return {

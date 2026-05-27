@@ -63,7 +63,7 @@ _p5.env.document = document;
     importTextBoxSettings
   } = createExportUtils(_p5, {
     Script,
-    setScript: _p5.env.setScript
+    setScript: (value) => _p5.env.setScript(value)
   });
   
   const {
@@ -72,6 +72,7 @@ _p5.env.document = document;
     updateAnimation,
     setupAnimation_textBoxSettings
   } = createAnimationUtils(_p5);
+  _p5.env.setupAnimation_textBoxSettings = setupAnimation_textBoxSettings;
 
   
   
@@ -158,6 +159,8 @@ _p5.env.document = document;
   // Animation
 
   // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+  // Expose shared utilities to env before UIManager is created
+  _p5.env.diffAndUpdateDOM = diffAndUpdateDOM;
   // Instantiate UIManager and add its methods to env
   Object.assign(_p5.env, createUIManager(_p5));
   _p5.preload = function () {
@@ -265,7 +268,7 @@ _p5.env.document = document;
               const input = document.getElementById("textInput");
               if (input) {
                 input.value = data.textBoxText;
-                if (typeof _p5.env.textBox !== 'undefined') {
+                if (_p5.env.textBox != null) {
                   _p5.env.textBox.setText(_p5.env.textToArray(data.textBoxText));
                   _p5.redraw();
                 }
@@ -302,7 +305,7 @@ _p5.env.document = document;
     window.addEventListener('keydown', triggerRedraw);
     window.addEventListener('keyup', triggerRedraw);
     window.addEventListener('input', triggerRedraw);
-    window.addEventListener('wheel', triggerRedraw);
+    _p5.canvas.addEventListener('wheel', triggerRedraw);
     setupCanvas();
     // setupAsync();
 
@@ -327,6 +330,9 @@ _p5.env.document = document;
   function update() {
     if (anyActiveAnimation() == true) {
       updateAnimation();
+      if (anyActiveAnimation() == false) {
+        _p5.noLoop();
+      }
     }
     _p5.env.glyphEditor.update();
   }
@@ -368,6 +374,7 @@ _p5.env.document = document;
     let b = _p5.blue(c);
     return rgbToHex(r, g, b);
   }
+  _p5.env.colorToHex = colorToHex;
   function rgbToHex(r, g, b) {
     // Convert each color component to a two-digit hex value
     let toHex = component => {
@@ -411,6 +418,7 @@ _p5.env.document = document;
   function textToArray(text) {
     return text.split(/\r?\n/);
   }
+  _p5.env.textToArray = textToArray;
   function timestamp() {
     const now = new Date();
     const year = now.getFullYear();
@@ -421,6 +429,8 @@ _p5.env.document = document;
     const seconds = String(now.getSeconds()).padStart(2, '0');
     return `${year}${month}${day}-${hours}${minutes}${seconds}`;
   }
+  _p5.env.arrayToText = arrayToText;
+  _p5.env.timestamp = timestamp;
   function setRotateAll(value) {
     _p5.env.rotateAll = parseFloat(value);
     let s = document.getElementById("rotateAll");
@@ -791,15 +801,16 @@ _p5.env.document = document;
     document.getElementById('textBox').style.top = textBox_yPosition + 'px';
   }
   function updateCanvas_parameter() {
-    document.documentElement.style.setProperty('--backgroundColor', _p5.env.backgroundColor);
-    document.documentElement.style.setProperty('--textColor', _p5.env.scriptColor);
+    const toHex = c => (typeof c === 'object' && c !== null) ? colorToHex(c) : c;
+    document.documentElement.style.setProperty('--backgroundColor', toHex(_p5.env.backgroundColor));
+    document.documentElement.style.setProperty('--textColor', toHex(_p5.env.scriptColor));
     document.documentElement.style.setProperty('--textColorRGB', _p5.red(_p5.env.scriptColor) + ', ' + _p5.green(_p5.env.scriptColor) + ', ' + _p5.blue(_p5.env.scriptColor));
-    document.documentElement.style.setProperty('--hoverColor', _p5.env.hoverColor);
-    document.documentElement.style.setProperty('--activeColor', _p5.env.activeColor);
-    document.documentElement.style.setProperty('--emptyColor', _p5.env.emptyColor);
-    document.documentElement.style.setProperty('--missingColor', _p5.env.missingColor);
-    document.documentElement.style.setProperty('--logoColor', _p5.env.emptyColor);
-    document.documentElement.style.setProperty('--logoColorHover', _p5.env.missingColor);
+    document.documentElement.style.setProperty('--hoverColor', toHex(_p5.env.hoverColor));
+    document.documentElement.style.setProperty('--activeColor', toHex(_p5.env.activeColor));
+    document.documentElement.style.setProperty('--emptyColor', toHex(_p5.env.emptyColor));
+    document.documentElement.style.setProperty('--missingColor', toHex(_p5.env.missingColor));
+    document.documentElement.style.setProperty('--logoColor', toHex(_p5.env.emptyColor));
+    document.documentElement.style.setProperty('--logoColorHover', toHex(_p5.env.missingColor));
   }
 
   // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -837,6 +848,7 @@ _p5.env.document = document;
     _p5.env.glyphEditor.setMode(value);
     _p5.env.updateInterface_glyphEditorTools_state();
   }
+  _p5.env.switchMode = switchMode;
   function switchGlyphEditorDisplayInfo() {
     _p5.env.glyphEditor.displayInfo = !_p5.env.glyphEditor.displayInfo;
     _p5.env.updateInterface_glyphEditorTools_state();
@@ -867,8 +879,9 @@ _p5.env.document = document;
     _p5.env.glyphEditor.setActiveGlyph(char);
     _p5.env.updateInterface_glyphSet_state();
   }
+  _p5.env.setGlyph = setGlyph;
   function setGlyphName() {
-    var value = document.Id("setGlyphName").value;
+    var value = document.getElementById("setGlyphName").value;
     var char = _p5.env.glyphSet_missingLink;
     if (value.length > 0 && value != '') {
       char = value;
@@ -896,6 +909,7 @@ _p5.env.document = document;
     _p5.env.updateInterface_scriptList_state();
     _p5.env.updateInterface_scriptList_label();
   }
+  _p5.env.setScript = setScript;
   function nextScript() {
     _p5.env.activeScriptIndex = (_p5.env.activeScriptIndex + 1 + _p5.env.scripts.length) % _p5.env.scripts.length;
     _p5.env.setScript(_p5.env.activeScriptIndex);
@@ -1108,5 +1122,9 @@ _p5.env.document = document;
   window.prevScript = prevScript;
   window.switchTextBoxDisplayInfo = switchTextBoxDisplayInfo;
   window.setTextBoxDisplayInfo = setTextBoxDisplayInfo;
+  window.resetScript = resetScript;
+  window.toggleDropDown = _p5.env.toggleDropDown;
+  window.showPrompt = _p5.env.showPrompt;
+  window.closePrompt = _p5.env.closePrompt;
   bindEvents(_p5);
 };

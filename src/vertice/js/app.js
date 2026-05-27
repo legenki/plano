@@ -90,7 +90,7 @@ export function verticeSketch(p) {
     window.addEventListener('keydown', triggerRedraw);
     window.addEventListener('keyup', triggerRedraw);
     window.addEventListener('input', triggerRedraw);
-    window.addEventListener('wheel', triggerRedraw);
+    p.canvas.addEventListener('wheel', triggerRedraw);
     const saved = localStorage.getItem('vertice_autosave');
     if (saved) {
       try {
