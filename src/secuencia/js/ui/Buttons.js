@@ -172,7 +172,7 @@ class GuideButton extends Button {
     _p5.push();
     _p5.stroke(_p5.env.glyphEditor_guideColor);
     _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.fill(this.isHovered == true ? glyphEditor_guideColor : _p5.env.backgroundColor);
+    _p5.fill(this.isHovered == true ? _p5.env.glyphEditor_guideColor : _p5.env.backgroundColor);
     _p5.ellipse(this.position.x, this.position.y, this.size, this.size);
     _p5.pop();
   }

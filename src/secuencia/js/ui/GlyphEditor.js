@@ -947,7 +947,7 @@ class GlyphEditor {
   displayGuides() {
 
     _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.stroke(this.displayInfo == true ? glyphEditor_guideColor : _p5.env.gridColor);
+    _p5.stroke(this.displayInfo == true ? _p5.env.glyphEditor_guideColor : _p5.env.gridColor);
 
     // x-_p5.height
     _p5.line(this.position.x, this.xHeight, this.position.x + this.width, this.xHeight);

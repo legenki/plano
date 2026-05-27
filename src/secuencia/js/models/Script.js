@@ -25,7 +25,7 @@ class Script {
   // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
   reset() {
-    this.name = this.name == null ? scriptName_DEFAULT : this.name;
+    this.name = this.name == null ? _p5.env.scriptName_DEFAULT : this.name;
     this.xHeight = _p5.env.script_xHeight_DEFAULT;
     this.ascenderHeight = _p5.env.script_ascenderHeight_DEFAULT;
     this.descenderHeight = _p5.env.script_descenderHeight_DEFAULT;
