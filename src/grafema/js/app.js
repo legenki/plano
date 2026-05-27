@@ -7,6 +7,7 @@
 import { createLetterClasses } from './Letter.js';
 import { createGlyphClass } from './Glyph.js';
 import { HistoryManager } from '../../js/HistoryManager.js';
+import { diffAndUpdateDOM } from '../../js/ui-utils.js';
 
 export function grafemaSketch(p) {
   // --- MODULE SETUP ---
@@ -381,6 +382,7 @@ export function grafemaSketch(p) {
     setActiveGlyph(null);
     updateLayersList();
     showSnackbar("Undo");
+    p.redraw();
   }
 
   function appRedo() {
@@ -391,6 +393,7 @@ export function grafemaSketch(p) {
     setActiveGlyph(null);
     updateLayersList();
     showSnackbar("Redo");
+    p.redraw();
   }
 
   // --- THEME ---
@@ -515,36 +518,66 @@ export function grafemaSketch(p) {
 
   function updateLayersList() {
     if (!DOM.layersList) return;
-    DOM.layersList.innerHTML = '';
-    glyphs.forEach((glyph, idx) => {
-      const ch = getGlyphChar(glyph);
-      const row = document.createElement('div');
-      row.className = `layer-item ${glyph === activeGlyph ? 'active' : ''}`;
-      row.setAttribute('data-index', idx);
-      row.innerHTML = `
-        <span class="layer-badge">${idx + 1}</span>
-        <span class="layer-name">Glyph ${idx + 1}: ${ch}</span>
-        <button class="btn-icon btn-danger btn-delete-layer" title="Delete layer">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-        </button>`;
-      row.addEventListener('click', (e) => {
-        if (e.target.closest('.btn-delete-layer')) return;
-        setActiveGlyph(glyph);
-      });
-      row.querySelector('.btn-delete-layer').addEventListener('click', (e) => {
-        e.stopPropagation();
-        deleteGlyph(idx);
-      });
-      DOM.layersList.appendChild(row);
-    });
+    
+    DOM.layersList.setAttribute("role", "listbox");
+    DOM.layersList.setAttribute("aria-live", "polite");
+
+    diffAndUpdateDOM(
+      DOM.layersList,
+      glyphs,
+      (glyph, idx) => {
+        const row = document.createElement('div');
+        row.setAttribute("role", "option");
+        row.tabIndex = 0; // Make focusable
+        
+        row.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setActiveGlyph(glyph);
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (row.nextElementSibling) row.nextElementSibling.focus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (row.previousElementSibling) row.previousElementSibling.focus();
+          }
+        });
+
+        row.innerHTML = `
+          <span class="layer-badge"></span>
+          <span class="layer-name"></span>
+          <button class="btn-icon btn-danger btn-delete-layer" title="Delete layer" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>`;
+          
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('.btn-delete-layer')) return;
+          setActiveGlyph(glyph);
+        });
+        
+        row.querySelector('.btn-delete-layer').addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteGlyph(parseInt(row.getAttribute('data-index'), 10));
+        });
+        
+        return row;
+      },
+      (row, glyph, idx) => {
+        const ch = getGlyphChar(glyph);
+        row.className = `layer-item ${glyph === activeGlyph ? 'active' : ''}`;
+        row.setAttribute('data-index', idx);
+        row.setAttribute('aria-selected', glyph === activeGlyph);
+        
+        row.querySelector('.layer-badge').innerText = idx + 1;
+        row.querySelector('.layer-name').innerText = `Glyph ${idx + 1}: ${ch}`;
+      }
+    );
+
     if (DOM.statsGlyphCount) DOM.statsGlyphCount.innerText = `Glyphs: ${glyphs.length}`;
   }
 
   function updateLayersActiveState() {
-    document.querySelectorAll('#app-grafema .layer-item').forEach(item => {
-      const idx = parseInt(item.getAttribute('data-index'), 10);
-      item.classList.toggle('active', activeGlyph !== null && glyphs.indexOf(activeGlyph) === idx);
-    });
+    updateLayersList(); // Since we use diffing, updating is cheap, we just call updateLayersList
   }
 
   // --- DOM CACHE ---

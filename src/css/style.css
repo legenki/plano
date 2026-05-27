@@ -1511,3 +1511,17 @@ kbd {
   margin-top: auto;
   flex-shrink: 0;
 }
+
+/* Accessibility Focus Rings */
+:focus-visible {
+  outline: 2px solid #005fcc; /* Accent blue */
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.2);
+}
+
+.layer-item:focus-visible,
+.glyphSet_box:focus-visible,
+#scriptList li:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: -2px;
+}

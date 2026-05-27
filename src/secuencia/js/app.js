@@ -1,3 +1,5 @@
+import { diffAndUpdateDOM } from '../../js/ui-utils.js';
+
 export const secuenciaSketch = (_p5) => {
 
 // Proxy document to remap prefixed IDs for secuencia
@@ -339,7 +341,10 @@ function saveSecuenciaState() {
     textBoxSettings: {
        size, wordSpace, letterSpace, lineHeight, letterWidth, letterHeight, slant,
        randomSize, randomLetterSpace, randomLetterWidth, randomLetterHeight, randomSlant, randomBaselineOffset, precision,
-       scriptStrokeWeight, backgroundColor, scriptColor, rotateAll
+       scriptStrokeWeight, 
+       backgroundColor: typeof backgroundColor === 'object' && backgroundColor.levels ? colorToHex(backgroundColor) : backgroundColor, 
+       scriptColor: typeof scriptColor === 'object' && scriptColor.levels ? colorToHex(scriptColor) : scriptColor, 
+       rotateAll
     }
   };
   localStorage.setItem('secuencia_autosave', JSON.stringify(data));
@@ -375,8 +380,16 @@ function loadSecuenciaState() {
            randomBaselineOffset = data.textBoxSettings.randomBaselineOffset !== undefined ? data.textBoxSettings.randomBaselineOffset : randomBaselineOffset;
            precision = data.textBoxSettings.precision !== undefined ? data.textBoxSettings.precision : precision;
            scriptStrokeWeight = data.textBoxSettings.scriptStrokeWeight !== undefined ? data.textBoxSettings.scriptStrokeWeight : scriptStrokeWeight;
-           backgroundColor = data.textBoxSettings.backgroundColor !== undefined ? data.textBoxSettings.backgroundColor : backgroundColor;
-           scriptColor = data.textBoxSettings.scriptColor !== undefined ? data.textBoxSettings.scriptColor : scriptColor;
+           
+           if (data.textBoxSettings.backgroundColor !== undefined) {
+             const bg = data.textBoxSettings.backgroundColor;
+             backgroundColor = (typeof bg === 'string') ? hexToColor(bg) : (bg.levels ? _p5.color(bg.levels) : backgroundColor);
+           }
+           if (data.textBoxSettings.scriptColor !== undefined) {
+             const sc = data.textBoxSettings.scriptColor;
+             scriptColor = (typeof sc === 'string') ? hexToColor(sc) : (sc.levels ? _p5.color(sc.levels) : scriptColor);
+           }
+           
            if (data.textBoxSettings.rotateAll !== undefined && typeof rotateAll !== 'undefined') rotateAll = data.textBoxSettings.rotateAll;
         }
         if (data.textBoxText) {
@@ -956,36 +969,49 @@ function updateInterface_glyphEditorContext_state() {
 }
 
 function updateInterface_glyphSet_boxes() {
+  glyphSetElement.setAttribute("role", "listbox");
+  glyphSetElement.setAttribute("aria-live", "polite");
 
-  // clean up current glyphSet elements
-  while (glyphSetElement.firstChild) {
-    glyphSetElement.removeChild(glyphSetElement.firstChild);
-  }
-
-  // add element for each character of activeScript
-  activeScript.glyphs.forEach(glyph => {
-    // Create a new div element for each character
-    const name = glyph.name;
-    const char = (name.length > 1 && name.match(/\?/)) ? glyphSet_missingLink : name; 
-    // const char = name; 
-    const glyphSet_box = document.createElement('div');
-    glyphSet_box.className = 'glyphSet_box';
-    glyphSet_box.id = name;
-    glyphSet_box.setAttribute("onclick", `setGlyph(${JSON.stringify(name)})`);
-    if (developerMode == true) {
-      glyphSet_box.setAttribute("ondblclick", `showPrompt('setGlyphNamePrompt')`);
+  diffAndUpdateDOM(
+    glyphSetElement,
+    activeScript.glyphs,
+    (glyph, idx) => {
+      const box = document.createElement('div');
+      box.className = 'glyphSet_box';
+      box.setAttribute("role", "option");
+      box.tabIndex = 0; // Make focusable
+      
+      const label = document.createElement('label');
+      box.appendChild(label);
+      
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setGlyph(box.id);
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (box.nextElementSibling) box.nextElementSibling.focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (box.previousElementSibling) box.previousElementSibling.focus();
+        }
+      });
+      
+      box.addEventListener('click', () => setGlyph(box.id));
+      if (developerMode == true) {
+        box.addEventListener('dblclick', () => showPrompt('setGlyphNamePrompt'));
+      }
+      return box;
+    },
+    (box, glyph, idx) => {
+      const name = glyph.name;
+      const char = (name.length > 1 && name.match(/\?/)) ? glyphSet_missingLink : name; 
+      
+      box.id = name;
+      box.querySelector('label').textContent = char;
+      box.setAttribute('aria-selected', glyphEditor && glyphEditor.activeGlyph === glyph);
     }
-
-    // Create a label and set its text
-    const label = document.createElement('label');
-    label.textContent = char;
-
-    // Append the label to the glyphSetBox
-    glyphSet_box.appendChild(label);
-
-    // Append the glyphSetBox to the container
-    glyphSetElement.appendChild(glyphSet_box);
-  });
+  );
 
   // update box fit
   const glyphSet_boxObjects = document.querySelectorAll('.glyphSet_box');
@@ -1066,17 +1092,39 @@ function updateInterface_scriptName() {
 }
 
 function updateInterface_scriptList_label() {
+  const scriptListElement = document.getElementById("scriptList");
+  if (!scriptListElement) return;
+  
+  scriptListElement.setAttribute("role", "listbox");
 
-  // _p5.clear list
-  scriptListElement.innerHTML = '';
-
-  // add list elements
-  scripts.forEach((script, index) => {
-    const li = document.createElement('li');
-    li.textContent = script.name; // Set the visible text
-    li.setAttribute('onclick', `setScript('${index}')`); // Set the onclick functionality
-    document.getElementById("scriptList").appendChild(li); // Add the <li> to the list
-  });
+  diffAndUpdateDOM(
+    scriptListElement,
+    scripts,
+    (script, index) => {
+      const li = document.createElement('li');
+      li.setAttribute("role", "option");
+      li.tabIndex = 0; // Make focusable
+      
+      li.addEventListener('click', () => setScript(index));
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setScript(index);
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (li.nextElementSibling) li.nextElementSibling.focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (li.previousElementSibling) li.previousElementSibling.focus();
+        }
+      });
+      return li;
+    },
+    (li, script, index) => {
+      li.textContent = script.name;
+      li.setAttribute('aria-selected', index === activeScriptIndex);
+    }
+  );
  
   updateInterface_scriptList_state();
 }

@@ -7,6 +7,7 @@
 import { createCornerClass } from './corner.js';
 import { createGlyphClass } from './glyph.js';
 import { HistoryManager } from '../../js/HistoryManager.js';
+import { diffAndUpdateDOM } from '../../js/ui-utils.js';
 
 export function verticeSketch(p) {
   // --- НАСТРОЙКА МОДУЛЕЙ ---
@@ -646,6 +647,7 @@ export function verticeSketch(p) {
     updateUISidebarVisibility();
     updateLayersUI();
     showSnackbar("Undo");
+    p.redraw();
   }
 
   function appRedo() {
@@ -656,6 +658,7 @@ export function verticeSketch(p) {
     updateUISidebarVisibility();
     updateLayersUI();
     showSnackbar("Redo");
+    p.redraw();
   }
 
   function appClearScene() {
@@ -764,46 +767,84 @@ export function verticeSketch(p) {
 
   function updateLayersUI() {
     if (!DOM.domLayersList) return;
-    DOM.domLayersList.innerHTML = "";
     if (DOM.valLayersCount) DOM.valLayersCount.innerText = `Glyphs: ${scene_glyphs.length}`;
     if (scene_glyphs.length === 0) {
       DOM.domLayersList.innerHTML = `<div class="layer-item">Scene is empty</div>`;
       return;
     }
+    
+    // Clear the "Scene is empty" message if present
+    if (DOM.domLayersList.innerHTML.includes("Scene is empty")) {
+      DOM.domLayersList.innerHTML = "";
+    }
+    
+    DOM.domLayersList.setAttribute("role", "listbox");
+    DOM.domLayersList.setAttribute("aria-live", "polite");
 
+    const flatData = [];
     scene_glyphs.forEach((glyph, gIndex) => {
-      const gEl = document.createElement("div");
-      gEl.className = `layer-item ${selected_glyph === glyph ? 'active' : ''}`;
-      gEl.innerHTML = `<span>Glyph #${gIndex + 1}</span><span class="vertex-count">Vertices: ${glyph.corners.length}</span>`;
-      gEl.onclick = (e) => {
-        e.stopPropagation();
-        clearSelection();
-        selected_glyph = glyph;
-        selected_glyph.setActive(true);
-        setAppMode("glyph");
-        syncGlyphToUI();
-      };
-      DOM.domLayersList.appendChild(gEl);
-
+      flatData.push({ type: 'glyph', glyph, index: gIndex });
       glyph.corners.forEach((corner, cIndex) => {
-        const cEl = document.createElement("div");
-        cEl.className = `layer-item ${selected_corner === corner ? 'active' : ''}`;
-        cEl.style.paddingLeft = "24px";
-        cEl.style.borderLeft = "1px dashed var(--border-color)";
-        const isConn = glyph.connections.get(corner).length > 0;
-        cEl.innerHTML = `<span>• Point #${cIndex + 1} (R: ${Math.round(corner.radians)})</span><span class="vertex-count">${isConn ? 'Linked' : 'Single'}</span>`;
-        cEl.onclick = (e) => {
-          e.stopPropagation();
-          clearSelection();
-          selected_corner = corner;
-          selected_corner.setActive(true);
-          selected_glyph = glyph;
-          setAppMode("corner");
-          syncVertexToUI();
-        };
-        DOM.domLayersList.appendChild(cEl);
+        flatData.push({ type: 'corner', glyph, corner, index: cIndex });
       });
     });
+
+    diffAndUpdateDOM(
+      DOM.domLayersList,
+      flatData,
+      (data, idx) => {
+        const el = document.createElement("div");
+        el.setAttribute("role", "option");
+        el.tabIndex = 0; // Make focusable
+        
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (el.nextElementSibling) el.nextElementSibling.focus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (el.previousElementSibling) el.previousElementSibling.focus();
+          }
+        });
+        return el;
+      },
+      (el, data, idx) => {
+        if (data.type === 'glyph') {
+          el.className = `layer-item ${selected_glyph === data.glyph ? 'active' : ''}`;
+          el.style.paddingLeft = "8px";
+          el.style.borderLeft = "none";
+          el.innerHTML = `<span>Glyph #${data.index + 1}</span><span class="vertex-count">Vertices: ${data.glyph.corners.length}</span>`;
+          el.onclick = (e) => {
+            e.stopPropagation();
+            clearSelection();
+            selected_glyph = data.glyph;
+            selected_glyph.setActive(true);
+            setAppMode("glyph");
+            syncGlyphToUI();
+            p.redraw();
+          };
+        } else {
+          el.className = `layer-item ${selected_corner === data.corner ? 'active' : ''}`;
+          el.style.paddingLeft = "24px";
+          el.style.borderLeft = "1px dashed var(--border-color)";
+          const isConn = data.glyph.connections.get(data.corner).length > 0;
+          el.innerHTML = `<span>• Point #${data.index + 1} (R: ${Math.round(data.corner.radians)})</span><span class="vertex-count">${isConn ? 'Linked' : 'Single'}</span>`;
+          el.onclick = (e) => {
+            e.stopPropagation();
+            clearSelection();
+            selected_corner = data.corner;
+            selected_corner.setActive(true);
+            selected_glyph = data.glyph;
+            setAppMode("corner");
+            syncVertexToUI();
+            p.redraw();
+          };
+        }
+      }
+    );
   }
 
   // --- INITIALIZATION ---

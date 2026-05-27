@@ -68,10 +68,7 @@ function switchApp(appName) {
         view.style.display = 'block';
         view.classList.add('active');
         
-        // Resume loop for the active p5 instance
-        if (app === 'grafema' && grafemaInstance) grafemaInstance.loop();
-        if (app === 'vertice' && verticeInstance) verticeInstance.loop();
-        if (app === 'secuencia' && secuenciaInstance) secuenciaInstance.loop();
+        // (Removed loop calls because we are using event-based p.redraw() optimizations)
       }
     } else {
       if (btn) btn.classList.remove('active');
