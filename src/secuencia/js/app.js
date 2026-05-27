@@ -281,11 +281,13 @@ initScriptModel(_p5);
 const TextBox = createTextBoxClass(_p5);
 const { Button, GuideButton, PathButton, AnchorButton, HandleButton, mouseOverRect } = createButtonClasses(_p5);
 const GlyphEditor = createGlyphEditorClass(_p5, { GuideButton, PathButton, AnchorButton, Path, Anchor, mouseOverRect });
+_p5.env.document = document;
 const {
   importJSON, exportJSON, importScript, exportScript, exportTextBoxSettings,
   exportAs, exportText_SVG, exportText_PNG, exportText_TXT,
   uploadToServer, importTextBoxSettings,
 } = createExportUtils(_p5, { Script, setScript });
+_p5.env.document = document;
 const {
   AnimatedVariable, anyActiveAnimation, updateAnimation, setupAnimation_textBoxSettings,
 } = createAnimationUtils(_p5);
@@ -308,6 +310,7 @@ const document = new Proxy(window.document, {
     return typeof val === 'function' ? val.bind(target) : val;
   }
 });
+_p5.env.document = document;
 
 let globalPresets = [
     window.preset_01,
@@ -653,6 +656,7 @@ function loadSecuenciaState() {
            sc.fromJSON(sData);
            scripts.push(sc);
         });
+_p5.env.document = document;
         activeScriptIndex = data.activeScriptIndex || 0;
         
         if (data.textBoxSettings) {
@@ -717,6 +721,7 @@ _p5.setup = function() {
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(saveSecuenciaState, 1000);
       });
+_p5.env.document = document;
     }
   };
   window.addEventListener('pointermove', triggerRedraw);
@@ -927,6 +932,7 @@ function setupSecuenciaListeners() {
     bgInput.addEventListener('change', function (e) {
       handleBgImageUpload(e.target.files[0]);
     });
+_p5.env.document = document;
   }
 
   // Color pickers
@@ -938,6 +944,7 @@ function setupSecuenciaListeners() {
       if (lbl) lbl.innerText = e.target.value.toUpperCase();
       updateCanvas_parameter();
     });
+_p5.env.document = document;
   }
 
   let textColorPicker = document.getElementById('textColorPicker');
@@ -948,6 +955,7 @@ function setupSecuenciaListeners() {
       if (lbl) lbl.innerText = e.target.value.toUpperCase();
       updateCanvas_parameter();
     });
+_p5.env.document = document;
   }
 
   // Sync range and number inputs for all parameters
@@ -978,6 +986,7 @@ function setupSecuenciaListeners() {
       rangeEl.addEventListener('input', function () {
         param.setFn(parseFloat(rangeEl.value));
       });
+_p5.env.document = document;
 
       // Когда пользователь вводит число вручную
       numEl.addEventListener('input', function () {
@@ -1015,8 +1024,10 @@ function setupSecuenciaListeners() {
         // Синхронизируем положение слайдера
         rangeEl.value = percentage;
       });
+_p5.env.document = document;
     }
   });
+_p5.env.document = document;
 
   // Sync _p5.background parameters
   const bgParams = [
@@ -1035,14 +1046,17 @@ function setupSecuenciaListeners() {
       rangeEl.addEventListener('input', function () {
         param.setFn(rangeEl.value);
       });
+_p5.env.document = document;
       numEl.addEventListener('input', function () {
         let val = parseFloat(numEl.value);
         if (!isNaN(val)) {
           param.setFn(val);
         }
       });
+_p5.env.document = document;
     }
   });
+_p5.env.document = document;
 }
 
 // Parent communication listeners for Plano integration
@@ -1071,6 +1085,7 @@ window.addEventListener('message', (event) => {
     }
   }
 });
+_p5.env.document = document;
 
 window.addEventListener('keydown', (e) => {
   if (e.altKey && (e.key === 'g' || e.key === 'v' || e.key === 's' || e.key === 'п' || e.key === 'м' || e.key === 'ы')) {
@@ -1087,6 +1102,7 @@ window.addEventListener('keydown', (e) => {
     }
   }
 });
+_p5.env.document = document;
 
 // --- FILE: secuencia/js/interface.js ---
 
@@ -1380,6 +1396,7 @@ function setWordSpace(value) { // direct translation
 //       this.complete = this.variable.complete;
 //     }
 //   });
+_p5.env.document = document;
 // }
 
 function setLetterSpace(value) {

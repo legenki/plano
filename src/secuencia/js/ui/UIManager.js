@@ -1,4 +1,5 @@
 export function createUIManager(_p5) {
+  const document = _p5.env.document;
   function updateInterface_glyphEditorTools_state() {
   
     const editPathModeElement = document.getElementById("editPathMode");
@@ -271,25 +272,25 @@ export function createUIManager(_p5) {
     document.getElementById("textInput").value = _p5.env.arrayToText(_p5.env.textBox.textLines);
     
     // Sliders (0..100 _p5.map)
-    document.getElementById("_p5.env.size").value = _p5.map(_p5.env.size, _p5.env.sizeMin, _p5.env.sizeMax, 0, 100);
-    document.getElementById("_p5.env.scriptStrokeWeight").value = _p5.map(_p5.env.scriptStrokeWeight, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax, 0, 100);
-    document.getElementById("_p5.env.wordSpace").value = _p5.map(_p5.env.wordSpace, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax, 0, 100);
-    document.getElementById("_p5.env.letterSpace").value = _p5.map(_p5.env.letterSpace, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax, 0, 100);
-    document.getElementById("_p5.env.lineHeight").value = _p5.map(_p5.env.lineHeight, _p5.env.lineHeightMin, _p5.env.lineHeightMax, 0, 100);
-    document.getElementById("_p5.env.letterWidth").value = _p5.map(_p5.env.letterWidth, _p5.env.letterWidthMin, _p5.env.letterWidthMax, 0, 100);
-    document.getElementById("_p5.env.letterHeight").value = _p5.map(_p5.env.letterHeight, _p5.env.letterHeightMin, _p5.env.letterHeightMax, 0, 100);
-    document.getElementById("_p5.env.slant").value = _p5.map(_p5.env.slant, _p5.env.slantMin, _p5.env.slantMax, 0, 100);
+    document.getElementById("size").value = _p5.map(_p5.env.size, _p5.env.sizeMin, _p5.env.sizeMax, 0, 100);
+    document.getElementById("scriptStrokeWeight").value = _p5.map(_p5.env.scriptStrokeWeight, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax, 0, 100);
+    document.getElementById("wordSpace").value = _p5.map(_p5.env.wordSpace, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax, 0, 100);
+    document.getElementById("letterSpace").value = _p5.map(_p5.env.letterSpace, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax, 0, 100);
+    document.getElementById("lineHeight").value = _p5.map(_p5.env.lineHeight, _p5.env.lineHeightMin, _p5.env.lineHeightMax, 0, 100);
+    document.getElementById("letterWidth").value = _p5.map(_p5.env.letterWidth, _p5.env.letterWidthMin, _p5.env.letterWidthMax, 0, 100);
+    document.getElementById("letterHeight").value = _p5.map(_p5.env.letterHeight, _p5.env.letterHeightMin, _p5.env.letterHeightMax, 0, 100);
+    document.getElementById("slant").value = _p5.map(_p5.env.slant, _p5.env.slantMin, _p5.env.slantMax, 0, 100);
     
-    document.getElementById("_p5.env.randomSize").value = _p5.map(_p5.env.randomSize, _p5.env.randomSizeMin, _p5.env.randomSizeMax, 0, 100);
-    document.getElementById("_p5.env.randomLetterSpace").value = _p5.map(_p5.env.randomLetterSpace, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax, 0, 100);
-    document.getElementById("_p5.env.randomLetterWidth").value = _p5.map(_p5.env.randomLetterWidth, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax, 0, 100);
-    document.getElementById("_p5.env.randomLetterHeight").value = _p5.map(_p5.env.randomLetterHeight, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax, 0, 100);
-    document.getElementById("_p5.env.randomSlant").value = _p5.map(_p5.env.randomSlant, _p5.env.randomSlantMin, _p5.env.randomSlantMax, 0, 100);
-    document.getElementById("_p5.env.randomBaselineOffset").value = _p5.map(_p5.env.randomBaselineOffset, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax, 0, 100);
-    document.getElementById("_p5.env.precision").value = _p5.map(_p5.env.precision, _p5.env.precisionMin, _p5.env.precisionMax, 0, 100);
+    document.getElementById("randomSize").value = _p5.map(_p5.env.randomSize, _p5.env.randomSizeMin, _p5.env.randomSizeMax, 0, 100);
+    document.getElementById("randomLetterSpace").value = _p5.map(_p5.env.randomLetterSpace, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax, 0, 100);
+    document.getElementById("randomLetterWidth").value = _p5.map(_p5.env.randomLetterWidth, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax, 0, 100);
+    document.getElementById("randomLetterHeight").value = _p5.map(_p5.env.randomLetterHeight, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax, 0, 100);
+    document.getElementById("randomSlant").value = _p5.map(_p5.env.randomSlant, _p5.env.randomSlantMin, _p5.env.randomSlantMax, 0, 100);
+    document.getElementById("randomBaselineOffset").value = _p5.map(_p5.env.randomBaselineOffset, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax, 0, 100);
+    document.getElementById("precision").value = _p5.map(_p5.env.precision, _p5.env.precisionMin, _p5.env.precisionMax, 0, 100);
     
-    if (document.getElementById("_p5.env.rotateAll")) {
-      document.getElementById("_p5.env.rotateAll").value = _p5.env.rotateAll;
+    if (document.getElementById("rotateAll")) {
+      document.getElementById("rotateAll").value = _p5.env.rotateAll;
     }
   
     // Sync Numeric Inputs
