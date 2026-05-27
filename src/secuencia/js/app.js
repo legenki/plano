@@ -1,8 +1,8 @@
 import { diffAndUpdateDOM } from '../../js/ui-utils.js';
-import { createGlyphClasses } from './models/Glyph.js';
+import { initGlyphModels, Glyph, Path, Anchor, Handle } from './models/Glyph.js';
 import { createUIManager } from './ui/UIManager.js';
 import { bindEvents } from './controllers/Events.js';
-import { createScriptClass } from './models/Script.js';
+import { initScriptModel, Script } from './models/Script.js';
 import { createTextBoxClass } from './models/TextBox.js';
 import { createGlyphEditorClass } from './ui/GlyphEditor.js';
 import { createButtonClasses } from './ui/Buttons.js';
@@ -276,8 +276,8 @@ export const secuenciaSketch = (_p5) => {
   };
 
 // --- Initialize module factories (bind p5 instance to all classes) ---
-const { Glyph, Path, Anchor, Handle } = createGlyphClasses(_p5);
-const Script = createScriptClass(_p5, { Glyph, Path, Anchor, Handle });
+initGlyphModels(_p5);
+initScriptModel(_p5);
 const TextBox = createTextBoxClass(_p5);
 const { Button, GuideButton, PathButton, AnchorButton, HandleButton, mouseOverRect } = createButtonClasses(_p5);
 const GlyphEditor = createGlyphEditorClass(_p5, { GuideButton, PathButton, AnchorButton, Path, Anchor, mouseOverRect });

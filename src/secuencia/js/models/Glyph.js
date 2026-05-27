@@ -4,9 +4,10 @@
  * Requires _p5 (p5.js instance) passed as factory parameter.
  */
 
-export function createGlyphClasses(_p5) {
+let _p5;
+export function initGlyphModels(p) { _p5 = p; }
 
-class Glyph {
+export class Glyph {
   constructor(n, p, aW) {
     this.name = n;
     this.charCode = n.charCodeAt(0);
@@ -79,7 +80,7 @@ class Glyph {
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-class Path {
+export class Path {
   constructor(i, a, cTP, cTN) {
     this.index = i;
     this.anchors = a;
@@ -109,7 +110,7 @@ class Path {
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-class Anchor {
+export class Anchor {
   constructor(i, x, y, hpx, hpy, hnx, hny) {
     this.index = i;
     this.position = _p5.createVector(x, y);
@@ -128,7 +129,7 @@ class Anchor {
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-class Handle {
+export class Handle {
   constructor(a, x, y) {
     this.position = _p5.createVector(x, y);
     this.anchor = a;
@@ -148,5 +149,4 @@ class Handle {
 
 // --- FILE: secuencia/js/script.js ---
 
-  return { Glyph, Path, Anchor, Handle };
-}
+  

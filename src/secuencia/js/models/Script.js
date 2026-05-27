@@ -3,9 +3,13 @@
  * Requires _p5 (p5.js instance) + Glyph classes passed as factory parameters.
  */
 
-export function createScriptClass(_p5, { Glyph, Path, Anchor, Handle }) {
+import { Glyph, Path, Anchor, Handle } from './Glyph.js';
+let _p5;
+export function initScriptModel(p) {
+  _p5 = p;
+}
 
-class Script {
+export class Script {
 
   constructor(data) {
     this.reset();
@@ -1002,5 +1006,3 @@ const hersheyCodeToLetter = {
 
 // --- FILE: secuencia/js/glyphEditor.js ---
 
-  return Script;
-}
