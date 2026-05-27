@@ -1,6 +1,6 @@
 /**
  * SECUENCIA — Export Utilities
- * Handles import/export of scripts, settings, SVG, PNG, TXT.
+ * Handles import/export of _p5.env.scripts, settings, SVG, PNG, TXT.
  * Requires _p5 (p5.js instance) passed as factory parameter.
  */
 
@@ -60,8 +60,8 @@ function exportJSON(data, fileName) {
 function importScript() {
   importJSON(scriptFileExtension)
     .then((data) => {
-      scripts.push(new Script(data));
-      setScript(scripts.length - 1);
+      _p5.env.scripts.push(new Script(data));
+      setScript(_p5.env.scripts.length - 1);
     })
     .catch((err) => {
       console.error("Failed to import JSON:", err.message);
@@ -72,27 +72,27 @@ function importTextBoxSettings() {
   importJSON(textBoxSettingsFileExtension)
     .then((data) => {
 
-      lineHeight = _p5.constrain(data.lineHeight, lineHeightMin, lineHeightMax) || lineHeight_DEFAULT;
-      scriptStrokeWeight = _p5.constrain(data.strokeWeight, scriptStrokeWeightMin, scriptStrokeWeightMax) || scriptStrokeWeight_DEFAULT;
-      size = _p5.constrain(data.size, sizeMin, sizeMax) || size_DEFAULT;
-      wordSpace = _p5.constrain(data.wordSpace, wordSpaceMin, wordSpaceMax) || wordSpace_DEFAULT;
-      letterSpace = _p5.constrain(data.letterSpace, letterSpaceMin, letterSpaceMax) || letterSpace_DEFAULT;
-      letterWidth = _p5.constrain(data.letterWidth, letterWidthMin, letterWidthMax) || letterWidth_DEFAULT;
-      letterHeight = _p5.constrain(data.letterHeight, letterHeightMin, letterHeightMax) || letterHeight_DEFAULT;
-      slant = _p5.constrain(data.slant, slantMin, slantMax) || slant_DEFAULT;
+      _p5.env.lineHeight = _p5.constrain(data.lineHeight, lineHeightMin, lineHeightMax) || lineHeight_DEFAULT;
+      _p5.env.scriptStrokeWeight = _p5.constrain(data.strokeWeight, scriptStrokeWeightMin, scriptStrokeWeightMax) || scriptStrokeWeight_DEFAULT;
+      _p5.env.size = _p5.constrain(data.size, sizeMin, sizeMax) || size_DEFAULT;
+      _p5.env.wordSpace = _p5.constrain(data.wordSpace, wordSpaceMin, wordSpaceMax) || _p5.env.wordSpace_DEFAULT;
+      _p5.env.letterSpace = _p5.constrain(data.letterSpace, letterSpaceMin, letterSpaceMax) || _p5.env.letterSpace_DEFAULT;
+      _p5.env.letterWidth = _p5.constrain(data.letterWidth, letterWidthMin, letterWidthMax) || _p5.env.letterWidth_DEFAULT;
+      _p5.env.letterHeight = _p5.constrain(data.letterHeight, letterHeightMin, letterHeightMax) || _p5.env.letterHeight_DEFAULT;
+      _p5.env.slant = _p5.constrain(data.slant, slantMin, slantMax) || _p5.env.slant_DEFAULT;
 
-      _p5.print("data.slant: " + data.slant + "slant: " + slant);
-      randomSize = _p5.constrain(data.randomSize, randomSizeMin, randomSizeMax) || randomSize_DEFAULT;
-      randomLetterSpace = _p5.constrain(data.randomLetterSpace, randomLetterSpaceMin, randomLetterSpaceMax) || randomLetterSpace_DEFAULT;
-      randomLetterWidth = _p5.constrain(data.randomLetterWidth, randomLetterWidthMin, randomLetterWidthMax) || randomLetterWidth_DEFAULT;
-      randomLetterHeight = _p5.constrain(data.randomLetterHeight, randomLetterHeightMin, randomLetterHeightMax) || randomLetterHeight_DEFAULT;
-      randomSlant = _p5.constrain(data.randomSlant, randomSlantMin, randomSlantMax) || randomSlant_DEFAULT;
-      randomBaselineOffset = _p5.constrain(data.randomBaselineOffset, randomBaselineOffsetMin, randomBaselineOffsetMax) || randomBaselineOffset_DEFAULT;
-      precision = _p5.constrain(data.precision, precisionMax, precisionMin) || precision_DEFAULT;
+      _p5.print("data.slant: " + data.slant + "slant: " + _p5.env.slant);
+      _p5.env.randomSize = _p5.constrain(data.randomSize, randomSizeMin, randomSizeMax) || _p5.env.randomSize_DEFAULT;
+      _p5.env.randomLetterSpace = _p5.constrain(data.randomLetterSpace, randomLetterSpaceMin, randomLetterSpaceMax) || _p5.env.randomLetterSpace_DEFAULT;
+      _p5.env.randomLetterWidth = _p5.constrain(data.randomLetterWidth, randomLetterWidthMin, randomLetterWidthMax) || _p5.env.randomLetterWidth_DEFAULT;
+      _p5.env.randomLetterHeight = _p5.constrain(data.randomLetterHeight, randomLetterHeightMin, randomLetterHeightMax) || _p5.env.randomLetterHeight_DEFAULT;
+      _p5.env.randomSlant = _p5.constrain(data.randomSlant, randomSlantMin, randomSlantMax) || _p5.env.randomSlant_DEFAULT;
+      _p5.env.randomBaselineOffset = _p5.constrain(data.randomBaselineOffset, randomBaselineOffsetMin, randomBaselineOffsetMax) || _p5.env.randomBaselineOffset_DEFAULT;
+      _p5.env.precision = _p5.constrain(data.precision, precisionMax, precisionMin) || _p5.env.precision_DEFAULT;
       textBox.seed = data.seed || _p5.random(1000);
 
-      updateInterface_textBoxSettings_state();
-      updateInterface_textBoxSettings_label();
+      _p5.env.updateInterface_textBoxSettings_state();
+      _p5.env.updateInterface_textBoxSettings_label();
     })
     .catch((err) => {
       console.error("Failed to import JSON:", err.message);
@@ -109,7 +109,7 @@ function exportAs(value) {
   let fileName;
   switch (value) {
     case 'script':
-      fileName = document.getElementById('exportScriptFileName').value || activeScript.name;
+      fileName = document.getElementById('exportScriptFileName').value || _p5.env.activeScript.name;
       break;
     case 'settings':
       textBoxSettingsFileName = document.getElementById('exportTextBoxSettingsFileName').value || textBoxSettingsFileName;
@@ -126,7 +126,7 @@ function exportAs(value) {
 
   switch (value) {
     case 'script':
-      exportScript(fileName, true, true, 'scripts');
+      exportScript(fileName, true, true, '_p5.env.scripts');
       break;
     case 'settings':
       exportTextBoxSettings(fileName, true, true, 'settings');
@@ -153,7 +153,7 @@ function exportAs(value) {
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 function exportScript(fileName, localDownload, serverUpload, uploadFolder) {
-  const data = activeScript.toJSON();
+  const data = _p5.env.activeScript.toJSON();
 
   if (localDownload == true) {
     // _p5.save locally
@@ -173,21 +173,21 @@ function exportScript(fileName, localDownload, serverUpload, uploadFolder) {
 function exportTextBoxSettings(fileName, localDownload, serverUpload, uploadFolder) {
 
   const data = {
-    lineHeight: lineHeight,
-    strokeWeight: scriptStrokeWeight,
-    size: size,
-    wordSpace: wordSpace,
-    letterSpace: letterSpace,
-    letterWidth: letterWidth,
-    letterHeight: letterHeight,
-    slant: slant,
-    randomSize: randomSize,
-    randomLetterSpace: randomLetterSpace,
-    randomLetterWidth: randomLetterWidth,
-    randomLetterHeight: randomLetterHeight,
-    randomSlant: randomSlant,
-    randomBaselineOffset: randomBaselineOffset,
-    precision: precision,
+    lineHeight: _p5.env.lineHeight,
+    strokeWeight: _p5.env.scriptStrokeWeight,
+    size: _p5.env.size,
+    wordSpace: _p5.env.wordSpace,
+    letterSpace: _p5.env.letterSpace,
+    letterWidth: _p5.env.letterWidth,
+    letterHeight: _p5.env.letterHeight,
+    slant: _p5.env.slant,
+    randomSize: _p5.env.randomSize,
+    randomLetterSpace: _p5.env.randomLetterSpace,
+    randomLetterWidth: _p5.env.randomLetterWidth,
+    randomLetterHeight: _p5.env.randomLetterHeight,
+    randomSlant: _p5.env.randomSlant,
+    randomBaselineOffset: _p5.env.randomBaselineOffset,
+    precision: _p5.env.precision,
     seed: textBox.seed
   };
 
@@ -210,7 +210,7 @@ function exportText_SVG(fileName, localDownload, serverUpload, uploadFolder) {
 
   exportActive = true;
   exportSVGActive = true;
-  // Create a temporary graphics buffer with the desired size based on exportSize
+  // Create a temporary graphics buffer with the desired _p5.env.size based on exportSize
   svgCanvas = _p5.createGraphics(textBox.width, textBox.height, _p5.SVG);
 
   // _p5.translate the temporary canvas to fit the textBox position
@@ -246,13 +246,13 @@ function exportText_PNG(fileName, localDownload, serverUpload, uploadFolder) {
 
   exportActive = true;
 
-  // Create a temporary graphics buffer with the desired size based on exportSize
+  // Create a temporary graphics buffer with the desired _p5.env.size based on exportSize
   let exportGraphic = _p5.createGraphics(textBox.width, textBox.height, _p5.P2D);
 
   // update current display state
   display();
 
-  // Scale the original canvas content to fit the export size
+  // Scale the original canvas content to fit the export _p5.env.size
   exportGraphic.image(secuenciaCanvas, -textBox.position.x, -textBox.position.y, canvasWidth, canvasHeight);
 
   if (localDownload == true) {

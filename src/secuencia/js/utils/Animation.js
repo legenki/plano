@@ -31,7 +31,7 @@ class AnimatedVariable {
 }
 
 function anyActiveAnimation() {
-  return animations.length > 0
+  return _p5.env.animations.length > 0
 }
 
 function updateAnimation() {
@@ -39,7 +39,7 @@ function updateAnimation() {
     animation.update();
     if (animation.complete == true) {
       // remove animation object if animation is complete
-      animations.splice(index, 1); 
+      _p5.env.animations.splice(index, 1); 
     }
   }
 }
@@ -47,18 +47,18 @@ function updateAnimation() {
 function setupAnimation_textBoxSettings(mode) {
 
   let maxFactor = 0.5;
-  let random_wordSpace = wordSpace;
-  let random_letterSpace = letterSpace;
-  let random_letterWidth = letterWidth;
-  let random_letterHeight = letterHeight;
-  let random_slant = slant;
-  let random_randomSize = randomSize;
-  let random_randomLetterSpace = randomLetterSpace;
-  let random_randomLetterWidth = randomLetterWidth;
-  let random_randomLetterHeight = randomLetterHeight;
-  let random_randomSlant = randomSlant;
-  let random_randomBaselineOffset = randomBaselineOffset;
-  let random_precision = precision;
+  let random_wordSpace = _p5.env.wordSpace;
+  let random_letterSpace = _p5.env.letterSpace;
+  let random_letterWidth = _p5.env.letterWidth;
+  let random_letterHeight = _p5.env.letterHeight;
+  let random_slant = _p5.env.slant;
+  let random_randomSize = _p5.env.randomSize;
+  let random_randomLetterSpace = _p5.env.randomLetterSpace;
+  let random_randomLetterWidth = _p5.env.randomLetterWidth;
+  let random_randomLetterHeight = _p5.env.randomLetterHeight;
+  let random_randomSlant = _p5.env.randomSlant;
+  let random_randomBaselineOffset = _p5.env.randomBaselineOffset;
+  let random_precision = _p5.env.precision;
 
   // _p5.random algorithmus below
 
@@ -71,7 +71,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValWordSpace > 0.3) {
     random_wordSpace  = 0.0;
   } else {
-    random_wordSpace = wordSpace;
+    random_wordSpace = _p5.env.wordSpace;
   }   
   
   //if (_p5.random(1) > 0.5) {
@@ -83,7 +83,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValSpace > 0.3) {
     random_letterSpace  = 0.0;
   } else {
-    random_letterSpace = letterSpace;
+    random_letterSpace = _p5.env.letterSpace;
   }  
   
   //if (_p5.random(1) > 0.5) {
@@ -95,7 +95,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValWidth > 0.3) {
     random_letterWidth  = 1.0;
   } else {
-    random_letterWidth = letterWidth;
+    random_letterWidth = _p5.env.letterWidth;
   }   
   
   //if (_p5.random(1) > 0.5) {
@@ -107,7 +107,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValHeight > 0.3) {
     random_letterHeight  = 1.0;
   } else {
-    random_letterHeight = letterHeight;
+    random_letterHeight = _p5.env.letterHeight;
   }   
   
   //if (_p5.random(1) > 0.5) {
@@ -119,7 +119,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValSlant > 0.3) {
     random_slant  = 0.0;
   } else {
-    random_slant = slant;
+    random_slant = _p5.env.slant;
   }  
 
   //if (_p5.random(1) > 0.5) {
@@ -131,7 +131,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomSize > 0.3) {
     random_randomSize  = 0.0;
   } else {
-    random_randomSize = randomSize;
+    random_randomSize = _p5.env.randomSize;
   }   
   
  //  if (_p5.random(1) > 0.5) {
@@ -143,7 +143,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomSpace > 0.3) {
     random_randomLetterSpace  = 0.0;
   } else {
-    random_randomLetterSpace = randomLetterSpace;
+    random_randomLetterSpace = _p5.env.randomLetterSpace;
   }
 
 //  if (_p5.random(1) > 0.5) {
@@ -155,7 +155,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomWidth > 0.3) {
     random_randomLetterWidth  = 0.0;
   } else {
-    random_randomLetterWidth = randomLetterWidth;
+    random_randomLetterWidth = _p5.env.randomLetterWidth;
   }
   
  //  if (_p5.random(1) > 0.5) {
@@ -167,7 +167,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomHeight > 0.3) {
     random_randomLetterHeight  = 0.0;
   } else {
-    random_randomLetterHeight = randomLetterHeight;
+    random_randomLetterHeight = _p5.env.randomLetterHeight;
   }  
   
  // if (_p5.random(1) > 0.5) {
@@ -179,7 +179,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomSlant > 0.3) {
     random_randomSlant  = 0.0;
   } else {
-    random_randomSlant = randomSlant;
+    random_randomSlant = _p5.env.randomSlant;
   }
  
  // if (_p5.random(1) > 0.5) {
@@ -191,7 +191,7 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomBase > 0.3) {
     random_randomBaselineOffset  = 0.0;
   } else {
-    random_randomBaselineOffset = precision;
+    random_randomBaselineOffset = _p5.env.precision;
   }
   
   let randomValRandomPrec = _p5.random(1.0);
@@ -200,41 +200,41 @@ function setupAnimation_textBoxSettings(mode) {
   } else if (randomValRandomPrec > 0.2) {
     random_precision  = 0.0;
   } else {
-    random_precision = randomBaselineOffset;
+    random_precision = _p5.env.randomBaselineOffset;
   }
 
   // no more changes here
 
   textBoxSettings_animation = {
-    wordSpace: new AnimatedVariable(wordSpace, mode == "_p5.random" ? random_wordSpace : wordSpace_DEFAULT),
-    letterSpace: new AnimatedVariable(letterSpace, mode == "_p5.random" ? random_letterSpace : letterSpace_DEFAULT),
-    letterWidth: new AnimatedVariable(letterWidth, mode == "_p5.random" ? random_letterWidth : letterWidth_DEFAULT),
-    letterHeight: new AnimatedVariable(letterHeight, mode == "_p5.random" ? random_letterHeight : letterHeight_DEFAULT),
-    slant: new AnimatedVariable(slant, mode == "_p5.random" ? random_slant : slant_DEFAULT),
-    randomSize: new AnimatedVariable(randomSize, mode == "_p5.random" ? random_randomSize : randomSize_DEFAULT),
-    randomLetterSpace: new AnimatedVariable(randomLetterSpace, mode == "_p5.random" ? random_randomLetterSpace : randomLetterSpace_DEFAULT),
-    randomLetterWidth: new AnimatedVariable(randomLetterWidth, mode == "_p5.random" ? random_randomLetterWidth : randomLetterWidth_DEFAULT),
-    randomLetterHeight: new AnimatedVariable(randomLetterHeight, mode == "_p5.random" ? random_randomLetterHeight : randomLetterHeight_DEFAULT),
-    randomSlant: new AnimatedVariable(randomSlant, mode == "_p5.random" ? random_randomSlant : randomSlant_DEFAULT),
-    randomBaselineOffset: new AnimatedVariable(randomBaselineOffset, mode == "_p5.random" ? random_randomBaselineOffset : randomBaselineOffset_DEFAULT),
-    precision: new AnimatedVariable(precision, mode == "_p5.random" ? random_precision : precision_DEFAULT),
+    wordSpace: new AnimatedVariable(_p5.env.wordSpace, mode == "_p5.random" ? random_wordSpace : _p5.env.wordSpace_DEFAULT),
+    letterSpace: new AnimatedVariable(_p5.env.letterSpace, mode == "_p5.random" ? random_letterSpace : _p5.env.letterSpace_DEFAULT),
+    letterWidth: new AnimatedVariable(_p5.env.letterWidth, mode == "_p5.random" ? random_letterWidth : _p5.env.letterWidth_DEFAULT),
+    letterHeight: new AnimatedVariable(_p5.env.letterHeight, mode == "_p5.random" ? random_letterHeight : _p5.env.letterHeight_DEFAULT),
+    slant: new AnimatedVariable(_p5.env.slant, mode == "_p5.random" ? random_slant : _p5.env.slant_DEFAULT),
+    randomSize: new AnimatedVariable(_p5.env.randomSize, mode == "_p5.random" ? random_randomSize : _p5.env.randomSize_DEFAULT),
+    randomLetterSpace: new AnimatedVariable(_p5.env.randomLetterSpace, mode == "_p5.random" ? random_randomLetterSpace : _p5.env.randomLetterSpace_DEFAULT),
+    randomLetterWidth: new AnimatedVariable(_p5.env.randomLetterWidth, mode == "_p5.random" ? random_randomLetterWidth : _p5.env.randomLetterWidth_DEFAULT),
+    randomLetterHeight: new AnimatedVariable(_p5.env.randomLetterHeight, mode == "_p5.random" ? random_randomLetterHeight : _p5.env.randomLetterHeight_DEFAULT),
+    randomSlant: new AnimatedVariable(_p5.env.randomSlant, mode == "_p5.random" ? random_randomSlant : _p5.env.randomSlant_DEFAULT),
+    randomBaselineOffset: new AnimatedVariable(_p5.env.randomBaselineOffset, mode == "_p5.random" ? random_randomBaselineOffset : _p5.env.randomBaselineOffset_DEFAULT),
+    precision: new AnimatedVariable(_p5.env.precision, mode == "_p5.random" ? random_precision : _p5.env.precision_DEFAULT),
     complete: false,
 
     update: function() {
-      wordSpace = this.wordSpace.update();
-      letterSpace = this.letterSpace.update();
-      letterWidth = this.letterWidth.update();
-      letterHeight = this.letterHeight.update();
-      slant = this.slant.update();
-      randomSize = this.randomSize.update();
-      randomLetterSpace = this.randomLetterSpace.update();
-      randomLetterWidth = this.randomLetterWidth.update();
-      randomLetterHeight = this.randomLetterHeight.update();
-      randomSlant = this.randomSlant.update();
-      randomBaselineOffset = this.randomBaselineOffset.update();
-      precision = this.precision.update();
-      updateInterface_textBoxSettings_state();
-      updateInterface_textBoxSettings_label();
+      _p5.env.wordSpace = this.wordSpace.update();
+      _p5.env.letterSpace = this.letterSpace.update();
+      _p5.env.letterWidth = this.letterWidth.update();
+      _p5.env.letterHeight = this.letterHeight.update();
+      _p5.env.slant = this.slant.update();
+      _p5.env.randomSize = this.randomSize.update();
+      _p5.env.randomLetterSpace = this.randomLetterSpace.update();
+      _p5.env.randomLetterWidth = this.randomLetterWidth.update();
+      _p5.env.randomLetterHeight = this.randomLetterHeight.update();
+      _p5.env.randomSlant = this.randomSlant.update();
+      _p5.env.randomBaselineOffset = this.randomBaselineOffset.update();
+      _p5.env.precision = this.precision.update();
+      _p5.env.updateInterface_textBoxSettings_state();
+      _p5.env.updateInterface_textBoxSettings_label();
       if (this.wordSpace.complete == true && this.letterSpace.complete == true && this.letterWidth.complete == true && this.letterHeight.complete == true &&
         this.slant.complete == true && this.randomSize.complete == true && this.randomLetterSpace.complete == true && this.randomLetterWidth.complete == true &&
         this.randomLetterHeight.complete == true && this.randomSlant.complete == true && this.randomBaselineOffset.complete == true && this.precision.complete == true) {
@@ -243,7 +243,7 @@ function setupAnimation_textBoxSettings(mode) {
     }
   };
 
-  animations.push(textBoxSettings_animation);
+  _p5.env.animations.push(textBoxSettings_animation);
 }
 
   return {

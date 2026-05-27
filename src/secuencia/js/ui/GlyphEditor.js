@@ -16,13 +16,13 @@ class GlyphEditor {
 
     this.isHovered;
 
-    this.gridSize = glyphEditor_gridSize_DEFAULT;
-    this.gridsPerSegment = glyphEditor_gridsPerSegment_DEFAULT;
+    this.gridSize = _p5.env.glyphEditor_gridSize_DEFAULT;
+    this.gridsPerSegment = _p5.env.glyphEditor_gridsPerSegment_DEFAULT;
 
-    this.scriptStrokeWeight = glyphEditor_scriptStrokeWeight_DEFAULT;
+    this.scriptStrokeWeight = _p5.env.glyphEditor_scriptStrokeWeight_DEFAULT;
 
-    this.buttonSizeBig = glyphEditor_buttonSizeBig_DEFAULT;
-    this.buttonSizeSmall = glyphEditor_buttonSizeSmall_DEFAULT;
+    this.buttonSizeBig = _p5.env.glyphEditor_buttonSizeBig_DEFAULT;
+    this.buttonSizeSmall = _p5.env.glyphEditor_buttonSizeSmall_DEFAULT;
 
     this.baselinePositionFactor = 0.65;
     this.leftBoundingPositionFactor = 0.25;
@@ -59,7 +59,7 @@ class GlyphEditor {
     this.contextMenu = false;
     this.displayInfo = true;
 
-    this.setActiveGlyph(activeScript.glyphs[0].name);
+    this.setActiveGlyph(_p5.env.activeScript.glyphs[0].name);
   }
 
   // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -97,7 +97,7 @@ class GlyphEditor {
 
   setActiveGlyph(character) {
 
-    let glyph = activeScript.getGlyph(character);
+    let glyph = _p5.env.activeScript.getGlyph(character);
 
     if (glyph != null) {
       this.resetActiveGlyph();
@@ -153,11 +153,11 @@ class GlyphEditor {
 
 
 
-      let doubleGlyphIndex = activeScript.glyphs.findIndex(glyph => glyph.name === character);
+      let doubleGlyphIndex = _p5.env.activeScript.glyphs.findIndex(glyph => glyph.name === character);
       if (doubleGlyphIndex != -1) {
-        let activeGlyphIndex = activeScript.glyphs.findIndex(glyph => glyph.name === this.activeGlyph.name);
-        activeScript.glyphs[doubleGlyphIndex] = this.activeGlyph;
-        activeScript.glyphs.splice(activeGlyphIndex, 1);
+        let activeGlyphIndex = _p5.env.activeScript.glyphs.findIndex(glyph => glyph.name === this.activeGlyph.name);
+        _p5.env.activeScript.glyphs[doubleGlyphIndex] = this.activeGlyph;
+        _p5.env.activeScript.glyphs.splice(activeGlyphIndex, 1);
       }
 
       this.activeGlyph.name = character;
@@ -170,7 +170,7 @@ class GlyphEditor {
     this.pathButtons = [];
     this.resetActivePath();
     this.updateActiveGlyph();
-    this.activeGlyph.updateWidth(activeScript.defaultGlyphWidth);
+    this.activeGlyph.updateWidth(_p5.env.activeScript.defaultGlyphWidth);
     this.repositionGuides();
   }
 
@@ -562,13 +562,13 @@ class GlyphEditor {
     this.baseline = this.baselineButton.position.y;
 
     this.xHeight = this.xHeightButton.position.y;
-    activeScript.xHeight = (this.baseline - this.xHeight) / (this.width * 0.9);
+    _p5.env.activeScript.xHeight = (this.baseline - this.xHeight) / (this.width * 0.9);
 
     this.ascenderHeight = this.ascenderHeightButton.position.y;
-    activeScript.ascenderHeight = (this.baseline - this.ascenderHeight) / (this.width * 0.9);
+    _p5.env.activeScript.ascenderHeight = (this.baseline - this.ascenderHeight) / (this.width * 0.9);
 
     this.descenderHeight = this.descenderHeightButton.position.y;
-    activeScript.descenderHeight = (this.baseline - this.descenderHeight) / (this.width * 0.9);
+    _p5.env.activeScript.descenderHeight = (this.baseline - this.descenderHeight) / (this.width * 0.9);
 
     this.leftBounding = this.leftBoundingButton.position.x;
     this.rightBounding = this.rightBoundingButton.position.x;
@@ -580,9 +580,9 @@ class GlyphEditor {
 
     // calc guide positions
     this.baseline = this.position.y + this.gridifySegments(this.height * this.baselinePositionFactor);
-    this.xHeight = this.baseline - (activeScript.xHeight * (this.width * 0.9));
-    this.ascenderHeight = this.baseline - (activeScript.ascenderHeight * (this.width * 0.9));
-    this.descenderHeight = this.baseline - (activeScript.descenderHeight * (this.width * 0.9));
+    this.xHeight = this.baseline - (_p5.env.activeScript.xHeight * (this.width * 0.9));
+    this.ascenderHeight = this.baseline - (_p5.env.activeScript.ascenderHeight * (this.width * 0.9));
+    this.descenderHeight = this.baseline - (_p5.env.activeScript.descenderHeight * (this.width * 0.9));
     this.leftBounding = this.position.x + (this.width * this.leftBoundingPositionFactor);
 
     // reposition guide buttons
@@ -599,12 +599,12 @@ class GlyphEditor {
 
   setContextMenu() {
     this.contextMenu = true;
-    updateInterface_glyphEditorContext_state();
+    _p5.env.updateInterface_glyphEditorContext_state();
   }
 
   resetContextMenu() {
     this.contextMenu = false;
-    updateInterface_glyphEditorContext_state();
+    _p5.env.updateInterface_glyphEditorContext_state();
   }
 
   // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -874,10 +874,10 @@ class GlyphEditor {
 
       if (this.mode == 'editHandle') {
         this.setMode('editAnchor');
-        updateInterface_glyphEditorTools_state();
+        _p5.env.updateInterface_glyphEditorTools_state();
       } else if (this.mode == 'editAnchor') {
         this.setMode('editHandle');
-        updateInterface_glyphEditorTools_state();
+        _p5.env.updateInterface_glyphEditorTools_state();
       } if (this.mode == 'drawPath') {
         
         // HIER
@@ -890,10 +890,10 @@ class GlyphEditor {
 
       if (this.mode == 'editHandle') {
         this.setMode('editAnchor');
-        updateInterface_glyphEditorTools_state();
+        _p5.env.updateInterface_glyphEditorTools_state();
       } else if (this.mode == 'editAnchor') {
         this.setMode('editHandle');
-        updateInterface_glyphEditorTools_state();
+        _p5.env.updateInterface_glyphEditorTools_state();
       }
 
     }
@@ -928,7 +928,7 @@ class GlyphEditor {
       _p5.line(this.position.x, this.position.y + y, this.position.x + this.width, this.position.y + y);
     }
 
-    _p5.stroke(gridColor);
+    _p5.stroke(_p5.env.gridColor);
     for (let x = 0; x < this.width; x += this.gridSize * this.gridsPerSegment) {
       _p5.line(this.position.x + x, this.position.y, this.position.x + x, this.position.y + this.height);
     }
@@ -938,7 +938,7 @@ class GlyphEditor {
   }
 
   displayBox() {
-    _p5.stroke(gridColor);
+    _p5.stroke(_p5.env.gridColor);
     _p5.strokeWeight(interfaceStrokeWeight);
     _p5.noFill();
     _p5.rect(this.position.x + (this.width * 0.5), this.position.y + (this.height * 0.5), this.width, this.height);
@@ -947,7 +947,7 @@ class GlyphEditor {
   displayGuides() {
 
     _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.stroke(this.displayInfo == true ? glyphEditor_guideColor : gridColor);
+    _p5.stroke(this.displayInfo == true ? glyphEditor_guideColor : _p5.env.gridColor);
 
     // x-_p5.height
     _p5.line(this.position.x, this.xHeight, this.position.x + this.width, this.xHeight);

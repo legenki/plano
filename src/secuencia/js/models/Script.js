@@ -26,11 +26,11 @@ class Script {
 
   reset() {
     this.name = this.name == null ? scriptName_DEFAULT : this.name;
-    this.xHeight = script_xHeight_DEFAULT;
-    this.ascenderHeight = script_ascenderHeight_DEFAULT;
-    this.descenderHeight = script_descenderHeight_DEFAULT;
-    this.defaultGlyphWidth = script_glyphWidth_DEFAULT;
-    this.wordSpace = script_wordSpace_DEFAULT;
+    this.xHeight = _p5.env.script_xHeight_DEFAULT;
+    this.ascenderHeight = _p5.env.script_ascenderHeight_DEFAULT;
+    this.descenderHeight = _p5.env.script_descenderHeight_DEFAULT;
+    this.defaultGlyphWidth = _p5.env.script_glyphWidth_DEFAULT;
+    this.wordSpace = _p5.env.script_wordSpace_DEFAULT;
 
     this.glyphs = [];
     this.setupBlankGlyphs();
@@ -40,12 +40,12 @@ class Script {
 
   fromJSON(data) {
 
-    this.name = data ? data.name : scriptName_DEFAULT;
-    this.xHeight = data ? data.xHeight : script_xHeight;
-    this.ascenderHeight = data ? data.ascenderHeight : script_ascenderHeight;
-    this.descenderHeight = data ? data.descenderHeight : script_descenderHeight;
-    this.defaultGlyphWidth = data ? data.defaultGlyphWidth : script_defaultGlyphWidth;
-    this.wordSpace = data ? data.wordSpace : script_defaultWordSpace;
+    this.name = data ? data.name : _p5.env.scriptName_DEFAULT;
+    this.xHeight = data ? data.xHeight : _p5.env.script_xHeight;
+    this.ascenderHeight = data ? data.ascenderHeight : _p5.env.script_ascenderHeight;
+    this.descenderHeight = data ? data.descenderHeight : _p5.env.script_descenderHeight;
+    this.defaultGlyphWidth = data ? data.defaultGlyphWidth : _p5.env.script_defaultGlyphWidth;
+    this.wordSpace = data ? data.wordSpace : _p5.env.script_defaultWordSpace;
 
     if (data && data.glyphs) {
       data.glyphs.forEach(glyphData => {
@@ -103,8 +103,8 @@ class Script {
   // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
   setupBlankGlyphs() {
-    for (let i = 0; i < basicLatin.length; i++) {
-      this.addBlankCharacter(basicLatin.charAt(i))
+    for (let i = 0; i < _p5.env.basicLatin.length; i++) {
+      this.addBlankCharacter(_p5.env.basicLatin.charAt(i))
     }
   }
 
@@ -116,7 +116,7 @@ class Script {
     this.glyphs.push(new Glyph(character, paths, glyphWidth));
     this.sortGlyphs();
 
-    if (activeScript == this) updateInterface_glyphSet_boxes();
+    if (_p5.env.activeScript == this) _p5.env.updateInterface_glyphSet_boxes();
   }
 
   sortGlyphs() {
@@ -167,7 +167,7 @@ class Script {
     }
 
     this.addBlankCharacter(character);
-    updateInterface_glyphSet_boxes();
+    _p5.env.updateInterface_glyphSet_boxes();
 
     for (let glyph of this.glyphs) {
       if (_p5.str(glyph.name) == character) {

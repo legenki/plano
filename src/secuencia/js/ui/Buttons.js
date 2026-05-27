@@ -170,9 +170,9 @@ class GuideButton extends Button {
 
   display() {
     _p5.push();
-    _p5.stroke(glyphEditor_guideColor);
+    _p5.stroke(_p5.env.glyphEditor_guideColor);
     _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.fill(this.isHovered == true ? glyphEditor_guideColor : backgroundColor);
+    _p5.fill(this.isHovered == true ? glyphEditor_guideColor : _p5.env.backgroundColor);
     _p5.ellipse(this.position.x, this.position.y, this.size, this.size);
     _p5.pop();
   }
@@ -358,13 +358,13 @@ class PathButton extends Button {
   displayPath() {
     _p5.push();
 
-    _p5.stroke(scriptColor);
+    _p5.stroke(_p5.env.scriptColor);
     _p5.strokeWeight(glyphEditor.scriptStrokeWeight);
     _p5.noFill();
 
     if (glyphEditor.displayInfo == true) {
       if (this.isHovered == true && this.active == false) {
-        _p5.stroke(hoverColor);
+        _p5.stroke(_p5.env.hoverColor);
       }
     }
 
@@ -424,7 +424,7 @@ class PathButton extends Button {
     }
 
     _p5.push();
-    _p5.stroke(hoverColor);
+    _p5.stroke(_p5.env.hoverColor);
     _p5.strokeWeight(glyphEditor.scriptStrokeWeight);
     _p5.noFill();
     _p5.bezier(
@@ -472,7 +472,7 @@ class PathButton extends Button {
     let y = firstAnchor.position.y + shift.y;
 
     _p5.noStroke();
-    _p5.fill(scriptColor);
+    _p5.fill(_p5.env.scriptColor);
     _p5.textFont(interfaceFont);
     _p5.textSize(interfaceFontSize);
     _p5.textAlign(_p5.CENTER, _p5.CENTER);
@@ -499,7 +499,7 @@ class PathButton extends Button {
     let y = anchor.position.y + shift.y;
 
     _p5.noStroke();
-    _p5.fill(scriptColor);
+    _p5.fill(_p5.env.scriptColor);
     _p5.textFont(interfaceFont);
     _p5.textSize(interfaceFontSize);
     _p5.textAlign(_p5.CENTER, _p5.CENTER);
@@ -514,7 +514,7 @@ class PathButton extends Button {
   displayBounding() {
     _p5.push();
     _p5.rectMode(_p5.CORNER);
-    _p5.stroke(scriptColor);
+    _p5.stroke(_p5.env.scriptColor);
     _p5.strokeWeight(interfaceStrokeWeight);
     _p5.noFill();
     _p5.rect(this.xMin, this.yMin, this.xMax - this.xMin, this.yMax - this.yMin);
@@ -635,20 +635,20 @@ class AnchorButton extends Button {
     if (displayHandle == true) {
       // _p5.line from anchor to handle
       _p5.strokeWeight(interfaceStrokeWeight);
-      _p5.stroke(glyphEditor_anchorColor);
+      _p5.stroke(_p5.env.glyphEditor_anchorColor);
       _p5.noFill();
       _p5.line(this.handleToPrev.position.x, this.handleToPrev.position.y, this.position.x, this.position.y);
       _p5.line(this.handleToNext.position.x, this.handleToNext.position.y, this.position.x, this.position.y);
     }
 
     // display settings
-    _p5.stroke(glyphEditor_anchorColor);
+    _p5.stroke(_p5.env.glyphEditor_anchorColor);
     if (this.active == true) {
-      _p5.fill(activeColor);
+      _p5.fill(_p5.env.activeColor);
     } else if (this.isHovered == true) {
-      _p5.fill(hoverColor);
+      _p5.fill(_p5.env.hoverColor);
     } else {
-      _p5.fill(backgroundColor);
+      _p5.fill(_p5.env.backgroundColor);
     }
 
     if (this.angular == true) {
@@ -682,11 +682,11 @@ class AnchorButton extends Button {
 
       _p5.strokeWeight(interfaceStrokeWeight);
       if (this.active == true) {
-        _p5.stroke(backgroundColor);
+        _p5.stroke(_p5.env.backgroundColor);
       } else if (this.isHovered == true) {
-        _p5.stroke(glyphEditor_anchorColor);
+        _p5.stroke(_p5.env.glyphEditor_anchorColor);
       } else {
-        _p5.stroke(glyphEditor_anchorColor);
+        _p5.stroke(_p5.env.glyphEditor_anchorColor);
       }
       _p5.noFill();
 
@@ -776,14 +776,14 @@ class HandleButton extends Button {
   // –––––––––––––––––––––––––––––––––
 
   display() {
-    _p5.stroke(scriptColor);
+    _p5.stroke(_p5.env.scriptColor);
     _p5.strokeWeight(interfaceStrokeWeight);
     if (this.anchor.active == true) {
-      _p5.fill(activeColor);
+      _p5.fill(_p5.env.activeColor);
     } else if (this.isHovered == true) {
-      _p5.fill(hoverColor);
+      _p5.fill(_p5.env.hoverColor);
     } else {
-      _p5.fill(backgroundColor);
+      _p5.fill(_p5.env.backgroundColor);
     }
     _p5.ellipse(this.position.x, this.position.y, this.size, this.size);
   }

@@ -71,13 +71,13 @@ class TextBox {
   }
 
   reset() {
-    this.tempSize = size;
-    this.tempWordSpace = (activeScript.wordSpace) * this.tempSize * 0.8 * (1 + wordSpace);
+    this.tempSize = _p5.env.size;
+    this.tempWordSpace = (_p5.env.activeScript.wordSpace) * this.tempSize * 0.8 * (1 + _p5.env.wordSpace);
 
-    this.tempSlant = slant;
-    this.tempLetterSpace = letterSpace;
-    this.tempLetterWidth = letterWidth;
-    this.tempLetterHeight = letterHeight;
+    this.tempSlant = _p5.env.slant;
+    this.tempLetterSpace = _p5.env.letterSpace;
+    this.tempLetterWidth = _p5.env.letterWidth;
+    this.tempLetterHeight = _p5.env.letterHeight;
     this.temBaselineOffset = 0;
 
     this.prevGlyph = null;
@@ -85,7 +85,7 @@ class TextBox {
     this.nextGlyph = null;
 
     this.resetX = this.position.x + this.padding;
-    this.resetY = this.position.y + this.padding + lineHeight;
+    this.resetY = this.position.y + this.padding + _p5.env.lineHeight;
 
     this.currGlyphX = this.resetX;
     this.currGlyphY = this.resetY;
@@ -129,26 +129,26 @@ class TextBox {
   displayLines() {
 
     _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.stroke(gridColor);
+    _p5.stroke(_p5.env.gridColor);
 
-    let totalLines = _p5.floor((this.height - this.padding * 2) / (lineHeight));
+    let totalLines = _p5.floor((this.height - this.padding * 2) / (_p5.env.lineHeight));
     for (let y = 1; y <= totalLines; y++) {
-      _p5.line(this.position.x + this.padding, this.position.y + this.padding + (y * lineHeight),
-        this.position.x + this.width - this.padding, this.position.y + this.padding + (y * lineHeight));
+      _p5.line(this.position.x + this.padding, this.position.y + this.padding + (y * _p5.env.lineHeight),
+        this.position.x + this.width - this.padding, this.position.y + this.padding + (y * _p5.env.lineHeight));
     }
   }
 
   displayBox() {
     _p5.noFill();
     _p5.strokeWeight(interfaceStrokeWeight);
-    _p5.stroke(gridColor);
+    _p5.stroke(_p5.env.gridColor);
     _p5.rect(this.position.x + (this.width * 0.5), this.position.y + (this.height * 0.5), this.width, this.height);
   }
 
   displayMissingGlyphs() {
-    _p5.stroke(missingColor);
-    // _p5.strokeWeight(scriptStrokeWeight * size / 100);
-    _p5.strokeWeight(scriptStrokeWeight);
+    _p5.stroke(_p5.env.missingColor);
+    // _p5.strokeWeight(_p5.env.scriptStrokeWeight * _p5.env.size / 100);
+    _p5.strokeWeight(_p5.env.scriptStrokeWeight);
     _p5.noFill();
     for (let missing of this.displayMissingCollection) {
       let x = missing[0];
@@ -162,17 +162,17 @@ class TextBox {
   }
 
   displayPaths() {
-    _p5.stroke(scriptColor);
-    // _p5.strokeWeight(scriptStrokeWeight * size / 100);
-    _p5.strokeWeight(scriptStrokeWeight);
+    _p5.stroke(_p5.env.scriptColor);
+    // _p5.strokeWeight(_p5.env.scriptStrokeWeight * _p5.env.size / 100);
+    _p5.strokeWeight(_p5.env.scriptStrokeWeight);
     _p5.noFill();
     _p5.strokeCap(_p5.ROUND);
     _p5.strokeJoin(_p5.ROUND);
 
     if (exportActive == true && exportSVGActive == true) {
-      svgCanvas.stroke(scriptColor);
-      // svgCanvas.strokeWeight(scriptStrokeWeight * size / 100);
-      svgCanvas.strokeWeight(scriptStrokeWeight);
+      svgCanvas.stroke(_p5.env.scriptColor);
+      // svgCanvas.strokeWeight(_p5.env.scriptStrokeWeight * _p5.env.size / 100);
+      svgCanvas.strokeWeight(_p5.env.scriptStrokeWeight);
       svgCanvas.noFill();
       svgCanvas.strokeCap(_p5.ROUND);
       svgCanvas.strokeJoin(_p5.ROUND);
@@ -255,9 +255,9 @@ class TextBox {
           break;
         }
 
-          this.prevGlyph = (k > 0 && this.currGlyphX != this.resetX) ? activeScript.getGlyph(words[j].charAt(k - 1)) : null;
-          this.currGlyph = activeScript.getGlyph(words[j].charAt(k));
-          this.nextGlyph = k + 1 < words[j].length ? activeScript.getGlyph(words[j].charAt(k + 1)) : null;
+          this.prevGlyph = (k > 0 && this.currGlyphX != this.resetX) ? _p5.env.activeScript.getGlyph(words[j].charAt(k - 1)) : null;
+          this.currGlyph = _p5.env.activeScript.getGlyph(words[j].charAt(k));
+          this.nextGlyph = k + 1 < words[j].length ? _p5.env.activeScript.getGlyph(words[j].charAt(k + 1)) : null;
 
           // If glyph is unknown add a wordspace
           if (this.currGlyph == null) {
@@ -271,21 +271,21 @@ class TextBox {
               this.currGlyphX += this.relativeXPosition(this.tempLetterSpace);
             }
 
-            this.tempSize += (_p5.noise(this.getNoiseIndex()) - 0.5) * randomSize;
+            this.tempSize += (_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomSize;
             this.tempSize = _p5.max(this.tempSize, sizeMin);
 
-            this.temBaselineOffset = (_p5.noise(this.getNoiseIndex()) - 0.5) * randomBaselineOffset;
+            this.temBaselineOffset = (_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomBaselineOffset;
 
-            this.tempLetterSpace = letterSpace + ((_p5.noise(this.getNoiseIndex()) - 0.5) * (randomLetterSpace));
+            this.tempLetterSpace = _p5.env.letterSpace + ((_p5.noise(this.getNoiseIndex()) - 0.5) * (_p5.env.randomLetterSpace));
             this.tempLetterSpace = _p5.max(this.tempLetterSpace, letterSpaceMin);
 
-            this.tempLetterWidth = letterWidth + ((_p5.noise(this.getNoiseIndex()) - 0.5) * randomLetterWidth);
+            this.tempLetterWidth = _p5.env.letterWidth + ((_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomLetterWidth);
             this.tempLetterWidth = _p5.max(this.tempLetterWidth, letterWidthMin);
 
-            this.tempLetterHeight = letterHeight + ((_p5.noise(this.getNoiseIndex()) - 0.5) * randomLetterHeight);
+            this.tempLetterHeight = _p5.env.letterHeight + ((_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomLetterHeight);
             this.tempLetterHeight = _p5.max(this.tempLetterHeight, letterHeightMin);
 
-            this.tempSlant = slant + ((_p5.noise(this.getNoiseIndex()) - 0.5) * randomSlant);
+            this.tempSlant = _p5.env.slant + ((_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.randomSlant);
             // this.tempSlant = _p5.min(_p5.max(this.tempSlant, slantMin), slantMax);
             this.tempSlant = _p5.constrain(this.tempSlant, slantMin, slantMax) * -1; 
 
@@ -294,11 +294,11 @@ class TextBox {
               this.currGlyphX += this.relativeXPosition((this.currGlyph.width * this.tempLetterWidth) + this.currGlyph.leftSideBearing + this.currGlyph.rightSideBearing);
             } else {
               this.addMissing();
-              this.currGlyphX += this.relativeXPosition((activeScript.defaultGlyphWidth * this.tempLetterWidth));
+              this.currGlyphX += this.relativeXPosition((_p5.env.activeScript.defaultGlyphWidth * this.tempLetterWidth));
             }
 
             // reset tempSize to global value
-            this.tempSize = size;
+            this.tempSize = _p5.env.size;
           }
 
           // check if word fits in _p5.line, else add linebreak and begin to redraw word
@@ -370,8 +370,8 @@ class TextBox {
         let handleToNext = anchor.handleToNext;
 
         // tempNoise for similar anchor and handle distortion
-        let tempNoiseX = (_p5.noise(this.getNoiseIndex()) - 0.5) * precision;
-        let tempNoiseY = (_p5.noise(this.getNoiseIndex()) - 0.5) * precision;
+        let tempNoiseX = (_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.precision;
+        let tempNoiseY = (_p5.noise(this.getNoiseIndex()) - 0.5) * _p5.env.precision;
 
         // calc temp anchor positioning
         let tempAnchorX = this.relativeXPosition((((anchor.position.x - this.currGlyph.leftSideBearing) * this.tempLetterWidth) + this.currGlyph.leftSideBearing) + tempNoiseX);
@@ -447,8 +447,8 @@ class TextBox {
   }
 
   addMissing() {
-    let w = this.relativeXPosition(activeScript.defaultGlyphWidth * letterWidth);
-    let h = this.relativeYPosition(activeScript.ascenderHeight * letterHeight) * -1;
+    let w = this.relativeXPosition(_p5.env.activeScript.defaultGlyphWidth * _p5.env.letterWidth);
+    let h = this.relativeYPosition(_p5.env.activeScript.ascenderHeight * _p5.env.letterHeight) * -1;
     let x = this.currGlyphX;
     let y = this.currGlyphY;
     this.tempWordDisplayMissing.push([x, y, w, h]);
@@ -487,7 +487,7 @@ class TextBox {
 
   resetToNextLine() {
     this.currGlyphX = this.resetX;
-    this.currGlyphY += lineHeight;
+    this.currGlyphY += _p5.env.lineHeight;
     this.prevGlyph = null;
     this.currGlyph = null;
     this.nextGlyph = null;
