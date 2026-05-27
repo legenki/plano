@@ -10,15 +10,15 @@ export function createControlFunctions(_p5) {
 _p5.mousePressed = function() {
 
   if (_p5.mouseButton == "right" || event.ctrlKey) {
-    if (glyphEditor.isHovered == true) {
-      glyphEditor.handleRightClick();
+    if (_p5.env.glyphEditor.isHovered == true) {
+      _p5.env.glyphEditor.handleRightClick();
     }
   }
 
 }
 
 _p5.mouseDragged = function() {
-  glyphEditor.handleDrag();
+  _p5.env.glyphEditor.handleDrag();
 }
 
 _p5.mouseReleased = function() {
@@ -42,14 +42,14 @@ _p5.touchEnded = function() {
 };
 
 _p5.mouseClicked = function() {
-  if (glyphEditor.isHovered == true && event.ctrlKey == false) {
-    glyphEditor.handleClick();
+  if (_p5.env.glyphEditor.isHovered == true && event.ctrlKey == false) {
+    _p5.env.glyphEditor.handleClick();
   }
 }
 
 function doubleClicked() {
-  if (glyphEditor.isHovered == true) {
-    glyphEditor.handleDoubleClick();
+  if (_p5.env.glyphEditor.isHovered == true) {
+    _p5.env.glyphEditor.handleDoubleClick();
   }
 }
 
@@ -62,7 +62,7 @@ _p5.keyPressed = function() {
   }
 
   if (_p5.key == 'Alt') {
-    if (glyphEditor) glyphEditor.handleAlt('pressed');
+    if (_p5.env.glyphEditor) _p5.env.glyphEditor.handleAlt('pressed');
   }
 
   // Vector editing mode keyboard hotkeys
@@ -84,11 +84,11 @@ _p5.keyReleased = function() {
   }
 
   if (_p5.key == 'Backspace') {
-    if (glyphEditor) glyphEditor.handleDelete();
+    if (_p5.env.glyphEditor) _p5.env.glyphEditor.handleDelete();
   } else if (_p5.key == 'Escape') {
-    if (glyphEditor) glyphEditor.handleEscape();
+    if (_p5.env.glyphEditor) _p5.env.glyphEditor.handleEscape();
   } else if (_p5.key == 'Alt') {
-    if (glyphEditor) glyphEditor.handleAlt('released');
+    if (_p5.env.glyphEditor) _p5.env.glyphEditor.handleAlt('released');
   }
 }
 
@@ -100,7 +100,7 @@ document.addEventListener('keydown', (event) => {
 
   if ((event.key === 'z' || event.key === 'Z') && (event.metaKey || event.ctrlKey)) {
     event.preventDefault();
-    glyphEditor.handleCmdZ();
+    _p5.env.glyphEditor.handleCmdZ();
   }
 });
 
@@ -109,12 +109,12 @@ document.addEventListener('keydown', (event) => {
 // glyphEditorTools
 
 function switchMode(value) {
-  glyphEditor.setMode(value);
+  _p5.env.glyphEditor.setMode(value);
   updateInterface_glyphEditorTools_state();
 }
 
 function switchGlyphEditorDisplayInfo() {
-  glyphEditor.displayInfo = !glyphEditor.displayInfo;
+  _p5.env.glyphEditor.displayInfo = !_p5.env.glyphEditor.displayInfo;
   updateInterface_glyphEditorTools_state();
 }
 
@@ -123,26 +123,26 @@ function switchGlyphEditorDisplayInfo() {
 // glyphEditorContext
 
 function switchConnectionToPrev() {
-  glyphEditor.switchConnectionToPrev();
+  _p5.env.glyphEditor.switchConnectionToPrev();
   updateInterface_glyphEditorContext_state();
 }
 
 function switchConnectionToNext() {
-  glyphEditor.switchConnectionToNext();
+  _p5.env.glyphEditor.switchConnectionToNext();
   updateInterface_glyphEditorContext_state();
 }
 
 function switchMainPath() {
-  glyphEditor.switchMainPath();
+  _p5.env.glyphEditor.switchMainPath();
   updateInterface_glyphEditorContext_state();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-// glyphEditor
+// _p5.env.glyphEditor
 
 function setGlyph(char) {
-  glyphEditor.setActiveGlyph(char);
+  _p5.env.glyphEditor.setActiveGlyph(char);
   updateInterface_glyphSet_state();
 }
 
@@ -155,14 +155,14 @@ function setGlyphName() {
     char = value;
   }
 
-  glyphEditor.setActiveGlyphName(char);
+  _p5.env.glyphEditor.setActiveGlyphName(char);
   updateInterface_glyphSet_state();
 
   closePrompt('setGlyphNamePrompt');
 }
 
 function clearGlyph() {
-  glyphEditor.clearActiveGlyph();
+  _p5.env.glyphEditor.clearActiveGlyph();
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -172,9 +172,9 @@ function clearGlyph() {
 function setScript(value) {
   activeScriptIndex = value;
   activeScript = scripts[activeScriptIndex];
-  if (glyphEditor == null) return;
-  glyphEditor.reloadActiveGlyph();
-  glyphEditor.repositionGuides();
+  if (_p5.env.glyphEditor == null) return;
+  _p5.env.glyphEditor.reloadActiveGlyph();
+  _p5.env.glyphEditor.repositionGuides();
   updateInterface_scriptName();
   updateInterface_glyphSet_boxes();
   updateInterface_scriptList_state();
@@ -202,9 +202,9 @@ function resetScript() {
   }
 
   // Fully update the interface and the glyph editor to reflect the changes
-  if (glyphEditor != null) {
-    glyphEditor.reloadActiveGlyph();
-    glyphEditor.repositionGuides();
+  if (_p5.env.glyphEditor != null) {
+    _p5.env.glyphEditor.reloadActiveGlyph();
+    _p5.env.glyphEditor.repositionGuides();
   }
   updateInterface_scriptName();
   updateInterface_glyphSet_boxes();

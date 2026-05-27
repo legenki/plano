@@ -219,7 +219,7 @@ class PathButton extends Button {
       let handleToNext = anchor.handleToNext;
       let nextAnchor = this.anchors[i + 1];
       let nextAnchor_handleToPrev = nextAnchor.handleToPrev;
-      if (mouseOverBezier(anchor.position, handleToNext.position, nextAnchor_handleToPrev.position, nextAnchor.position, glyphEditor.scriptStrokeWeight * 2) == true) {
+      if (mouseOverBezier(anchor.position, handleToNext.position, nextAnchor_handleToPrev.position, nextAnchor.position, _p5.env.glyphEditor.scriptStrokeWeight * 2) == true) {
         this.isHovered = true;
       }
     }
@@ -251,7 +251,7 @@ class PathButton extends Button {
 
   gridifyPosition() {
 
-    this.position = _p5.createVector(glyphEditor.gridify(this.position.x), glyphEditor.gridify(this.position.y));
+    this.position = _p5.createVector(_p5.env.glyphEditor.gridify(this.position.x), _p5.env.glyphEditor.gridify(this.position.y));
 
     for (let anchor of this.anchors) {
       anchor.updatePositionRelativeToPath();
@@ -316,13 +316,13 @@ class PathButton extends Button {
 
     this.displayPath();
 
-    if (glyphEditor.displayInfo == true) {
+    if (_p5.env.glyphEditor.displayInfo == true) {
 
-      if (glyphEditor.mode != 'drawPath') {
+      if (_p5.env.glyphEditor.mode != 'drawPath') {
         this.displayIndex();
       }
 
-      if (glyphEditor.mode == 'editPath') {
+      if (_p5.env.glyphEditor.mode == 'editPath') {
         if (this.active == true) {
           this.displayBounding();
           if (this.connectionToPrev == true && this.anchors[0]) {
@@ -334,7 +334,7 @@ class PathButton extends Button {
         }
       }
 
-      if (glyphEditor.mode == 'editAnchor' || glyphEditor.mode == 'editHandle') {
+      if (_p5.env.glyphEditor.mode == 'editAnchor' || _p5.env.glyphEditor.mode == 'editHandle') {
         for (let anchor of this.anchors) {
           if (this.active == true) {
             anchor.display(true);
@@ -342,7 +342,7 @@ class PathButton extends Button {
         }
       }
 
-      if (glyphEditor.mode == 'drawPath') {
+      if (_p5.env.glyphEditor.mode == 'drawPath') {
         for (let anchor of this.anchors) {
           if (this.active == true) {
             anchor.display(true);
@@ -359,10 +359,10 @@ class PathButton extends Button {
     _p5.push();
 
     _p5.stroke(_p5.env.scriptColor);
-    _p5.strokeWeight(glyphEditor.scriptStrokeWeight);
+    _p5.strokeWeight(_p5.env.glyphEditor.scriptStrokeWeight);
     _p5.noFill();
 
-    if (glyphEditor.displayInfo == true) {
+    if (_p5.env.glyphEditor.displayInfo == true) {
       if (this.isHovered == true && this.active == false) {
         _p5.stroke(_p5.env.hoverColor);
       }
@@ -394,9 +394,9 @@ class PathButton extends Button {
         nextAnchor_handleToPrev.position.x, nextAnchor_handleToPrev.position.y,
         nextAnchor.position.x, nextAnchor.position.y
       );
-    } else if (this.active == true &&  glyphEditor.mode == 'drawPath' && glyphEditor.checkAnyGuideIsHovered() == false &&
-      glyphEditor.isHovered == true && glyphEditor.isHovered == true && 
-      glyphEditor.activeAnchor != null && glyphEditor.activeAnchor.isPressed == false) {
+    } else if (this.active == true &&  _p5.env.glyphEditor.mode == 'drawPath' && _p5.env.glyphEditor.checkAnyGuideIsHovered() == false &&
+      _p5.env.glyphEditor.isHovered == true && _p5.env.glyphEditor.isHovered == true && 
+      _p5.env.glyphEditor.activeAnchor != null && _p5.env.glyphEditor.activeAnchor.isPressed == false) {
       this.displayCurrentDraw();
     }
 
@@ -410,22 +410,22 @@ class PathButton extends Button {
     if (direction == "prev") {
       anchor2 = this.anchors[0].position;
       handle2 = this.anchors[0].handleToPrev.position;
-      let x = glyphEditor.xInsideBounds(this.xMin - (0.15 * glyphEditor.width));
-      let y = glyphEditor.yInsideBounds(glyphEditor.xHeightButton.position.y);
+      let x = _p5.env.glyphEditor.xInsideBounds(this.xMin - (0.15 * _p5.env.glyphEditor.width));
+      let y = _p5.env.glyphEditor.yInsideBounds(_p5.env.glyphEditor.xHeightButton.position.y);
       anchor1 = _p5.createVector(x, y);
       handle1 = _p5.createVector(x, y);
     } else {
       anchor1 = this.anchors[this.anchors.length-1].position;
       handle1 = this.anchors[this.anchors.length-1].handleToNext.position;     
-      let x = glyphEditor.xInsideBounds(this.xMax + (0.15 * glyphEditor.width));
-      let y = glyphEditor.yInsideBounds(glyphEditor.xHeightButton.position.y);
+      let x = _p5.env.glyphEditor.xInsideBounds(this.xMax + (0.15 * _p5.env.glyphEditor.width));
+      let y = _p5.env.glyphEditor.yInsideBounds(_p5.env.glyphEditor.xHeightButton.position.y);
       anchor2 = _p5.createVector(x, y);
       handle2 = _p5.createVector(x, y);
     }
 
     _p5.push();
     _p5.stroke(_p5.env.hoverColor);
-    _p5.strokeWeight(glyphEditor.scriptStrokeWeight);
+    _p5.strokeWeight(_p5.env.glyphEditor.scriptStrokeWeight);
     _p5.noFill();
     _p5.bezier(
       anchor1.x, anchor1.y,
@@ -438,8 +438,8 @@ class PathButton extends Button {
   }
 
   displayCurrentDraw() {
-    let anchor = glyphEditor.activeAnchor.first == true ? this.anchors[0] : this.anchors[this.anchors.length - 1];
-    let handle = glyphEditor.activeAnchor.first == true ? anchor.handleToPrev : anchor.handleToNext;
+    let anchor = _p5.env.glyphEditor.activeAnchor.first == true ? this.anchors[0] : this.anchors[this.anchors.length - 1];
+    let handle = _p5.env.glyphEditor.activeAnchor.first == true ? anchor.handleToPrev : anchor.handleToNext;
     _p5.bezier(
       anchor.position.x, anchor.position.y,
       handle.position.x, handle.position.y,

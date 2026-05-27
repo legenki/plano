@@ -157,6 +157,8 @@ export const secuenciaSketch = (_p5) => {
     set animations(v) { animations = v; },
     get activeScriptIndex() { return typeof activeScriptIndex !== 'undefined' ? activeScriptIndex : undefined; },
     set activeScriptIndex(v) { activeScriptIndex = v; },
+    get glyphEditor() { return typeof glyphEditor !== 'undefined' ? glyphEditor : undefined; },
+    set glyphEditor(v) { glyphEditor = v; },
   };
 
 // --- Initialize module factories (bind p5 instance to all classes) ---

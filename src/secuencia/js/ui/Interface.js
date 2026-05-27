@@ -47,11 +47,11 @@ function updateCanvas_layout() {
   let glyphSet_boxSizeFit = (glyphEditor_width / glyphSet_boxesPerRow) + ((glyphSet_boxesPerRow - 1) * 0.1);
   document.documentElement.style.setProperty('--glyphSet_boxSize', glyphSet_boxSizeFit + 'px');
 
-  // reposition glyphEditor
-  if (glyphEditor != null) {
+  // reposition _p5.env.glyphEditor
+  if (_p5.env.glyphEditor != null) {
     let glyphEditor_xPosition = glyphEditorElement.getBoundingClientRect().left;
     let glyphEditor_yPosition = glyphEditorElement.getBoundingClientRect().top;
-    glyphEditor.setDimensions(glyphEditor_xPosition, glyphEditor_yPosition, glyphEditor_width, glyphEditor_height);
+    _p5.env.glyphEditor.setDimensions(glyphEditor_xPosition, glyphEditor_yPosition, glyphEditor_width, glyphEditor_height);
   }
 
   // reposition textBox
@@ -116,7 +116,7 @@ function updateInterface_glyphEditorTools_state() {
   resetState(editHandleModeElement);
   resetState(drawPathModeElement);
 
-  switch (glyphEditor.mode) {
+  switch (_p5.env.glyphEditor.mode) {
     case 'editPath':
       setActive(editPathModeElement);
       break;
@@ -138,30 +138,30 @@ function updateInterface_glyphEditorContext_state() {
   const glyphEditorContextMainPathElement = document.getElementById("glyphEditorContextMainPath");
 
   // update state
-  if (glyphEditor.contextMenu == true) {
+  if (_p5.env.glyphEditor.contextMenu == true) {
 
     setDisplay(glyphEditorContextElement);
     glyphEditorContextElement.style.left = _p5.mouseX + 'px';
     glyphEditorContextElement.style.top = _p5.mouseY + 'px';
 
-    if (glyphEditor.mode != 'drawPath') {
+    if (_p5.env.glyphEditor.mode != 'drawPath') {
 
       const connectionToPrevElement = document.getElementById("connectionToPrev");
       const connectionToNextElement = document.getElementById("connectionToNext");
 
-      if (glyphEditor.activePath.connectionToPrev == true) {
+      if (_p5.env.glyphEditor.activePath.connectionToPrev == true) {
         setActive(connectionToPrevElement);
       } else {
         resetState(connectionToPrevElement);
       }
 
-      if (glyphEditor.activePath.connectionToNext == true) {
+      if (_p5.env.glyphEditor.activePath.connectionToNext == true) {
         setActive(connectionToNextElement);
       } else {
         resetState(connectionToNextElement);
       }
 
-      if(glyphEditor.activePath.index != 0) {
+      if(_p5.env.glyphEditor.activePath.index != 0) {
         setDisplay(glyphEditorContextMainPathElement);
       } else {
         setHidden(glyphEditorContextMainPathElement);
@@ -215,7 +215,7 @@ function updateInterface_glyphSet_boxes() {
       
       box.id = name;
       box.querySelector('label').textContent = char;
-      box.setAttribute('aria-selected', glyphEditor && glyphEditor.activeGlyph === glyph);
+      box.setAttribute('aria-selected', _p5.env.glyphEditor && _p5.env.glyphEditor.activeGlyph === glyph);
     }
   );
 
@@ -277,7 +277,7 @@ function updateInterface_glyphSet_state() {
     glyphSet_boxObjects.forEach((box) => {
       let character = box.id;
       let glyph = activeScript.getGlyph(character);
-      if (glyph == glyphEditor.activeGlyph) {
+      if (glyph == _p5.env.glyphEditor.activeGlyph) {
         setActive(box);
       } else if (glyph.paths.length == 0) {
         if (document.getElementById("textInput").value.includes(glyph.name)) {
