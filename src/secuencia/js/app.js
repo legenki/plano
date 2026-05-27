@@ -1222,6 +1222,22 @@ _p5.mouseReleased = function() {
 
 }
 
+// --- TOUCH HANDLERS ---
+_p5.touchStarted = function() {
+  _p5.mousePressed();
+  if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
+};
+
+_p5.touchMoved = function() {
+  _p5.mouseDragged();
+  if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
+};
+
+_p5.touchEnded = function() {
+  _p5.mouseReleased();
+  if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
+};
+
 _p5.mouseClicked = function() {
   if (glyphEditor.isHovered == true && event.ctrlKey == false) {
     glyphEditor.handleClick();

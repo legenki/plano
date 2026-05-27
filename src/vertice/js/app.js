@@ -317,6 +317,22 @@ export function verticeSketch(p) {
     patternDragStart = null;
   };
 
+  // --- TOUCH HANDLERS ---
+  p.touchStarted = function() {
+    p.mousePressed();
+    if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
+  };
+
+  p.touchMoved = function() {
+    p.mouseDragged();
+    if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
+  };
+
+  p.touchEnded = function() {
+    p.mouseReleased();
+    if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
+  };
+
   p.doubleClicked = function() {
     const sidebar = document.querySelector('#app-vertice .sidebar');
     if (sidebar && p.mouseX > p.width - sidebar.clientWidth) return;
