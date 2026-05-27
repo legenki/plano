@@ -71,7 +71,7 @@
           
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Rotate All Glyphs</span>
+              <span class="parameter-label">Rotate All Glyphs</span>
               <span class="parameter-value-badge" id="val-global-rotation">0°</span>
             </div>
             <input type="range" id="slide-global-rotation" min="-180" max="180" value="0" oninput="rotateAllGlyphsFromUI(this.value)" onchange="saveHistoryState()">
@@ -84,7 +84,7 @@
           
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Position X / Y</span>
+              <span class="parameter-label">Position X / Y</span>
             </div>
             <div class="figma-input-row">
               <div class="figma-input-wrapper">
@@ -100,7 +100,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Radius</span>
+              <span class="parameter-label">Radius</span>
               <span class="parameter-value-badge" id="val-vertex-radius">20</span>
             </div>
             <input type="range" id="slide-vertex-radius" min="12" max="150" value="20" oninput="updateSelectedVertexFromUI()">
@@ -118,7 +118,7 @@
           
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Translation Offset X / Y</span>
+              <span class="parameter-label">Translation Offset X / Y</span>
             </div>
             <div class="figma-input-row">
               <div class="figma-input-wrapper">
@@ -134,7 +134,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Scale</span>
+              <span class="parameter-label">Scale</span>
             </div>
             <div class="btn-group">
               <button class="btn" onclick="scaleSelectedGlyph(-0.1)">- 10%</button>
@@ -144,7 +144,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Rotation</span>
+              <span class="parameter-label">Rotation</span>
               <span class="parameter-value-badge" id="val-glyph-rotation">0°</span>
             </div>
             <input type="range" id="slide-glyph-rotation" min="-180" max="180" value="0" oninput="rotateSelectedGlyphFromUI(this.value)">
@@ -166,7 +166,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Opacity</span>
+              <span class="parameter-label">Opacity</span>
               <span class="parameter-value-badge" id="val-bg-opacity">50%</span>
             </div>
             <input type="range" id="slide-bg-opacity" min="0" max="100" value="50" oninput="updateBgImageSettingsFromUI()">
@@ -174,7 +174,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Scale</span>
+              <span class="parameter-label">Scale</span>
               <span class="parameter-value-badge" id="val-bg-scale">100%</span>
             </div>
             <input type="range" id="slide-bg-scale" min="10" max="500" value="100" oninput="updateBgImageSettingsFromUI()">
@@ -182,7 +182,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Rotation</span>
+              <span class="parameter-label">Rotation</span>
               <span class="parameter-value-badge" id="val-bg-rotation">0°</span>
             </div>
             <input type="range" id="slide-bg-rotation" min="-180" max="180" value="0" oninput="updateBgImageSettingsFromUI()">
@@ -190,7 +190,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Offset X / Y</span>
+              <span class="parameter-label">Offset X / Y</span>
             </div>
             <div class="figma-input-row">
               <div class="figma-input-wrapper">
@@ -219,7 +219,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Interval X</span>
+              <span class="parameter-label">Interval X</span>
               <span class="parameter-value-badge" id="val-pattern-x-offset">400</span>
             </div>
             <input type="range" id="slide-pattern-x-offset" min="100" max="1000" value="400" oninput="updatePatternFromUI()">
@@ -227,7 +227,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Interval Y</span>
+              <span class="parameter-label">Interval Y</span>
               <span class="parameter-value-badge" id="val-pattern-y-offset">400</span>
             </div>
             <input type="range" id="slide-pattern-y-offset" min="100" max="1000" value="400" oninput="updatePatternFromUI()">
@@ -235,7 +235,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Grid Rotation</span>
+              <span class="parameter-label">Grid Rotation</span>
               <span class="parameter-value-badge" id="val-pattern-rotation">0°</span>
             </div>
             <input type="range" id="slide-pattern-rotation" min="-180" max="180" value="0" oninput="updatePatternFromUI()">
@@ -243,7 +243,7 @@
 
           <div class="parameter-row">
             <div class="parameter-label-container">
-              <span>Copy Opacity</span>
+              <span class="parameter-label">Copy Opacity</span>
               <span class="parameter-value-badge" id="val-pattern-alpha">100</span>
             </div>
             <input type="range" id="slide-pattern-alpha" min="0" max="255" value="100" oninput="updatePatternFromUI()">
@@ -260,17 +260,20 @@
             <span>Rounded line joints</span>
           </label>
 
-          <div class="color-picker-wrapper">
-            <span class="color-picker-label">Background Color</span>
-            <div class="color-input-container">
-              <input type="color" id="picker-bg-color" value="#ffffff" oninput="updateColorsFromUI()">
+          <div class="control-group color-pickers-row">
+            <div>
+              <label for="picker-bg-color">Background Color</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="picker-bg-color" value="#ffffff" oninput="updateColorsFromUI()">
+                <span id="label-bg" class="color-code">#FFFFFF</span>
+              </div>
             </div>
-          </div>
-
-          <div class="color-picker-wrapper">
-            <span class="color-picker-label">Stroke Color</span>
-            <div class="color-input-container">
-              <input type="color" id="picker-stroke-color" value="#000000" oninput="updateColorsFromUI()">
+            <div>
+              <label for="picker-stroke-color">Stroke Color</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="picker-stroke-color" value="#000000" oninput="updateColorsFromUI()">
+                <span id="label-stroke" class="color-code">#000000</span>
+              </div>
             </div>
           </div>
 

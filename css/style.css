@@ -384,11 +384,11 @@ body.theme-dark .sidebar, body.theme-dark .secuencia-panel {
 /* Section titles and cards */
 .section-title {
   font-weight: 600;
-  font-size: 10px;
-  color: var(--text-secondary);
-  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--text-primary);
+  text-transform: none;
   margin: 10px 0 6px 0;
-  letter-spacing: 0.05em;
+  letter-spacing: normal;
 }
 
 .section-subtitle {

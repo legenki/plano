@@ -492,6 +492,8 @@ function setupSecuenciaListeners() {
   if (bgColorPicker) {
     bgColorPicker.addEventListener('input', function(e) {
       backgroundColor = hexToColor(e.target.value);
+      let lbl = document.getElementById('label-bg');
+      if (lbl) lbl.innerText = e.target.value.toUpperCase();
       updateCanvas_parameter();
     });
   }
@@ -500,6 +502,8 @@ function setupSecuenciaListeners() {
   if (textColorPicker) {
     textColorPicker.addEventListener('input', function(e) {
       scriptColor = hexToColor(e.target.value);
+      let lbl = document.getElementById('label-text');
+      if (lbl) lbl.innerText = e.target.value.toUpperCase();
       updateCanvas_parameter();
     });
   }

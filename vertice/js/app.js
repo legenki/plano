@@ -199,8 +199,16 @@ function updateUISidebarVisibility() {
  * Синхронизация цветов в UI
  */
 function updateUIColors() {
-  if (DOM.pickerBgColor) DOM.pickerBgColor.value = backgroundColor;
-  if (DOM.pickerStrokeColor) DOM.pickerStrokeColor.value = shapeColor;
+  if (DOM.pickerBgColor) {
+    DOM.pickerBgColor.value = backgroundColor;
+    let lbl = document.getElementById("label-bg");
+    if (lbl) lbl.innerText = backgroundColor.toUpperCase();
+  }
+  if (DOM.pickerStrokeColor) {
+    DOM.pickerStrokeColor.value = shapeColor;
+    let lbl = document.getElementById("label-stroke");
+    if (lbl) lbl.innerText = shapeColor.toUpperCase();
+  }
 }
 
 // --- SETUP И DRAW (P5.JS CORE) ---
@@ -957,6 +965,11 @@ function toggleStrokeCapRounded(rounded) {
 function updateColorsFromUI() {
   backgroundColor = DOM.pickerBgColor.value;
   shapeColor = DOM.pickerStrokeColor.value;
+  
+  let lblBg = document.getElementById("label-bg");
+  if (lblBg) lblBg.innerText = backgroundColor.toUpperCase();
+  let lblStroke = document.getElementById("label-stroke");
+  if (lblStroke) lblStroke.innerText = shapeColor.toUpperCase();
   
   // Принудительно обновляем цвет заднего фона у контейнера canvas
   const canvasContainer = document.getElementById("canvas-container");

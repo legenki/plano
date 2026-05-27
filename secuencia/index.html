@@ -107,333 +107,361 @@
   </div>
 
   <!-- RIGHT PANEL: TEXT LAYOUT & DESIGN SYSTEM -->
-  <div id="textBoxSettings" class="secuencia-panel">
-
-    <!-- Interactive Text Area -->
-    <div class="section-title">Text Input</div>
-    <div class="textarea-wrapper">
-      <textarea id="textInput" rows="4" placeholder="Type text here..." oninput="setText()"></textarea>
-    </div>
-
-    <div class="lineHorizontal"></div>
-
-    <!-- Parameter Sliders -->
-    <div class="scroll-box-container" style="flex-grow: 1;">
-      <div class="scrollBox" id="textBoxSettingsSliderScrollBox">
-        <div id="textBoxSettingsSlider">
-          
-          <!-- Size -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Size</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="sizeNum" class="secuencia-num-input" min="20" max="400" step="1">
-                <span class="unit">px</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="size" oninput="setSize(this.value)">
-          </div>
-
-          <!-- Line Height -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Line Height</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="lineHeightNum" class="secuencia-num-input" min="20" max="500" step="1">
-                <span class="unit">px</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="lineHeight" oninput="setLineHeight(this.value)">
-          </div>
-
-          <!-- Stroke Weight -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Stroke Weight</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="scriptStrokeWeightNum" class="secuencia-num-input" min="1" max="10" step="0.1">
-                <span class="unit">px</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="scriptStrokeWeight" oninput="setScriptStrokeWeight(this.value)">
-          </div>
-
-          <!-- Word Space -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Word Space</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="wordSpaceNum" class="secuencia-num-input" min="100" max="300" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="wordSpace" oninput="setWordSpace(this.value)">
-          </div>
-
-          <!-- Letter Space -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Letter Space</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="letterSpaceNum" class="secuencia-num-input" min="100" max="200" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="letterSpace" oninput="setLetterSpace(this.value)">
-          </div>
-
-          <!-- Letter Width -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Letter Width</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="letterWidthNum" class="secuencia-num-input" min="25" max="500" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="letterWidth" oninput="setLetterWidth(this.value)">
-          </div>
-
-          <!-- Letter Height -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Letter Height</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="letterHeightNum" class="secuencia-num-input" min="25" max="500" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="letterHeight" oninput="setLetterHeight(this.value)">
-          </div>
-
-          <!-- Slant -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Slant</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="slantNum" class="secuencia-num-input" min="-45" max="45" step="1">
-                <span class="unit">°</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="slant" oninput="setSlant(this.value)">
-          </div>
-
-          <div class="lineHorizontal" style="margin: 12px 0;"></div>
-          <span class="section-subtitle">Random Variations</span>
-
-          <!-- Random Size -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Random Size</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="randomSizeNum" class="secuencia-num-input" min="0" max="200" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="randomSize" oninput="setRandomSize(this.value)">
-          </div>
-
-          <!-- Random Letter Space -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Random Space</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="randomLetterSpaceNum" class="secuencia-num-input" min="0" max="150" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="randomLetterSpace" oninput="setRandomLetterSpace(this.value)">
-          </div>
-
-          <!-- Random Letter Width -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Random Width</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="randomLetterWidthNum" class="secuencia-num-input" min="0" max="500" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="randomLetterWidth" oninput="setRandomLetterWidth(this.value)">
-          </div>
-
-          <!-- Random Letter Height -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Random Height</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="randomLetterHeightNum" class="secuencia-num-input" min="0" max="500" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="randomLetterHeight" oninput="setRandomLetterHeight(this.value)">
-          </div>
-
-          <!-- Random Slant -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Random Slant</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="randomSlantNum" class="secuencia-num-input" min="0" max="200" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="randomSlant" oninput="setRandomSlant(this.value)">
-          </div>
-
-          <!-- Random Baseline Offset -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Random Baseline</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="randomBaselineOffsetNum" class="secuencia-num-input" min="0" max="100" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="randomBaselineOffset" oninput="setRandomBaselineOffset(this.value)">
-          </div>
-
-          <div class="lineHorizontal" style="margin: 12px 0;"></div>
-
-          <!-- Precision -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Precision</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="precisionNum" class="secuencia-num-input" min="0" max="100" step="1">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="0" id="precision" oninput="setPrecision(this.value)">
-          </div>
-          
-          <!-- Rotate All Glyphs -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Rotate All Glyphs</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="rotateAllNum" class="secuencia-num-input" min="-180" max="180" step="1" value="0">
-                <span class="unit">°</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="-180" max="180" value="0" id="rotateAll" oninput="setRotateAll(this.value)">
-          </div>
-
-          <div class="lineHorizontal" style="margin: 12px 0;"></div>
-          <span class="section-subtitle">Reference Background</span>
-
-          <!-- Background Image upload & settings -->
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Background Image</span>
-            </div>
-            <div style="display: flex; gap: 8px; width: 100%;">
-              <div class="input-file-btn-wrapper" style="flex: 1; position: relative; overflow: hidden; display: inline-block;">
-                <button class="btn" style="width: 100%;">Choose Image</button>
-                <input type="file" id="bgImageInput" accept="image/*" style="position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;">
-              </div>
-              <button class="btn" onclick="removeBgImage()" style="flex: 0 0 28px; width: 28px; height: 28px;" title="Remove background image">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Opacity</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="bgOpacityNum" class="secuencia-num-input" min="0" max="100" step="1" value="50">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="0" max="100" value="50" id="bgOpacity" oninput="setBgOpacity(this.value)">
-          </div>
-
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Scale</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="bgScaleNum" class="secuencia-num-input" min="10" max="400" step="1" value="100">
-                <span class="unit">%</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="10" max="400" value="100" id="bgScale" oninput="setBgScale(this.value)">
-          </div>
-
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Rotation</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="bgRotationNum" class="secuencia-num-input" min="-180" max="180" step="1" value="0">
-                <span class="unit">°</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="-180" max="180" value="0" id="bgRotation" oninput="setBgRotation(this.value)">
-          </div>
-
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Offset X</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="bgOffsetXNum" class="secuencia-num-input" min="-1000" max="1000" step="1" value="0">
-                <span class="unit">px</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="-1000" max="1000" value="0" id="bgOffsetX" oninput="setBgOffsetX(this.value)">
-          </div>
-
-          <div class="parameter-row">
-            <div class="parameter-header">
-              <span class="parameter-label">Offset Y</span>
-              <div class="num-input-wrapper">
-                <input type="number" id="bgOffsetYNum" class="secuencia-num-input" min="-1000" max="1000" step="1" value="0">
-                <span class="unit">px</span>
-              </div>
-            </div>
-            <input type="range" class="ranger" min="-1000" max="1000" value="0" id="bgOffsetY" oninput="setBgOffsetY(this.value)">
-          </div>
-
-          <div class="lineHorizontal" style="margin: 12px 0;"></div>
-          <span class="section-subtitle">Canvas Style</span>
-
-          <div class="color-picker-wrapper">
-            <span class="color-picker-label">Background</span>
-            <div class="color-input-container">
-              <input type="color" id="bgColorPicker" value="#ffffff">
-            </div>
-          </div>
-
-          <div class="color-picker-wrapper" style="margin-top: 6px;">
-            <span class="color-picker-label">Text Color</span>
-            <div class="color-input-container">
-              <input type="color" id="textColorPicker" value="#000000">
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- TextBox settings action buttons -->
-    <div class="btn-group-row" style="grid-template-columns: auto 1fr 1fr; margin-top: 10px;">
-      <button class="btn btn-icon" onclick="randomTextBoxSettings()" title="Randomize Parameters">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 3 21 3 21 8"></polyline>
-          <line x1="4" y1="20" x2="21" y2="3"></line>
-          <polyline points="21 16 21 21 16 21"></polyline>
-          <line x1="15" y1="15" x2="21" y2="21"></line>
-          <line x1="4" y1="4" x2="9" y2="9"></line>
+  <div id="textBoxSettings" class="sidebar right-sidebar">
+    
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="21" y1="12" x2="3" y2="12"></line>
+          <line x1="12" y1="3" x2="12" y2="21"></line>
         </svg>
-      </button>
-      <button class="btn" onclick="resetTextBoxSettings()">Reset</button>
-      <button class="btn" onclick="importTextBoxSettings()">Load Presets</button>
+        <span class="logo-text">SECUENCIA</span>
+      </div>
+      <span class="version-tag">v1.0</span>
     </div>
-    <div class="btn-group-row" style="grid-template-columns: 1fr; margin-top: 6px;">
-      <button class="btn btn-accent" onclick="showPrompt('exportTextBoxSettingsPrompt')">Save Presets</button>
+
+    <!-- Sidebar Scrollable Content -->
+    <div class="sidebar-content">
+      
+      <!-- Section 1: Text Input -->
+      <section class="control-card">
+        <div class="card-title">Text Input</div>
+        <div class="textarea-wrapper">
+          <textarea id="textInput" rows="4" placeholder="Type text here..." oninput="setText()"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 2: Typography Parameters -->
+      <section class="control-card">
+        <div class="card-title">Typography</div>
+
+        <!-- Size -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Size</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="sizeNum" class="figma-num-input" min="20" max="400" step="1">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="size" oninput="setSize(this.value)">
+        </div>
+
+        <!-- Line Height -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Line Height</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="lineHeightNum" class="figma-num-input" min="20" max="500" step="1">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="lineHeight" oninput="setLineHeight(this.value)">
+        </div>
+
+        <!-- Stroke Weight -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Stroke Weight</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="scriptStrokeWeightNum" class="figma-num-input" min="1" max="10" step="0.1">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="scriptStrokeWeight" oninput="setScriptStrokeWeight(this.value)">
+        </div>
+
+        <!-- Word Space -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Word Space</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="wordSpaceNum" class="figma-num-input" min="100" max="300" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="wordSpace" oninput="setWordSpace(this.value)">
+        </div>
+
+        <!-- Letter Space -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Letter Space</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="letterSpaceNum" class="figma-num-input" min="100" max="200" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="letterSpace" oninput="setLetterSpace(this.value)">
+        </div>
+
+        <!-- Letter Width -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Letter Width</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="letterWidthNum" class="figma-num-input" min="25" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="letterWidth" oninput="setLetterWidth(this.value)">
+        </div>
+
+        <!-- Letter Height -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Letter Height</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="letterHeightNum" class="figma-num-input" min="25" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="letterHeight" oninput="setLetterHeight(this.value)">
+        </div>
+
+        <!-- Slant -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Slant</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="slantNum" class="figma-num-input" min="-45" max="45" step="1">
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="slant" oninput="setSlant(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 3: Random Variations -->
+      <section class="control-card">
+        <div class="card-title">Random Variations</div>
+
+        <!-- Random Size -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Size</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="randomSizeNum" class="figma-num-input" min="0" max="200" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="randomSize" oninput="setRandomSize(this.value)">
+        </div>
+
+        <!-- Random Letter Space -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Space</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="randomLetterSpaceNum" class="figma-num-input" min="0" max="150" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="randomLetterSpace" oninput="setRandomLetterSpace(this.value)">
+        </div>
+
+        <!-- Random Letter Width -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Width</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="randomLetterWidthNum" class="figma-num-input" min="0" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="randomLetterWidth" oninput="setRandomLetterWidth(this.value)">
+        </div>
+
+        <!-- Random Letter Height -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Height</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="randomLetterHeightNum" class="figma-num-input" min="0" max="500" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="randomLetterHeight" oninput="setRandomLetterHeight(this.value)">
+        </div>
+
+        <!-- Random Slant -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Slant</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="randomSlantNum" class="figma-num-input" min="0" max="200" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="randomSlant" oninput="setRandomSlant(this.value)">
+        </div>
+
+        <!-- Random Baseline Offset -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Random Baseline</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="randomBaselineOffsetNum" class="figma-num-input" min="0" max="100" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="randomBaselineOffset" oninput="setRandomBaselineOffset(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 4: Global Controls -->
+      <section class="control-card">
+        <div class="card-title">Global Controls</div>
+
+        <!-- Precision -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Precision</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="precisionNum" class="figma-num-input" min="0" max="100" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="0" id="precision" oninput="setPrecision(this.value)">
+        </div>
+        
+        <!-- Rotate All Glyphs -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Rotate All Glyphs</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="rotateAllNum" class="figma-num-input" min="-180" max="180" step="1" value="0">
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-180" max="180" value="0" id="rotateAll" oninput="setRotateAll(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 5: Background Reference Image -->
+      <section class="control-card">
+        <div class="card-title">Background Image</div>
+
+        <!-- File upload -->
+        <div class="parameter-row">
+          <div style="display: flex; gap: 8px; width: 100%;">
+            <div class="input-file-btn-wrapper" style="flex: 1; position: relative; overflow: hidden; display: inline-block;">
+              <button class="btn btn-accent" style="width: 100%;">Choose Image...</button>
+              <input type="file" id="bgImageInput" accept="image/*" style="position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;">
+            </div>
+            <button class="btn" onclick="removeBgImage()" style="flex: 0 0 28px; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Remove background image">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Opacity -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Opacity</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="bgOpacityNum" class="figma-num-input" min="0" max="100" step="1" value="50">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="0" max="100" value="50" id="bgOpacity" oninput="setBgOpacity(this.value)">
+        </div>
+
+        <!-- Scale -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Scale</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="bgScaleNum" class="figma-num-input" min="10" max="400" step="1" value="100">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="10" max="400" value="100" id="bgScale" oninput="setBgScale(this.value)">
+        </div>
+
+        <!-- Rotation -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Rotation</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="bgRotationNum" class="figma-num-input" min="-180" max="180" step="1" value="0">
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-180" max="180" value="0" id="bgRotation" oninput="setBgRotation(this.value)">
+        </div>
+
+        <!-- Offset X -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Offset X</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="bgOffsetXNum" class="figma-num-input" min="-1000" max="1000" step="1" value="0">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-1000" max="1000" value="0" id="bgOffsetX" oninput="setBgOffsetX(this.value)">
+        </div>
+
+        <!-- Offset Y -->
+        <div class="parameter-row">
+          <div class="parameter-header">
+            <span class="parameter-label">Offset Y</span>
+            <div class="num-input-wrapper">
+              <input type="number" id="bgOffsetYNum" class="figma-num-input" min="-1000" max="1000" step="1" value="0">
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <input type="range" class="ranger" min="-1000" max="1000" value="0" id="bgOffsetY" oninput="setBgOffsetY(this.value)">
+        </div>
+      </section>
+
+      <!-- Section 6: Canvas Style -->
+      <section class="control-card">
+        <div class="card-title">Canvas Style</div>
+        
+        <div class="control-group color-pickers-row">
+          <div>
+            <label for="bgColorPicker">Background Color</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="bgColorPicker" value="#ffffff">
+              <span id="label-bg" class="color-code">#FFFFFF</span>
+            </div>
+          </div>
+          <div>
+            <label for="textColorPicker">Line Color</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="textColorPicker" value="#000000">
+              <span id="label-text" class="color-code">#000000</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
+
+    <!-- Sidebar Footer -->
+    <footer class="sidebar-footer">
+      <div class="btn-group-row" style="grid-template-columns: auto 1fr 1fr; width: 100%;">
+        <button class="btn btn-icon" onclick="randomTextBoxSettings()" title="Randomize Parameters">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 3 21 3 21 8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21 16 21 21 16 21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+        </button>
+        <button class="btn btn-danger" onclick="resetTextBoxSettings()">Reset</button>
+        <button class="btn" onclick="importTextBoxSettings()">Load Presets</button>
+      </div>
+      <button class="btn btn-accent" style="width: 100%;" onclick="showPrompt('exportTextBoxSettingsPrompt')">Save Presets</button>
+    </footer>
   </div>
 
   <!-- CONTEXT MENU FOR GLYPH EDITOR PATHS -->

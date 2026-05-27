@@ -375,10 +375,16 @@ function updateInterface_textBoxSettings_state() {
 
   // Update Color Pickers
   if (document.getElementById("bgColorPicker") && typeof backgroundColor !== 'undefined') {
-    document.getElementById("bgColorPicker").value = colorToHex(backgroundColor);
+    let hex = colorToHex(backgroundColor);
+    document.getElementById("bgColorPicker").value = hex;
+    let lbl = document.getElementById('label-bg');
+    if (lbl) lbl.innerText = hex.toUpperCase();
   }
   if (document.getElementById("textColorPicker") && typeof scriptColor !== 'undefined') {
-    document.getElementById("textColorPicker").value = colorToHex(scriptColor);
+    let hex = colorToHex(scriptColor);
+    document.getElementById("textColorPicker").value = hex;
+    let lbl = document.getElementById('label-text');
+    if (lbl) lbl.innerText = hex.toUpperCase();
   }
 }
 
