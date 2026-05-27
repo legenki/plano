@@ -899,5 +899,5 @@ function calcReflectionPoint(position, center) {
 
 // --- FILE: secuencia/js/export.js ---
 
-  return { Button, GuideButton, PathButton, AnchorButton, HandleButton };
+  return { Button, GuideButton, PathButton, AnchorButton, HandleButton, mouseOverRect, mouseOverEllipse, mouseOverBezier, rhombus, calcCenterDirection, calcReflectionPoint };
 }

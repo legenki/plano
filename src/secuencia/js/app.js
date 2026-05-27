@@ -163,13 +163,13 @@ export const secuenciaSketch = (_p5) => {
 const { Glyph, Path, Anchor, Handle } = createGlyphClasses(_p5);
 const Script = createScriptClass(_p5, { Glyph, Path, Anchor, Handle });
 const TextBox = createTextBoxClass(_p5);
-const { Button, GuideButton, PathButton, AnchorButton, HandleButton } = createButtonClasses(_p5);
-const GlyphEditor = createGlyphEditorClass(_p5, { GuideButton, PathButton, AnchorButton, Path, Anchor });
+const { Button, GuideButton, PathButton, AnchorButton, HandleButton, mouseOverRect } = createButtonClasses(_p5);
+const GlyphEditor = createGlyphEditorClass(_p5, { GuideButton, PathButton, AnchorButton, Path, Anchor, mouseOverRect });
 const {
   importJSON, exportJSON, importScript, exportScript, exportTextBoxSettings,
   exportAs, exportText_SVG, exportText_PNG, exportText_TXT,
   uploadToServer, importTextBoxSettings,
-} = createExportUtils(_p5, { Script });
+} = createExportUtils(_p5, { Script, setScript });
 const {
   AnimatedVariable, anyActiveAnimation, updateAnimation, setupAnimation_textBoxSettings,
 } = createAnimationUtils(_p5);

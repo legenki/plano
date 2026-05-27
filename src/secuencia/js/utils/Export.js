@@ -4,7 +4,7 @@
  * Requires _p5 (p5.js instance) passed as factory parameter.
  */
 
-export function createExportUtils(_p5, { Script }) {
+export function createExportUtils(_p5, { Script, setScript }) {
 
 let inputElement;
 function importJSON(fileExtension) {
