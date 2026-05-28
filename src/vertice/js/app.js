@@ -154,7 +154,15 @@ export function verticeSketch(p) {
   // --- МЫШЬ ---
 
   p.mousePressed = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     const sidebar = document.querySelector('#app-vertice .sidebar');
     if (sidebar && p.mouseX > p.width - sidebar.clientWidth) return;
     if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) return;
@@ -251,7 +259,15 @@ export function verticeSketch(p) {
     }
   };
   p.mouseDragged = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     calculateLocalMouse();
     if (env.activeMode === "corner" && env.selected_corner && env.selected_corner.dragging) {
       env.selected_corner.drag(env.mouse);
@@ -276,7 +292,15 @@ export function verticeSketch(p) {
     }
   };
   p.mouseReleased = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     if (env.selected_corner && env.selected_corner.dragging) {
       env.selected_corner.endDrag();
       env.AppController.saveHistoryState();
@@ -304,7 +328,15 @@ export function verticeSketch(p) {
     if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
   };
   p.doubleClicked = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     const sidebar = document.querySelector('#app-vertice .sidebar');
     if (sidebar && p.mouseX > p.width - sidebar.clientWidth) return;
     if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) return;

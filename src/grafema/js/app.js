@@ -165,7 +165,15 @@ export function grafemaSketch(p) {
   // --- MOUSE HANDLERS ---
 
   p.mousePressed = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     // Ignore clicks on sidebar area
     const sidebar = document.querySelector('#app-grafema .sidebar');
     if (sidebar && p.mouseX > p.width - sidebar.clientWidth - 20) return;
@@ -202,7 +210,15 @@ export function grafemaSketch(p) {
     env.AppController.setActiveGlyph(null);
   };
   p.mouseDragged = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     if (env.activeGlyph === null) return;
     if (env.interactionState.isDragging) {
       env.activeGlyph.position.x = p.mouseX - env.interactionState.dragOffsetX;
@@ -221,7 +237,15 @@ export function grafemaSketch(p) {
     }
   };
   p.mouseReleased = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     if (env.interactionState.isDragging || env.interactionState.isRotating || env.interactionState.isScaling) {
       env.AppController.saveHistoryState();
     }
@@ -244,7 +268,15 @@ export function grafemaSketch(p) {
     if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
   };
   p.doubleClicked = function (e) {
-    if (e && e.target && e.target.tagName !== "CANVAS") return;
+    
+    let evt = e || window.event;
+    if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
+    if (!evt) {
+        // Fallback for missing event object in p5
+        const hovered = document.elementFromPoint(p.mouseX + (p.canvas.getBoundingClientRect().left || 0), p.mouseY + (p.canvas.getBoundingClientRect().top || 0));
+        if (hovered && hovered.tagName !== "CANVAS") return;
+    }
+  
     const sidebar = document.querySelector('#app-grafema .sidebar');
     if (sidebar && p.mouseX > p.width - sidebar.clientWidth - 20) return;
     if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) return;
