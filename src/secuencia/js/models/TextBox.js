@@ -187,7 +187,7 @@ class TextBox {
       }
 
       // _p5.env.display points based on type
-      for (var i = 0; i < path.length - 3; i += 3) {
+      for (let i = 0; i < path.length - 3; i += 3) {
 
         let p1 = path[i];
         let p2 = path[i + 1];
@@ -545,7 +545,6 @@ class TextBox {
 }
 
 
-// --- FILE: secuencia/js/glyph.js ---
 
   return TextBox;
 }

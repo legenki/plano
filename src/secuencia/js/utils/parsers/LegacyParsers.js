@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-assignment */
-import { env } from '../../Config.js';
 import { Glyph, Path, Anchor, Handle } from '../../models/Glyph.js';
 
 export function parseSCM(scriptInstance, data) {
@@ -71,7 +69,7 @@ export function parseSCM(scriptInstance, data) {
   }
 }
 
-export function parseJHF(scriptInstance, data) {
+export function parseJHF(scriptInstance, data, { hersheyAlphabet, hersheyBaseIndex, hersheyScale, hersheyShift }) {
   scriptInstance.name = data[0].split('.')[0].replace(/_/g, ' ');
 
   // ––––––––––––––––––
@@ -88,8 +86,8 @@ export function parseJHF(scriptInstance, data) {
     const line = data[i];
 
     // a number at the 5th char and a whitespace at the 6th char marks a new glyph
-    if (_p5.line.charAt(4).match(/^\d/) && _p5.line.charAt(5).match(/^\s/)) {
-      // _p5.save current glyphs data
+    if (line.charAt(4).match(/^\d/) && line.charAt(5).match(/^\s/)) {
+      // save current glyph data
       if (tempGlyphName.length > 0 && tempGlyphPairs.length > 0) {
         dataSortedAsGlyphs.push([tempGlyphName, tempGlyphPairs, tempGlyphPositioning, tempGlyphCoordinates]);
       }
@@ -101,13 +99,13 @@ export function parseJHF(scriptInstance, data) {
       tempGlyphCoordinates = "";
 
       // add new glyph name info and coordinate info
-      tempGlyphName = _p5.line.slice(0, 5);
-      tempGlyphPairs = _p5.line.slice(6, 8);
-      tempGlyphPositioning = _p5.line.slice(8, 10);
-      tempGlyphCoordinates = _p5.line.slice(10);
+      tempGlyphName = line.slice(0, 5);
+      tempGlyphPairs = line.slice(6, 8);
+      tempGlyphPositioning = line.slice(8, 10);
+      tempGlyphCoordinates = line.slice(10);
     } else {
-      // add _p5.line to current glyph data
-      tempGlyphCoordinates += _p5.line;
+      // add line to current glyph data
+      tempGlyphCoordinates += line;
     }
   }
 
@@ -124,14 +122,13 @@ export function parseJHF(scriptInstance, data) {
     const line = dataSortedAsGlyphs[i];
     // extract glyph ID and vector data
 
-    const characterCode = _p5.line[0];
+    const characterCode = line[0];
     let character = hersheyCodeToLetter[characterCode] || (characterCode == "12345" ? '?' + i : '?' + characterCode);
-    const pairs = _p5.line[1];
-    const positioning = _p5.line[2];
-    const coordinates = _p5.line[3];
+    const pairs = line[1];
+    const positioning = line[2];
+    const coordinates = line[3];
     if (!hersheyCodeToLetter[characterCode] && pairs == "1") {
-      _p5.print("missing characterCode: " + characterCode);
-      // continue;
+      console.warn("missing characterCode: " + characterCode);
     }
 
     // skip empty glyphs
@@ -142,9 +139,9 @@ export function parseJHF(scriptInstance, data) {
     let left = 0;
     let right = 0;
     if (positioning.length > 0) {
-      left = decodeHersheyCharToCoordinate(positioning.charAt(0));
-      right = decodeHersheyCharToCoordinate(positioning.charAt(1));
-      glyphWidth = _p5.abs(left) + right;
+      left = decodeHersheyCharToCoordinate(positioning.charAt(0), hersheyAlphabet, hersheyBaseIndex, hersheyScale);
+      right = decodeHersheyCharToCoordinate(positioning.charAt(1), false, hersheyAlphabet, hersheyBaseIndex, hersheyScale);
+      glyphWidth = Math.abs(left) + right;
     }
     let paths = [];
     if (coordinates.length > 0) {
@@ -154,8 +151,8 @@ export function parseJHF(scriptInstance, data) {
           paths.push(new Path(paths.length, anchors, false, false));
           anchors = [];
         } else {
-          let xPosition = decodeHersheyCharToCoordinate(coordinates.charAt(i)) + _p5.abs(left);
-          let yPosition = decodeHersheyCharToCoordinate(coordinates.charAt(i + 1), true) - env.hersheyShift;
+          let xPosition = decodeHersheyCharToCoordinate(coordinates.charAt(i), hersheyAlphabet, hersheyBaseIndex, hersheyScale) + Math.abs(left);
+          let yPosition = decodeHersheyCharToCoordinate(coordinates.charAt(i + 1), hersheyAlphabet, hersheyBaseIndex, hersheyScale) - hersheyShift;
           let first = false;
           let last = false;
           anchors.push(new Anchor(anchors.length, xPosition, yPosition, xPosition, yPosition, xPosition, yPosition, first, last));
@@ -171,11 +168,10 @@ export function parseJHF(scriptInstance, data) {
   }
 }
 
-export function decodeHersheyCharToCoordinate(character) {
-  let indexOfCharacter = env.hersheyAlphabet.indexOf(character);
-  let value = indexOfCharacter - env.hersheyBaseIndex;
-  let coordinate = _p5.map(value, -env.hersheyScale, env.hersheyScale, -1, 1);
-  return coordinate;
+export function decodeHersheyCharToCoordinate(character, hersheyAlphabet, hersheyBaseIndex, hersheyScale) {
+  const indexOfCharacter = hersheyAlphabet.indexOf(character);
+  const value = indexOfCharacter - hersheyBaseIndex;
+  return value / hersheyScale;
 }
 
 
@@ -760,4 +756,3 @@ const hersheyCodeToLetter = {
   " 0000": "↧"
 };
 
-// --- FILE: secuencia/js/glyphEditor.js ---

@@ -8,11 +8,7 @@ function mouseOverEllipse(x, y, diameter) {
 }
 
   function mouseOverRect(x, y, width, height) {
-  if (_p5.mouseX >= x && _p5.mouseX <= x + _p5.width && _p5.mouseY >= y && _p5.mouseY <= y + _p5.height) {
-    return true;
-  } else {
-    return false;
-  }
+  return _p5.mouseX >= x && _p5.mouseX <= x + width && _p5.mouseY >= y && _p5.mouseY <= y + height;
 }
 
   function mouseOverBezier(p1, p2, p3, p4, tolerance) {
@@ -79,7 +75,6 @@ function mouseOverEllipse(x, y, diameter) {
   return _p5.createVector(center.x + (center.x - position.x), center.y + (center.y - position.y));
 }
 
-// --- FILE: secuencia/js/export.js ---
 
   return {
     mouseOverEllipse,

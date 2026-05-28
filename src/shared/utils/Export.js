@@ -308,13 +308,11 @@ async function uploadToServer(blob, fileName, folder) {
     window.URL.revokeObjectURL(url);
   }, 100);
   
-  console.log(`File ${fileName} downloaded successfully`);
 }
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 
-// --- FILE: secuencia/js/animation.js ---
 
   return {
     importJSON,

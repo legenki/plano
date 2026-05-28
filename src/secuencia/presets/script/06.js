@@ -1,4 +1,4 @@
-window.preset_06 = {
+export default {
   "name": "Hershey Serif",
   "xHeight": 0.25,
   "ascenderHeight": 0.5,

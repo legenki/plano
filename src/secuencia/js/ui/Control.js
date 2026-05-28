@@ -148,8 +148,8 @@ function setGlyph(char) {
 
 function setGlyphName() {
 
-  var value = document.getElementById("setGlyphName").value;
-  var char = _p5.env.glyphSet_missingLink;
+  let value = document.getElementById("setGlyphName").value;
+  let char = _p5.env.glyphSet_missingLink;
 
   if (value.length > 0 && value != '') {
     char = value;
@@ -250,7 +250,7 @@ function setTextBoxDisplayInfo(value) {
 // textBoxSettings
 
 function setText() {
-  var textInput = document.getElementById("textInput").value;
+  let textInput = document.getElementById("textInput").value;
   _p5.env.textBox.setText(_p5.env.textToArray(textInput));
   _p5.env.updateInterface_glyphSet_state();
 }

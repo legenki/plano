@@ -1,15 +1,15 @@
 /**
- * VERTICE - КЛАСС ГЛИФА (GLYPH)
+ * VERTICE - GLYPH CLASS
  * (p5 Instance Mode)
- * 
- * Управляет набором вершин (Corner) и связями между ними.
- * Отвечает за расчет и отрисовку геометрии касательных линий,
- * соединяющих вершины, а также за операции трансформации (сдвиг, поворот, масштаб).
+ *
+ * Manages a set of Corner vertices and the connections between them.
+ * Responsible for computing tangent-line geometry, rendering, and
+ * transform operations (translate, rotate, scale).
  */
 
 export function createGlyphClass(p, CornerClass) {
 
-  // Константы
+  // Constants
   const corner_radiansMin = 12;
   const corner_radiansMax = 150;
   
@@ -21,7 +21,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Создает полную глубокую копию глифа для сохранения состояния истории (Undo/Redo)
+     * Creates a full deep copy of the glyph for undo/redo history snapshots.
      */
     copy() {
       const glyphCopy = new Glyph();
@@ -50,7 +50,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Добавляет вершину в глиф и инициализирует для нее пустой список связей
+     * Adds a new corner to the glyph and initializes an empty connection list for it.
      */
     addCorner(newCorner) {
       this.corners.push(newCorner);
@@ -58,7 +58,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Добавляет уже существующий экземпляр вершины в глиф
+     * Adds an existing corner instance into the glyph.
      */
     addCornerInstance(corner) {
       this.corners.push(corner);
@@ -66,7 +66,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Создает двунаправленную связь между двумя вершинами
+     * Creates a bidirectional connection between two corners.
      */
     connectCorners(c1, c2) {
       if (this.connections.has(c1)) {
@@ -83,7 +83,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Удаляет вершину и все связанные с ней линии соединения
+     * Removes a corner and all connection edges attached to it.
      */
     removeCorner(corner) {
       this.corners = this.corners.filter(c => c !== corner);
@@ -95,7 +95,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Разрезает глиф на две части по указанной вершине (если она имеет ровно 2 связи)
+     * Splits the glyph into two parts at the given corner (only if it has exactly 2 connections).
      */
     spliceAtCorner(corner) {
       const newGlyph = new Glyph();
@@ -108,11 +108,11 @@ export function createGlyphClass(p, CornerClass) {
       this.removeCorner(corner);
       newGlyph.removeCorner(corner);
 
-      // Удаляем разделенные части вершин из соответствующих глифов
+      // Remove the split-off corners from their respective glyphs
       this.removeCorners(this.collectAllFurtherConnections(connectedCorners[1], corner));
       newGlyph.removeCorners(newGlyph.collectAllFurtherConnections(connectedCorners[0], corner));
 
-      // Обновляем родительские ссылки вершин для новой ветви
+      // Update parent glyph references for corners in the new branch
       for (const cornerInstance of newGlyph.corners) {
         cornerInstance.glyph = newGlyph;
       }
@@ -121,7 +121,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Обход графа связей для сбора всех вершин, соединенных с данной
+     * Graph traversal: collects all corners reachable from the given corner.
      */
     collectAllFurtherConnections(corner, ignoreCorner) {
       const queue = [corner];
@@ -147,7 +147,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Удаляет группу вершин из глифа
+     * Removes a set of corners from the glyph.
      */
     removeCorners(cornersToRemove) {
       this.corners = this.corners.filter(c => !cornersToRemove.has(c));
@@ -160,7 +160,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Проверяет, является ли вершина частью замкнутой петли
+     * Checks whether a corner is part of a closed loop.
      */
     isPartOfClosedForm(corner) {
       const connectedCorners = this.connections.get(corner);
@@ -184,7 +184,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Объединяет данный глиф с другим глифом (слияние вершин и связей)
+     * Merges another glyph into this one (absorbs its corners and connections).
      */
     mergeGlyph(other) {
       other.corners.forEach(corner => {
@@ -195,7 +195,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Смещение всех вершин глифа на дельту координат
+     * Translates all corners by (dx, dy).
      */
     translate(dx, dy) {
       this.corners.forEach(corner => {
@@ -205,7 +205,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Масштабирование глифа относительно опорной точки (pivot)
+     * Scales the glyph relative to a pivot point.
      */
     scale(scaleFactor, pivot) {
       const pivotCenter = pivot instanceof CornerClass ? pivot.center : pivot;
@@ -221,7 +221,7 @@ export function createGlyphClass(p, CornerClass) {
     }
 
     /**
-     * Вращение глифа на угол (angle) вокруг опорной точки (pivot)
+     * Rotates the glyph by angle (radians) around a pivot point.
      */
     rotate(angle, pivot) {
       const pivotCenter = pivot instanceof CornerClass ? pivot.center : pivot;
@@ -242,10 +242,10 @@ export function createGlyphClass(p, CornerClass) {
       this.active = state;
     }
 
-    // --- СЕРИАЛИЗАЦИЯ ---
-    
+    // --- SERIALIZATION ---
+
     serialize() {
-      // Сохраняем вершины с их индексами, чтобы восстановить связи
+      // Save corners with their indices so connections can be restored
       const cornersData = this.corners.map(c => c.serialize());
       const connectionsData = [];
       
@@ -253,7 +253,7 @@ export function createGlyphClass(p, CornerClass) {
         const c1Index = this.corners.indexOf(corner);
         neighbors.forEach(neighbor => {
           const c2Index = this.corners.indexOf(neighbor);
-          // Сохраняем каждую связь один раз (c1 < c2)
+          // Store each connection only once (c1 < c2)
           if (c1Index < c2Index) {
             connectionsData.push([c1Index, c2Index]);
           }

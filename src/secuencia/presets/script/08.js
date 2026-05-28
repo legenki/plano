@@ -1,4 +1,4 @@
-window.preset_08 = {
+export default {
   "name": "Hershey Gothic",
   "xHeight": 0.25,
   "ascenderHeight": 0.5,

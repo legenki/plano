@@ -1,16 +1,14 @@
 /**
- * VERTICE - КЛАСС ВЕРШИНЫ (CORNER / VERTEX)
+ * VERTICE - CORNER CLASS (CORNER / VERTEX)
  * (p5 Instance Mode)
- * 
- * Управляет отдельными кругами-вершинами, их координатами, 
- * радиусом, отрисовкой, перетаскиванием мышью и состояниями.
+ *
+ * Manages individual circle-vertices: coordinates, radius,
+ * rendering, mouse drag, and selection state.
  */
 
 export function createCornerClass(p) {
 
-  // Глобальные переменные стилей из основного приложения
-  // Передаем их через замыкание или читаем напрямую из объекта app если нужно,
-  // но лучше определить статические константы здесь.
+  // Style constants — defined locally rather than read from the app object.
   const corner_radiansMin = 12;
   const corner_radiansMax = 150;
   const corner_buttonRadians = 8;
@@ -25,11 +23,11 @@ export function createCornerClass(p) {
       this.active = false;
       this.offsetX = 0;
       this.offsetY = 0;
-      this.glyph = glyph; // Ссылка на родительский глиф (не сериализуется напрямую, восстанавливается при загрузке)
+      this.glyph = glyph; // Reference to the parent glyph (not serialized directly — restored on load)
     }
 
     /**
-     * Создает копию вершины для буфера истории (Undo/Redo)
+     * Creates a copy of this corner for the undo/redo history buffer.
      */
     copy(glyph) {
       const cornerCopy = new Corner(this.center, this.radians, glyph);
@@ -43,7 +41,7 @@ export function createCornerClass(p) {
 
 
     /**
-     * Проверяет, была ли нажата мышь в области маркера вершины для начала перетаскивания
+     * Checks whether the mouse was pressed inside the corner handle to begin dragging.
      */
     checkDrag(mouse) {
       if (p.dist(mouse.x, mouse.y, this.center.x, this.center.y) < corner_buttonRadians) {
@@ -56,7 +54,7 @@ export function createCornerClass(p) {
     }
 
     /**
-     * Обновляет координаты центра при перетаскивании
+     * Updates the center coordinates while dragging.
      */
     drag(mouse) {
       if (this.dragging) {
@@ -66,28 +64,28 @@ export function createCornerClass(p) {
     }
 
     /**
-     * Завершает процесс перетаскивания
+     * Ends the drag operation.
      */
     endDrag() {
       this.dragging = false;
     }
 
     /**
-     * Проверяет наведение мыши на маркер вершины
+     * Checks whether the mouse is hovering over the corner handle button.
      */
     checkHoverButton(mouse) {
       return p.dist(mouse.x, mouse.y, this.center.x, this.center.y) < corner_buttonRadians;
     }
 
     /**
-     * Проверяет наведение мыши на саму область круга вершины
+     * Checks whether the mouse is hovering over the corner circle area.
      */
     checkHover(mouse) {
       return p.dist(mouse.x, mouse.y, this.center.x, this.center.y) < this.radians;
     }
 
     /**
-     * Изменение радиуса вершины с ограничением диапазона
+     * Adjusts the corner radius by an increment, clamped to the allowed range.
      */
     setRadians(increment) {
       this.radians += increment;
@@ -95,20 +93,20 @@ export function createCornerClass(p) {
     }
 
     /**
-     * Установка масштаба вершины
+     * Sets the corner scale.
      */
     setScale(increment) {
       this.scale += increment;
     }
 
     /**
-     * Установка флага активности выделения вершины
+     * Sets the active/selected state of the corner.
      */
     setActive(state) {
       this.active = state;
     }
 
-    // --- СЕРИАЛИЗАЦИЯ (для файла JSON и HistoryManager) ---
+    // --- SERIALIZATION (for JSON file and HistoryManager) ---
     
     serialize() {
       return {

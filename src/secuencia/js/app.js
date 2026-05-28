@@ -12,6 +12,15 @@ import { createGlyphEditorClass } from './ui/GlyphEditor.js';
 import { createButtonClasses } from './ui/Buttons.js';
 import { createExportUtils } from '../../shared/utils/Export.js';
 import { createAnimationUtils } from './utils/Animation.js';
+import preset01 from '../presets/script/01.js';
+import preset02 from '../presets/script/02.js';
+import preset03 from '../presets/script/03.js';
+import preset04 from '../presets/script/04.js';
+import preset05 from '../presets/script/05.js';
+import preset06 from '../presets/script/06.js';
+import preset07 from '../presets/script/07.js';
+import preset08 from '../presets/script/08.js';
+const presets = [preset01, preset02, preset03, preset04, preset05, preset06, preset07, preset08];
 export const secuenciaSketch = _p5 => {
   _p5.env = env;
 
@@ -70,7 +79,6 @@ export const secuenciaSketch = _p5 => {
     setupAnimation_textBoxSettings
   } = createAnimationUtils(_p5);
   _p5.env.setupAnimation_textBoxSettings = setupAnimation_textBoxSettings;
-  let globalPresets = [window.preset_01, window.preset_02, window.preset_03, window.preset_04, window.preset_05, window.preset_06, window.preset_07, window.preset_08];
 
   // Provide undeclared globals that were implicit before
 
@@ -91,8 +99,8 @@ export const secuenciaSketch = _p5 => {
   let defaultTextDirectory = "presets/text/" + "Text_Default.txt";
   let defaultTextLines = [];
   let blue_semiBright = '#80C0FF';
-  let glyphEditor_firstAnchorColor = _p5.env.red_medium;
-  let glyphEditor_lastAnchorColor = _p5.env.red_medium;
+  let glyphEditor_firstAnchorColor = _p5.env.color_redMedium;
+  let glyphEditor_lastAnchorColor = _p5.env.color_redMedium;
 
   // –––––––––––––––––––––––––––––––––
 
@@ -162,10 +170,8 @@ export const secuenciaSketch = _p5 => {
     // import default _p5.text(bypass CORS _p5.loadStrings)
     defaultTextLines = ["At 12:45 PM, the quick Brown Fox bought 6 juicy snacks for 7.89 and jumped over 2 Lazy Dogs at 3:00"];
 
-    // import script file data (bypass CORS _p5.loadJSON)
-    let globalPresets = [window.preset_01, window.preset_02, window.preset_03, window.preset_04, window.preset_05, window.preset_06, window.preset_07, window.preset_08];
-    for (let i = 0; i < globalPresets.length; i++) {
-      _p5.env.defaultScriptFiles.push(globalPresets[i]);
+    for (const preset of presets) {
+      _p5.env.defaultScriptFiles.push(preset);
     }
 
     // _p5.translate colors

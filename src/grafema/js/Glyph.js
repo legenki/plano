@@ -25,7 +25,7 @@ export function createGlyphClass(p, LetterClasses) {
 
       this.abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       this.myLetterChar = 'A';
-      for (var i = 0; i < this.abc.length; i++) {
+      for (let i = 0; i < this.abc.length; i++) {
         if (this.abc.charAt(i) === this.myLetterChar) this.abcIndex = i;
       }
       this.abcAngle = p.map(this.abcIndex, 0, this.abc.length, 0, 360);
@@ -130,8 +130,8 @@ export function createGlyphClass(p, LetterClasses) {
     }
 
     updatePar4(t1, pt1, t2, pt2) {
-      var d = p5.Vector.dist(p.createVector(t1.x, t1.y), p.createVector(t2.x, t2.y));
-      var prevdistance = p5.Vector.dist(p.createVector(pt1.x, pt1.y), p.createVector(pt2.x, pt2.y));
+      let d = p5.Vector.dist(p.createVector(t1.x, t1.y), p.createVector(t2.x, t2.y));
+      let prevdistance = p5.Vector.dist(p.createVector(pt1.x, pt1.y), p.createVector(pt2.x, pt2.y));
       let direction = d - prevdistance;
       this.par4 += p.map(direction, 0, 500, 0.0, 1.0);
       this.par4 = p.constrain(this.par4, 0.0, 1.0);

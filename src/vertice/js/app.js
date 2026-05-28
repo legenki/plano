@@ -2,9 +2,9 @@ import { createUIManager } from "./ui/UIManager.js";
 import { createAppController } from "./controllers/AppController.js";
 import { env } from "./Config.js";
 /**
- * VERTICE - ГЛАВНЫЙ КОНТРОЛЛЕР (p5 Instance Mode + ES6 Modules)
- * 
- * Экспортирует функцию скетча для вызова через `new p5(verticeSketch, container)`
+ * VERTICE - MAIN SKETCH (p5 Instance Mode + ES6 Modules)
+ *
+ * Exports the sketch function for use as `new p5(verticeSketch, container)`.
  */
 
 import { createCornerClass } from './corner.js';
@@ -13,7 +13,7 @@ import { HistoryManager } from '../../js/HistoryManager.js';
 import { GlyphRenderer } from './ui/GlyphRenderer.js';
 import { diffAndUpdateDOM } from '../../js/ui-utils.js';
 export function verticeSketch(p) {
-  // --- НАСТРОЙКА МОДУЛЕЙ ---
+  // --- MODULE SETUP ---
   const Corner = createCornerClass(p);
   const Glyph = createGlyphClass(p, Corner);
   const history = new HistoryManager(30);
@@ -21,13 +21,13 @@ export function verticeSketch(p) {
   env.AppController = createAppController(p, { env, Glyph, Corner, history, UIManager: env.UIManager });
 
 
-  // --- СОСТОЯНИЕ ---
+  // --- STATE ---
 
   // "corner", "glyph", "scene"
 
   let snackbarTimeout = null;
 
-  // --- ЖИЗНЕННЫЙ ЦИКЛ p5 ---
+  // --- p5 LIFECYCLE ---
 
   p.setup = function () {
     env.GlyphRenderer = new GlyphRenderer(p);
@@ -159,7 +159,7 @@ export function verticeSketch(p) {
     p.drawingContext.globalAlpha = originalAlpha;
   }
 
-  // --- МЫШЬ ---
+  // --- MOUSE ---
 
   p.mousePressed = function (e) {
     

@@ -1,4 +1,4 @@
-window.preset_03 = {
+export default {
   "name": "Simple",
   "xHeight": 0.3125,
   "ascenderHeight": 0.45,

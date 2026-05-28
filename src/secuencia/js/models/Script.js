@@ -16,7 +16,12 @@ export class Script {
       if (data[0].includes('.scm')) {
         parseSCM(this, data); // outdated file format
       } else if (data[0].includes('.jhf')) {
-        parseJHF(this, data); // outdated file format
+        parseJHF(this, data, {
+          hersheyAlphabet: _p5.env.hersheyAlphabet,
+          hersheyBaseIndex: _p5.env.hersheyBaseIndex,
+          hersheyScale: _p5.env.hersheyScale,
+          hersheyShift: _p5.env.hersheyShift,
+        }); // outdated file format
       }
     } else if (typeof data == 'object') {
       this.fromJSON(data); // json file format

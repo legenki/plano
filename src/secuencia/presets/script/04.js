@@ -1,4 +1,4 @@
-window.preset_04 = {
+export default {
   "name": "Straight",
   "xHeight": 0.35,
   "ascenderHeight": 0.6,

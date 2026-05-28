@@ -1,4 +1,4 @@
-window.preset_01 = {
+export default {
   "name": "Script",
   "xHeight": 0.3,
   "ascenderHeight": 0.5375,

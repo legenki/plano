@@ -1,4 +1,4 @@
-window.preset_07 = {
+export default {
   "name": "Hershey Cursive",
   "xHeight": 0.25,
   "ascenderHeight": 0.5,

@@ -2,7 +2,6 @@ export function createAppController(_p5, { Script }) {
   const document = _p5.env.document;
   // Provide undeclared globals that were implicit before
 
-// --- FILE: secuencia/js/main.js ---
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
@@ -203,12 +202,12 @@ function setupSecuenciaListeners() {
     let rangeEl = document.getElementById(param.id);
     let numEl = document.getElementById(param.id + 'Num');
     if (rangeEl && numEl) {
-      // Когда пользователь двигает слайдер
+      // When the user moves the slider
       rangeEl.addEventListener('input', function () {
         param.setFn(parseFloat(rangeEl.value));
       });
 
-      // Когда пользователь вводит число вручную
+      // When the user types a value manually
       numEl.addEventListener('input', function () {
         let val = parseFloat(numEl.value);
         if (isNaN(val)) return;
@@ -237,9 +236,9 @@ function setupSecuenciaListeners() {
           percentage = val;
         }
 
-        // Устанавливаем процент слайдера
+        // Apply the computed percentage to the parameter
         param.setFn(percentage);
-        // Синхронизируем положение слайдера
+        // Sync the slider position
         rangeEl.value = percentage;
       });
     }
@@ -286,7 +285,6 @@ function setupSecuenciaListeners() {
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-// --- FILE: secuencia/js/control.js ---
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
@@ -297,7 +295,6 @@ function isTouchDevice() {
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 }
 
-// --- FILE: secuencia/js/control.js ---
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
@@ -351,8 +348,8 @@ function setGlyph(char) {
   _p5.env.updateInterface_glyphSet_state();
 }
 function setGlyphName() {
-  var value = document.getElementById("setGlyphName").value;
-  var char = _p5.env.glyphSet_missingLink;
+  let value = document.getElementById("setGlyphName").value;
+  let char = _p5.env.glyphSet_missingLink;
   if (value.length > 0 && value != '') {
     char = value;
   }
@@ -469,7 +466,7 @@ function setTextBoxDisplayInfo(value) {
 // textBoxSettings
 
 function setText() {
-  var textInput = document.getElementById("textInput").value;
+  let textInput = document.getElementById("textInput").value;
   _p5.env.textBox.setText(_p5.env.textToArray(textInput));
   _p5.env.updateInterface_glyphSet_state();
 }

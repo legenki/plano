@@ -277,7 +277,7 @@ export function createAppController(_p5, {
   function scaleSelectedGlyph(factor) {
     if (!env.selected_glyph || env.selected_glyph.corners.length === 0) return;
 
-    // Берем в качестве опорной точки центр первой вершины глифа
+    // Use the first corner of the glyph as the pivot point
     const pivot = env.selected_glyph.corners[0];
     env.selected_glyph.scale(factor, pivot);
     saveHistoryState();
@@ -287,11 +287,10 @@ export function createAppController(_p5, {
     const angle = _p5.radians(parseFloat(angleDegrees));
     const pivot = env.selected_glyph.corners[0];
 
-    // Сбрасываем к исходному состоянию перед вращением, вращаем на дельту
-    // или просто применяем вращение от текущего значения слайдера
+    // Apply rotation as a delta from the previous slider value
     if (env.DOM.valGlyphRotation) env.DOM.valGlyphRotation.innerText = `${angleDegrees}°`;
 
-    // Для плавной регулировки вращаем от центральной точки глифа
+    // Rotate incrementally from the glyph's pivot for smooth slider control
     env.selected_glyph.rotate(_p5.radians(angleDegrees - (env.selected_glyph.lastRotationSliderVal || 0)), pivot);
     env.selected_glyph.lastRotationSliderVal = angleDegrees;
   }
@@ -301,7 +300,7 @@ export function createAppController(_p5, {
     const deltaRad = _p5.radians(deltaDegrees);
     env.scene_glyphs.forEach(glyph => {
       if (glyph.corners.length > 0) {
-        // Каждый глиф вращается вокруг своей первой вершины (локального центра)
+        // Each glyph rotates around its own first corner (local center)
         const pivot = glyph.corners[0];
         glyph.rotate(deltaRad, pivot);
       }
@@ -312,7 +311,7 @@ export function createAppController(_p5, {
   function createNewGlyphFromUI() {
     const newGlyph = new Glyph();
 
-    // Создаем начальную вершину в текущем центре видимой области холста
+    // Place the initial corner at the current visible center of the canvas
     const centerOfCanvas = _p5.createVector(_p5.width / 2 - env.scene_center.x, _p5.height / 2 - env.scene_center.y);
     centerOfCanvas.div(env.scene_scale);
     centerOfCanvas.rotate(-env.scene_rotation);
@@ -324,7 +323,7 @@ export function createAppController(_p5, {
     env.selected_glyph.setActive(true);
     env.selected_corner = newCorner;
     env.selected_corner.setActive(true);
-    setAppMode("corner"); // Переключаемся на редактирование вершины нового глифа
+    setAppMode("corner"); // Switch to corner editing mode for the new glyph
 
     saveHistoryState();
     UIManager.updateUISidebarVisibility();
@@ -346,7 +345,7 @@ export function createAppController(_p5, {
         rotation: env.pattern_rotation
       },
       glyphs: env.scene_glyphs.map(glyph => {
-        // Сохраняем вершины
+        // Save corners
         const cornersData = glyph.corners.map(corner => ({
           x: corner.center.x,
           y: corner.center.y,
@@ -354,7 +353,7 @@ export function createAppController(_p5, {
           scale: corner.scale
         }));
 
-        // Сохраняем индексы связей
+        // Save connection indices
         const connectionsData = [];
         glyph.connections.forEach((neighbors, corner) => {
           const cIndex = glyph.corners.indexOf(corner);
@@ -371,7 +370,7 @@ export function createAppController(_p5, {
       })
     };
 
-    // Скачивание файла
+    // Trigger file download
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectData, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
@@ -392,7 +391,7 @@ export function createAppController(_p5, {
       try {
         const data = JSON.parse(e.target.result);
 
-        // Загружаем глобальные стили
+        // Restore global style settings
         if (data.backgroundColor) env.backgroundColor = data.backgroundColor;
         if (data.shapeColor) env.shapeColor = data.shapeColor;
         if (data.strokeCapRounded !== undefined) env.strokeCapRounded = data.strokeCapRounded;
@@ -404,24 +403,24 @@ export function createAppController(_p5, {
           env.pattern_rotation = data.pattern.rotation;
         }
 
-        // Воссоздаем глифы
+        // Reconstruct glyphs
         const loadedGlyphs = [];
         data.glyphs.forEach(glyphData => {
           const glyph = new Glyph();
 
-          // Воссоздаем вершины
+          // Reconstruct corners
           glyphData.corners.forEach(cData => {
             const corner = new Corner(_p5.createVector(cData.x, cData.y), cData.radians, glyph);
             corner.scale = cData.scale;
             glyph.addCorner(corner);
           });
 
-          // Воссоздаем связи
+          // Reconstruct connections
           glyphData.connections.forEach(conn => {
             const mainCorner = glyph.corners[conn.cornerIndex];
             conn.neighborIndices.forEach(nIndex => {
               const neighborCorner = glyph.corners[nIndex];
-              // Поскольку connections в классе двунаправленные, проверяем, чтобы не дублировать
+              // Connections are bidirectional — check before adding to avoid duplicates
               if (!glyph.isConnected(mainCorner, neighborCorner)) {
                 glyph.connectCorners(mainCorner, neighborCorner);
               }
@@ -430,20 +429,20 @@ export function createAppController(_p5, {
           loadedGlyphs.push(glyph);
         });
 
-        // Перезаписываем сцену
+        // Replace the current scene
         env.scene_glyphs = loadedGlyphs;
         clearSelection();
 
-        // Сбрасываем историю на новое состояние
+        // Reset history to the newly loaded state
         history.clear();
         saveHistoryState();
 
-        // Сбрасываем глобальный поворот на 0, так как импортируется новая сцена
+        // Reset global rotation to 0 since a fresh scene is being imported
         env.globalRotationValue = 0;
         if (env.DOM.slideGlobalRotation) env.DOM.slideGlobalRotation.value = 0;
         if (env.DOM.valGlobalRotation) env.DOM.valGlobalRotation.innerText = "0°";
 
-        // Синхронизируем UI элементы
+        // Sync UI elements
         UIManager.updateUIColors();
         updateColorsFromUI();
         UIManager.syncPatternToUI();
@@ -459,7 +458,7 @@ export function createAppController(_p5, {
       }
     };
     reader.readAsText(file);
-    // Очищаем значение, чтобы можно было загрузить тот же файл повторно
+    // Clear the input value so the same file can be loaded again
     event.target.value = "";
   }
   function handleBgImageUpload(input) {
@@ -471,7 +470,7 @@ export function createAppController(_p5, {
       _p5.loadImage(dataUrl, img => {
         env.bgImage = img;
 
-        // Показываем кнопку удаления
+        // Show the remove button
         if (env.DOM.btnRemoveBgImage) env.DOM.btnRemoveBgImage.style.display = "block";
         UIManager.showSnackbar("Background image loaded successfully!");
         _p5.redraw();
@@ -481,7 +480,7 @@ export function createAppController(_p5, {
     };
     reader.readAsDataURL(file);
 
-    // Сбрасываем значение инпута
+    // Clear the input so the same file can be re-uploaded
     input.value = "";
   }
   function updateBgImageSettingsFromUI() {
@@ -508,14 +507,14 @@ export function createAppController(_p5, {
   function removeBgImage() {
     env.bgImage = null;
 
-    // Сбрасываем значения стейта
+    // Reset state values
     env.bgImageOpacity = 50;
     env.bgImageScale = 100;
     env.bgImageRotation = 0;
     env.bgImageX = 0;
     env.bgImageY = 0;
 
-    // Синхронизируем UI
+    // Sync UI
     if (env.DOM.slideBgOpacity) env.DOM.slideBgOpacity.value = 50;
     if (env.DOM.valBgOpacity) env.DOM.valBgOpacity.innerText = "50%";
     if (env.DOM.slideBgScale) env.DOM.slideBgScale.value = 100;
@@ -525,7 +524,7 @@ export function createAppController(_p5, {
     if (env.DOM.inputBgX) env.DOM.inputBgX.value = 0;
     if (env.DOM.inputBgY) env.DOM.inputBgY.value = 0;
 
-    // Скрываем кнопку удаления
+    // Hide the remove button
     if (env.DOM.btnRemoveBgImage) env.DOM.btnRemoveBgImage.style.display = "none";
     UIManager.showSnackbar("Background image removed.");
     _p5.redraw();
@@ -540,7 +539,7 @@ export function createAppController(_p5, {
     env.backgroundColor = env.DOM.pickerBgColor.value;
     env.shapeColor = env.DOM.pickerStrokeColor.value;
 
-    // Принудительно обновляем цвет заднего фона у контейнера canvas
+    // Force-update the canvas container background color
     const canvasContainer = document.getElementById("canvas-container");
     if (canvasContainer) {
       canvasContainer.style.backgroundColor = env.backgroundColor;

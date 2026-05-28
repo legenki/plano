@@ -1,4 +1,4 @@
-window.preset_02 = {
+export default {
   "name": "Double Stroke",
   "xHeight": 0.25,
   "ascenderHeight": 0.45,

@@ -13,9 +13,9 @@ export class Glyph {
     this.charCode = n.charCodeAt(0);
     this.paths = p;
     this.advancedWidth = aW;
-    this.width;
-    this.leftSideBearing;
-    this.rightSideBearing;
+    this.width = 0;
+    this.leftSideBearing = 0;
+    this.rightSideBearing = 0;
     this.updateSideBearings();
   }
 
@@ -193,6 +193,5 @@ export class Handle {
   }
 }
 
-// --- FILE: secuencia/js/script.js ---
 
   

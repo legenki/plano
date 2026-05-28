@@ -1,4 +1,4 @@
-window.preset_05 = {
+export default {
   "name": "Hershey Roman",
   "xHeight": 0.25,
   "ascenderHeight": 0.5,

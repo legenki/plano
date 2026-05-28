@@ -19,14 +19,14 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 1.0 * p.map(p1, 0.0, 1.0, 0.4, 2.0);
-      var bar = p.map(p2, 0.0, 1.0, 0.7, 0.1);
-      var topWidth = this.myWidth * p.constrain(p.map(p3, 0.0, 1.0, -1.0, 1.0), 0.01, 1.0);
-      var topLeft = (this.myWidth/2)-(topWidth/2);
-      var topRight = (this.myWidth/2)+(topWidth/2);
-      var x1b = p.lerp(0, topLeft, bar);
-      var y1b = p.lerp(0, -s, bar);
-      var x2b = p.lerp(this.myWidth, topRight, bar);
-      var y2b = p.lerp(0, -s, bar);
+      let bar = p.map(p2, 0.0, 1.0, 0.7, 0.1);
+      let topWidth = this.myWidth * p.constrain(p.map(p3, 0.0, 1.0, -1.0, 1.0), 0.01, 1.0);
+      let topLeft = (this.myWidth/2)-(topWidth/2);
+      let topRight = (this.myWidth/2)+(topWidth/2);
+      let x1b = p.lerp(0, topLeft, bar);
+      let y1b = p.lerp(0, -s, bar);
+      let x2b = p.lerp(this.myWidth, topRight, bar);
+      let y2b = p.lerp(0, -s, bar);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -44,12 +44,12 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.5 * p.map(p1, 0.0, 1.0, 0.2, 2.2);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
-      var ratio = p.map(p3, 0.0, 1.0, 0.2, 0.8);
-      var yCenUp = (s-yCenter)/2;
-      var yCenDown = yCenter/2;
-      var xWideUp = (this.myWidth*2)*ratio;
-      var xWideDown = (this.myWidth*2)*(1-ratio);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let ratio = p.map(p3, 0.0, 1.0, 0.2, 0.8);
+      let yCenUp = (s-yCenter)/2;
+      let yCenDown = yCenter/2;
+      let xWideUp = (this.myWidth*2)*ratio;
+      let xWideDown = (this.myWidth*2)*(1-ratio);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -71,7 +71,7 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s;
-      var aperture = 90 * p.map(p1, 0.0, 1.0, 1.0, 0.2);
+      let aperture = 90 * p.map(p1, 0.0, 1.0, 1.0, 0.2);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.ellipseMode(p.CENTER);
@@ -85,7 +85,7 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.3 * p.map(p1, 0.0, 1.0, 0.2, 3.2);
-      var offCurve = (s/2)*this.kappa;
+      let offCurve = (s/2)*this.kappa;
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -103,8 +103,8 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.7 * p.map(p1, 0.0, 1.0, 0.2, 2.2);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
-      var barLength = p.map(p3, 0.0, 1.0, 0.5, 0.95);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let barLength = p.map(p3, 0.0, 1.0, 0.5, 0.95);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -122,8 +122,8 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.7 * p.map(p1, 0.0, 1.0, 0.2, 2.2);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
-      var barLength = p.map(p3, 0.0, 1.0, 0.5, 0.95);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let barLength = p.map(p3, 0.0, 1.0, 0.5, 0.95);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -140,9 +140,9 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s;
-      var aperture = 90 * p.map(p1, 0.0, 1.0, 1.0, 0.2);
-      var myKappa = this.myWidth/2*this.kappa;
-      var barLength = s * p.map(p2, 0.0, 1.0, 0.3, 0.8);
+      let aperture = 90 * p.map(p1, 0.0, 1.0, 1.0, 0.2);
+      let myKappa = this.myWidth/2*this.kappa;
+      let barLength = s * p.map(p2, 0.0, 1.0, 0.3, 0.8);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.ellipseMode(p.CENTER);
@@ -162,7 +162,7 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.8 * p.map(p1, 0.0, 1.0, 0.3, 2.2);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.line(0, 0, 0, -s);
@@ -187,7 +187,7 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.5 * p.map(p1, 0.0, 1.0, 0.4, 2.0);
-      var aperture = 135 * p.map(p2, 0.0, 1.0, 1.0, 0.0);
+      let aperture = 135 * p.map(p2, 0.0, 1.0, 1.0, 0.0);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.ellipseMode(p.CENTER);
@@ -203,15 +203,15 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.6 * p.map(p1, 0.0, 1.0, 0.6, 2.4);
-      var armPos = p.constrain(p.map(p2, 0.0, 1.0, 1.0, 0.0), 0.0, 0.8);
-      var legPos = p.map(p.constrain(p3, 0.5, 1.0), 0.0, 1.0, -0.8, 0.8);
-      var yArm = p.lerp(0, -s, armPos);
-      var xHalfArm = p.lerp(0, this.myWidth, .5);
-      var yHalfArm = p.lerp(yArm, -s, .5);
-      var xLeg = p.lerp(0, this.myWidth, legPos);
-      var yLeg = p.lerp(yArm, -s, legPos);
-      var xHalfLeg = p.lerp(xLeg, this.myWidth, .5);
-      var yHalfLeg = p.lerp(yLeg, 0, .5);
+      let armPos = p.constrain(p.map(p2, 0.0, 1.0, 1.0, 0.0), 0.0, 0.8);
+      let legPos = p.map(p.constrain(p3, 0.5, 1.0), 0.0, 1.0, -0.8, 0.8);
+      let yArm = p.lerp(0, -s, armPos);
+      let xHalfArm = p.lerp(0, this.myWidth, .5);
+      let yHalfArm = p.lerp(yArm, -s, .5);
+      let xLeg = p.lerp(0, this.myWidth, legPos);
+      let yLeg = p.lerp(yArm, -s, legPos);
+      let xHalfLeg = p.lerp(xLeg, this.myWidth, .5);
+      let yHalfLeg = p.lerp(yLeg, 0, .5);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.line(0, 0, 0, -s);
@@ -242,7 +242,7 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.8 * p.map(p1, 0.0, 1.0, 0.6, 3.8);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.7, 0.0);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.7, 0.0);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -289,9 +289,9 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.5 * p.map(p1, 0.0, 1.0, 0.0, 2.2);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.2);
-      var yCenUp = (s-yCenter)/2;
-      var xWideUp = this.myWidth;
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.2);
+      let yCenUp = (s-yCenter)/2;
+      let xWideUp = this.myWidth;
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -310,8 +310,8 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s;
-      var tailRotation = p.map(p3, 0.0, 1.0, 0.0, -45.0);
-      var tail = p.map(p4, 0.0, 1.0, 0.2, 0.6);
+      let tailRotation = p.map(p3, 0.0, 1.0, 0.0, -45.0);
+      let tail = p.map(p4, 0.0, 1.0, 0.2, 0.6);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.ellipseMode(p.CENTER);
@@ -328,13 +328,13 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.5 * p.map(p1, 0.0, 1.0, 0.0, 3.0);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
-      var legTop = p.map(p3, 0.0, 1.0, 0.0, 1.0);
-      var legBottom = p.map(p4, 0.0, 1.0, 1.5, 0.2);
-      var yCenUp = (s-yCenter)/2;
-      var xWideUp = this.myWidth;
-      var xWideDown = xWideUp*legTop;
-      var legBottomX = xWideDown+s*legBottom;
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let legTop = p.map(p3, 0.0, 1.0, 0.0, 1.0);
+      let legBottom = p.map(p4, 0.0, 1.0, 1.5, 0.2);
+      let yCenUp = (s-yCenter)/2;
+      let xWideUp = this.myWidth;
+      let xWideDown = xWideUp*legTop;
+      let legBottomX = xWideDown+s*legBottom;
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -355,9 +355,9 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s;
-      var apertureTop = 90 * p.map(p1, 0.0, 1.0, 0.0, 1.0);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
-      var apertureBottom = 90 * p.map(p3, 0.0, 1.0, 0.0, 1.1);
+      let apertureTop = 90 * p.map(p1, 0.0, 1.0, 0.0, 1.0);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let apertureBottom = 90 * p.map(p3, 0.0, 1.0, 0.0, 1.1);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.ellipseMode(p.CENTER);
@@ -385,7 +385,7 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.5 * p.map(p1, 0.0, 1.0, 0.4, 2.6);
-      var myKappa = this.myWidth/2*this.kappa;
+      let myKappa = this.myWidth/2*this.kappa;
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -403,9 +403,9 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 1.0 * p.map(p1, 0.0, 1.0, 0.4, 2.0);
-      var bottomWidth = this.myWidth * p.constrain(p.map(p3, 0.0, 1.0, -1.0, 1.0), 0.05, 1.0);
-      var bottomLeft = (this.myWidth/2)-(bottomWidth/2);
-      var bottomRight = (this.myWidth/2)+(bottomWidth/2);
+      let bottomWidth = this.myWidth * p.constrain(p.map(p3, 0.0, 1.0, -1.0, 1.0), 0.05, 1.0);
+      let bottomLeft = (this.myWidth/2)-(bottomWidth/2);
+      let bottomRight = (this.myWidth/2)+(bottomWidth/2);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -422,8 +422,8 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 1.4 * p.map(p1, 0.0, 1.0, 0.4, 2.0);
-      var segWidth = this.myWidth/4;
-      var flat = 2;
+      let segWidth = this.myWidth/4;
+      let flat = 2;
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -456,10 +456,10 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 1.0 * p.map(p1, 0.0, 1.0, 0.4, 2.0);
-      var yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
-      var bottomWidth = this.myWidth * p.constrain(p.map(p3, 0.0, 1.0, -1.0, 1.0), 0.05, 1.0);
-      var bottomLeft = (this.myWidth/2)-(bottomWidth/2);
-      var bottomRight = (this.myWidth/2)+(bottomWidth/2);
+      let yCenter = s * p.map(p2, 0.0, 1.0, 0.74, 0.3);
+      let bottomWidth = this.myWidth * p.constrain(p.map(p3, 0.0, 1.0, -1.0, 1.0), 0.05, 1.0);
+      let bottomLeft = (this.myWidth/2)-(bottomWidth/2);
+      let bottomRight = (this.myWidth/2)+(bottomWidth/2);
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
@@ -477,8 +477,8 @@ export function createLetterClasses(p) {
     constructor() { super(); }
     display(s, p1, p2, p3, p4) {
       this.myWidth = s * 0.8 * p.map(p1, 0.0, 1.0, 0.4, 2.4);
-      var topWidth = this.myWidth * p.map(p2, 0.0, 1.0, 0.2, 0.8);
-      var bottomWidth = this.myWidth-topWidth;
+      let topWidth = this.myWidth * p.map(p2, 0.0, 1.0, 0.2, 0.8);
+      let bottomWidth = this.myWidth-topWidth;
       p.push();
       p.translate(-this.myWidth/2, s/2);
       p.beginShape();
