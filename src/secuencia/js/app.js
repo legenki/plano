@@ -1,4 +1,5 @@
-import { createHelpers } from "./utils/Helpers.js";
+import { createMathUtils } from '../../shared/utils/MathUtils.js';
+import { createHelpers } from "../../shared/utils/Helpers.js";
 import { createAppController } from "./controllers/AppController.js";
 import { env } from "./Config.js";
 import { diffAndUpdateDOM } from '../../js/ui-utils.js';
@@ -9,7 +10,7 @@ import { initScriptModel, Script } from './models/Script.js';
 import { createTextBoxClass } from './models/TextBox.js';
 import { createGlyphEditorClass } from './ui/GlyphEditor.js';
 import { createButtonClasses } from './ui/Buttons.js';
-import { createExportUtils } from './utils/Export.js';
+import { createExportUtils } from '../../shared/utils/Export.js';
 import { createAnimationUtils } from './utils/Animation.js';
 export const secuenciaSketch = _p5 => {
   _p5.env = env;
@@ -39,17 +40,13 @@ export const secuenciaSketch = _p5 => {
     GuideButton,
     PathButton,
     AnchorButton,
-    HandleButton,
-    mouseOverRect
-  } = createButtonClasses(_p5);
+    HandleButton} = createButtonClasses(_p5);
   const GlyphEditor = createGlyphEditorClass(_p5, {
     GuideButton,
     PathButton,
     AnchorButton,
     Path,
-    Anchor,
-    mouseOverRect
-  });
+    Anchor});
   const {
     importJSON,
     exportJSON,
@@ -153,7 +150,7 @@ export const secuenciaSketch = _p5 => {
   _p5.env.diffAndUpdateDOM = diffAndUpdateDOM;
   // Instantiate UIManager and add its methods to env
   Object.assign(_p5.env, createUIManager(_p5));
-  Object.assign(_p5.env, createHelpers(_p5));
+  Object.assign(_p5.env, createHelpers(_p5), createMathUtils(_p5));
   Object.assign(_p5.env, createAppController(_p5, { Script }));
   _p5.preload = function () {
     // collect elements

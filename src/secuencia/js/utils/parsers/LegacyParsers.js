@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-assignment */
-import { env } from '../Config.js';
-import { Glyph, Path, Anchor, Handle } from '../Glyph.js';
+import { env } from '../../Config.js';
+import { Glyph, Path, Anchor, Handle } from '../../models/Glyph.js';
 
 export function parseSCM(scriptInstance, data) {
   scriptInstance.name = data[0].split('.')[0].replace(/_/g, ' ');

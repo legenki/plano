@@ -337,10 +337,18 @@ export function createGlyphClass(p, CornerClass) {
         neighbors.forEach(c2 => {
           const pts = this.getCommonExternalTangentsPoints(c1, c2, strokeCapRounded);
           if (pts) {
-            ctx.moveTo(pts.t1p1.x, pts.t1p1.y);
-            ctx.lineTo(pts.t1p2.x, pts.t1p2.y);
-            ctx.lineTo(pts.t2p2.x, pts.t2p2.y);
-            ctx.lineTo(pts.t2p1.x, pts.t2p1.y);
+            let cross = (pts.t1p2.x - pts.t1p1.x) * (pts.t2p2.y - pts.t1p2.y) - (pts.t1p2.y - pts.t1p1.y) * (pts.t2p2.x - pts.t1p2.x);
+            if (cross < 0) {
+              ctx.moveTo(pts.t1p1.x, pts.t1p1.y);
+              ctx.lineTo(pts.t2p1.x, pts.t2p1.y);
+              ctx.lineTo(pts.t2p2.x, pts.t2p2.y);
+              ctx.lineTo(pts.t1p2.x, pts.t1p2.y);
+            } else {
+              ctx.moveTo(pts.t1p1.x, pts.t1p1.y);
+              ctx.lineTo(pts.t1p2.x, pts.t1p2.y);
+              ctx.lineTo(pts.t2p2.x, pts.t2p2.y);
+              ctx.lineTo(pts.t2p1.x, pts.t2p1.y);
+            }
             ctx.closePath();
           }
         });

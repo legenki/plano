@@ -19,5 +19,5 @@ export { createGlyphEditorClass } from './ui/GlyphEditor.js';
 export { createButtonClasses } from './ui/Buttons.js';
 export { createInterfaceFunctions } from './ui/Interface.js';
 export { createControlFunctions } from './ui/Control.js';
-export { createExportUtils } from './utils/Export.js';
+export { createExportUtils } from '../../shared/utils/Export.js';
 export { createAnimationUtils } from './utils/Animation.js';
