@@ -10,6 +10,7 @@ import { env } from "./Config.js";
 import { createCornerClass } from './corner.js';
 import { createGlyphClass } from './glyph.js';
 import { HistoryManager } from '../../js/HistoryManager.js';
+import { GlyphRenderer } from './ui/GlyphRenderer.js';
 import { diffAndUpdateDOM } from '../../js/ui-utils.js';
 export function verticeSketch(p) {
   // --- НАСТРОЙКА МОДУЛЕЙ ---
@@ -29,6 +30,7 @@ export function verticeSketch(p) {
   // --- ЖИЗНЕННЫЙ ЦИКЛ p5 ---
 
   p.setup = function () {
+    env.GlyphRenderer = new GlyphRenderer(p);
     const container = document.getElementById("vertice-canvas");
     p.createCanvas(container.clientWidth, container.clientHeight);
     env.scene_center = p.createVector(p.width / 2, p.height / 2);
@@ -106,11 +108,11 @@ export function verticeSketch(p) {
     p.scale(env.scene_scale);
     p.rotate(env.scene_rotation);
     env.scene_glyphs.forEach(glyph => {
-      glyph.drawScene(env.shapeColor, env.strokeCapRounded);
+      env.GlyphRenderer.drawScene(glyph, env.shapeColor, env.strokeCapRounded);
     });
     if (!env.exportActive) {
       env.scene_glyphs.forEach(glyph => {
-        glyph.drawActiveButton(env.shapeColor, env.backgroundColor, env.activeMode, env.mouse);
+        env.GlyphRenderer.drawActiveButton(glyph, env.shapeColor, env.backgroundColor, env.activeMode, env.mouse);
       });
     }
     p.pop();
@@ -133,6 +135,10 @@ export function verticeSketch(p) {
     const copiesY = 3;
     const originalAlpha = p.drawingContext.globalAlpha;
     p.drawingContext.globalAlpha = env.pattern_alpha / 255;
+    
+    p.drawingContext.fillStyle = env.shapeColor.toString();
+    p.drawingContext.beginPath();
+
     for (let x = -copiesX; x <= copiesX; x++) {
       for (let y = -copiesY; y <= copiesY; y++) {
         if (x === 0 && y === 0) continue;
@@ -143,11 +149,13 @@ export function verticeSketch(p) {
         p.scale(env.scene_scale);
         p.rotate(env.scene_rotation);
         env.scene_glyphs.forEach(glyph => {
-          glyph.drawSceneMerged(p.drawingContext, env.shapeColor, env.strokeCapRounded);
+          env.GlyphRenderer.addSceneToPath(glyph, p.drawingContext, env.strokeCapRounded);
         });
         p.pop();
       }
     }
+    
+    p.drawingContext.fill();
     p.drawingContext.globalAlpha = originalAlpha;
   }
 

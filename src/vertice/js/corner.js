@@ -40,40 +40,7 @@ export function createCornerClass(p) {
       return cornerCopy;
     }
 
-    /**
-     * Отрисовка круга вершины на холсте (или в SVG при экспорте)
-     */
-    draw(shapeColor, g = null) {
-      const scaledRadians = p.constrain(this.radians * this.scale, corner_radiansMin, corner_radiansMax);
-      
-      if (g) {
-        g.fill(shapeColor);
-        g.noStroke();
-        g.ellipse(this.center.x, this.center.y, scaledRadians * 2, scaledRadians * 2);
-      } else {
-        p.fill(shapeColor);
-        p.noStroke();
-        p.ellipse(this.center.x, this.center.y, scaledRadians * 2, scaledRadians * 2);
-      }
-    }
 
-    /**
-     * Отрисовка маркера активности вершины при редактировании
-     */
-    drawButton(shapeColor, backgroundColor, activeMode, mouse) {
-      if (this.active || this.checkHover(mouse) || activeMode === "glyph" || activeMode === "scene") {
-        if ((activeMode === "corner" && this.active) ||
-            ((activeMode === "glyph" || activeMode === "scene") && this.checkHover(mouse))) {
-          p.fill(backgroundColor);
-          p.stroke(shapeColor);
-        } else {
-          p.fill(shapeColor);
-          p.stroke(backgroundColor);
-        }
-        p.strokeWeight(corner_buttonStrokeWeight);
-        p.ellipse(this.center.x, this.center.y, corner_buttonRadians * 2, corner_buttonRadians * 2);
-      }
-    }
 
     /**
      * Проверяет, была ли нажата мышь в области маркера вершины для начала перетаскивания

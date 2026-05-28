@@ -52,27 +52,73 @@ export class Glyph {
     let yMin = Infinity;
     let yMax = -Infinity;
 
+    function getBezierExtremes(p0, p1, p2, p3) {
+      let tValues = [0, 1];
+      let a = -p0 + 3 * p1 - 3 * p2 + p3;
+      let b = 2 * (p0 - 2 * p1 + p2);
+      let c = p1 - p0;
+      
+      if (Math.abs(a) < 1e-12) {
+        if (Math.abs(b) > 1e-12) {
+          let t = -c / b;
+          if (t > 0 && t < 1) tValues.push(t);
+        }
+      } else {
+        let discriminant = b * b - 4 * a * c;
+        if (discriminant >= 0) {
+          let sqrtD = Math.sqrt(discriminant);
+          let t1 = (-b + sqrtD) / (2 * a);
+          let t2 = (-b - sqrtD) / (2 * a);
+          if (t1 > 0 && t1 < 1) tValues.push(t1);
+          if (t2 > 0 && t2 < 1) tValues.push(t2);
+        }
+      }
+      
+      let min = Math.min(p0, p3);
+      let max = Math.max(p0, p3);
+      
+      for (let t of tValues) {
+        let mt = 1 - t;
+        let val = (mt * mt * mt * p0) + (3 * mt * mt * t * p1) + (3 * mt * t * t * p2) + (t * t * t * p3);
+        if (val < min) min = val;
+        if (val > max) max = val;
+      }
+      return { min, max };
+    }
+
     for (let path of this.paths) {
       for (let i = 0; i < path.anchors.length - 1; i++) {
-
         let anchor = path.anchors[i];
         let handleToNext = anchor.handleToNext;
         let nextAnchor = path.anchors[i + 1];
         let nextAnchor_handleToPrev = nextAnchor.handleToPrev;
 
-        for (let t = 0; t <= 1; t += 0.01) {
-          let x = _p5.bezierPoint(anchor.position.x, handleToNext.position.x, nextAnchor_handleToPrev.position.x, nextAnchor.position.x, t);
-          let y = _p5.bezierPoint(anchor.position.y, handleToNext.position.y, nextAnchor_handleToPrev.position.y, nextAnchor.position.y, t);
-          if (x < xMin) xMin = x;
-          if (x > xMax) xMax = x;
-          if (y < yMin) yMin = y;
-          if (y > yMax) yMax = y;
-        }
+        let xExtremes = getBezierExtremes(
+          anchor.position.x, handleToNext.position.x, 
+          nextAnchor_handleToPrev.position.x, nextAnchor.position.x
+        );
+        let yExtremes = getBezierExtremes(
+          anchor.position.y, handleToNext.position.y, 
+          nextAnchor_handleToPrev.position.y, nextAnchor.position.y
+        );
+
+        if (xExtremes.min < xMin) xMin = xExtremes.min;
+        if (xExtremes.max > xMax) xMax = xExtremes.max;
+        if (yExtremes.min < yMin) yMin = yExtremes.min;
+        if (yExtremes.max > yMax) yMax = yExtremes.max;
       }
 
-      this.leftSideBearing = xMin;
-      this.rightSideBearing = this.advancedWidth - xMax;
-      this.width = this.advancedWidth - this.leftSideBearing - this.rightSideBearing
+      if (path.anchors.length === 1) {
+          let pos = path.anchors[0].position;
+          if (pos.x < xMin) xMin = pos.x;
+          if (pos.x > xMax) xMax = pos.x;
+      }
+
+      if (xMin !== Infinity) {
+        this.leftSideBearing = xMin;
+        this.rightSideBearing = this.advancedWidth - xMax;
+        this.width = this.advancedWidth - this.leftSideBearing - this.rightSideBearing;
+      }
     }
   }
 

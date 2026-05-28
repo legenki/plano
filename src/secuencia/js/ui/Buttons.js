@@ -230,28 +230,81 @@ export function createButtonClasses(_p5) {
       }
     }
     updateBounding() {
-      this.xMin = Infinity;
+            this.xMin = Infinity;
       this.xMax = -Infinity;
       this.yMin = Infinity;
       this.yMax = -Infinity;
+
+      function getBezierExtremes(p0, p1, p2, p3) {
+        let tValues = [0, 1];
+        let a = -p0 + 3 * p1 - 3 * p2 + p3;
+        let b = 2 * (p0 - 2 * p1 + p2);
+        let c = p1 - p0;
+        
+        if (Math.abs(a) < 1e-12) {
+          if (Math.abs(b) > 1e-12) {
+            let t = -c / b;
+            if (t > 0 && t < 1) tValues.push(t);
+          }
+        } else {
+          let discriminant = b * b - 4 * a * c;
+          if (discriminant >= 0) {
+            let sqrtD = Math.sqrt(discriminant);
+            let t1 = (-b + sqrtD) / (2 * a);
+            let t2 = (-b - sqrtD) / (2 * a);
+            if (t1 > 0 && t1 < 1) tValues.push(t1);
+            if (t2 > 0 && t2 < 1) tValues.push(t2);
+          }
+        }
+        
+        let min = Math.min(p0, p3);
+        let max = Math.max(p0, p3);
+        
+        for (let t of tValues) {
+          let mt = 1 - t;
+          let val = (mt * mt * mt * p0) + (3 * mt * mt * t * p1) + (3 * mt * t * t * p2) + (t * t * t * p3);
+          if (val < min) min = val;
+          if (val > max) max = val;
+        }
+        return { min, max };
+      }
+
       for (let i = 0; i < this.anchors.length - 1; i++) {
         let anchor = this.anchors[i];
         let handleToNext = anchor.handleToNext;
         let nextAnchor = this.anchors[i + 1];
         let nextAnchor_handleToPrev = nextAnchor.handleToPrev;
-        for (let t = 0; t <= 1; t += 0.01) {
-          let x = _p5.bezierPoint(anchor.position.x, handleToNext.position.x, nextAnchor_handleToPrev.position.x, nextAnchor.position.x, t);
-          let y = _p5.bezierPoint(anchor.position.y, handleToNext.position.y, nextAnchor_handleToPrev.position.y, nextAnchor.position.y, t);
-          if (x < this.xMin) this.xMin = x;
-          if (x > this.xMax) this.xMax = x;
-          if (y < this.yMin) this.yMin = y;
-          if (y > this.yMax) this.yMax = y;
-        }
+
+        let xExtremes = getBezierExtremes(
+          anchor.position.x, handleToNext.position.x, 
+          nextAnchor_handleToPrev.position.x, nextAnchor.position.x
+        );
+        let yExtremes = getBezierExtremes(
+          anchor.position.y, handleToNext.position.y, 
+          nextAnchor_handleToPrev.position.y, nextAnchor.position.y
+        );
+
+        if (xExtremes.min < this.xMin) this.xMin = xExtremes.min;
+        if (xExtremes.max > this.xMax) this.xMax = xExtremes.max;
+        if (yExtremes.min < this.yMin) this.yMin = yExtremes.min;
+        if (yExtremes.max > this.yMax) this.yMax = yExtremes.max;
       }
-      this.xMin -= this.size;
-      this.xMax += this.size;
-      this.yMin -= this.size;
-      this.yMax += this.size;
+
+      // Single point fallback
+      if (this.anchors.length === 1) {
+          let pos = this.anchors[0].position;
+          if (pos.x < this.xMin) this.xMin = pos.x;
+          if (pos.x > this.xMax) this.xMax = pos.x;
+          if (pos.y < this.yMin) this.yMin = pos.y;
+          if (pos.y > this.yMax) this.yMax = pos.y;
+      }
+
+      if (this.xMin !== Infinity) {
+        this.xMin -= this.size;
+        this.xMax += this.size;
+        this.yMin -= this.size;
+        this.yMax += this.size;
+      }
     }
     close() {
       this.closed = true;

@@ -240,7 +240,7 @@ export function createAppController(_p5, {
             c.setAlpha(env.pattern_alpha);
             const orig = env.shapeColor;
             env.shapeColor = c;
-            env.scene_glyphs.forEach(glyph => glyph.drawScene(env.shapeColor, env.strokeCapRounded, env.svgCanvas));
+            env.scene_glyphs.forEach(glyph => env.GlyphRenderer.drawScene(glyph, env.shapeColor, env.strokeCapRounded, env.svgCanvas));
             env.shapeColor = orig;
             env.svgCanvas.pop();
           }
@@ -250,7 +250,7 @@ export function createAppController(_p5, {
       env.svgCanvas.translate(env.scene_center.x, env.scene_center.y);
       env.svgCanvas.scale(env.scene_scale);
       env.svgCanvas.rotate(env.scene_rotation);
-      env.scene_glyphs.forEach(glyph => glyph.drawScene(env.shapeColor, env.strokeCapRounded, env.svgCanvas));
+      env.scene_glyphs.forEach(glyph => env.GlyphRenderer.drawScene(glyph, env.shapeColor, env.strokeCapRounded, env.svgCanvas));
       env.svgCanvas.pop();
       env.svgCanvas.save(`${filename}.svg`);
       env.exportSVGActive = false;
