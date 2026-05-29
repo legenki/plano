@@ -41,7 +41,7 @@ export function verticeSketch(p) {
     p.noLoop();
     let redrawPending = false;
     const triggerRedraw = () => {
-      if (!redrawPending) {
+      if (!redrawPending && document.getElementById('app-vertice').classList.contains('active')) {
         redrawPending = true;
         requestAnimationFrame(() => {
           p.redraw();
@@ -162,6 +162,7 @@ export function verticeSketch(p) {
   // --- MOUSE ---
 
   p.mousePressed = function (e) {
+    if (!document.getElementById('app-vertice').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -267,6 +268,7 @@ export function verticeSketch(p) {
     }
   };
   p.mouseDragged = function (e) {
+    if (!document.getElementById('app-vertice').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -300,6 +302,7 @@ export function verticeSketch(p) {
     }
   };
   p.mouseReleased = function (e) {
+    if (!document.getElementById('app-vertice').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -336,6 +339,7 @@ export function verticeSketch(p) {
     if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
   };
   p.doubleClicked = function (e) {
+    if (!document.getElementById('app-vertice').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -413,6 +417,7 @@ export function verticeSketch(p) {
     }
   };
   p.mouseWheel = function (event) {
+    if (!document.getElementById('app-vertice').classList.contains('active')) return;
     const sidebar = document.querySelector('#app-vertice .sidebar');
     if (sidebar && p.mouseX > p.width - sidebar.clientWidth) return;
     if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) return;

@@ -39,7 +39,7 @@ export function grafemaSketch(p) {
     p.noLoop();
     let redrawPending = false;
     const triggerRedraw = () => {
-      if (!redrawPending) {
+      if (!redrawPending && document.getElementById('app-grafema').classList.contains('active')) {
         redrawPending = true;
         requestAnimationFrame(() => {
           p.redraw();
@@ -165,6 +165,7 @@ export function grafemaSketch(p) {
   // --- MOUSE HANDLERS ---
 
   p.mousePressed = function (e) {
+    if (!document.getElementById('app-grafema').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -210,6 +211,7 @@ export function grafemaSketch(p) {
     env.AppController.setActiveGlyph(null);
   };
   p.mouseDragged = function (e) {
+    if (!document.getElementById('app-grafema').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -237,6 +239,7 @@ export function grafemaSketch(p) {
     }
   };
   p.mouseReleased = function (e) {
+    if (!document.getElementById('app-grafema').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;
@@ -268,6 +271,7 @@ export function grafemaSketch(p) {
     if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) return false;
   };
   p.doubleClicked = function (e) {
+    if (!document.getElementById('app-grafema').classList.contains('active')) return;
     
     let evt = e || window.event;
     if (evt && evt.target && evt.target.tagName !== "CANVAS") return;

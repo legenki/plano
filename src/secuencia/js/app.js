@@ -282,7 +282,7 @@ export const secuenciaSketch = _p5 => {
     let redrawPending = false;
     let saveTimeout = null;
     const triggerRedraw = () => {
-      if (!redrawPending) {
+      if (!redrawPending && document.getElementById('app-secuencia').classList.contains('active')) {
         redrawPending = true;
         requestAnimationFrame(() => {
           _p5.redraw();

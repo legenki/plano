@@ -1,5 +1,6 @@
 export function bindEvents(_p5) {
   _p5.mousePressed = function(event) {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     if (_p5.mouseButton == "right" || event.ctrlKey) {
       if (_p5.env.glyphEditor.isHovered == true) {
         _p5.env.glyphEditor.handleRightClick();
@@ -8,41 +9,49 @@ export function bindEvents(_p5) {
   };
 
   _p5.mouseDragged = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     _p5.env.glyphEditor.handleDrag();
   };
 
   _p5.mouseReleased = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
   };
 
   // --- TOUCH HANDLERS ---
   _p5.touchStarted = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     _p5.mousePressed();
     if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
   };
 
   _p5.touchMoved = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     _p5.mouseDragged();
     if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
   };
 
   _p5.touchEnded = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     _p5.mouseReleased();
     if (_p5.mouseX >= 0 && _p5.mouseX <= _p5.width && _p5.mouseY >= 0 && _p5.mouseY <= _p5.height) return false;
   };
 
   _p5.mouseClicked = function(event) {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     if (_p5.env.glyphEditor.isHovered == true && event.ctrlKey == false) {
       _p5.env.glyphEditor.handleClick();
     }
   };
 
   _p5.doubleClicked = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     if (_p5.env.glyphEditor.isHovered == true) {
       _p5.env.glyphEditor.handleDoubleClick();
     }
   };
 
   _p5.keyPressed = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
       return;
     }
@@ -64,6 +73,7 @@ export function bindEvents(_p5) {
   };
 
   _p5.keyReleased = function() {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
       return;
     }
