@@ -35,5 +35,5 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
-  plugins: [htmlPartialsAndCopyPlugin()]
+  plugins: [htmlPartialsAndCopyPlugin()],
 });
