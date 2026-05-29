@@ -72,24 +72,22 @@ function importTextBoxSettings() {
   importJSON(_p5.env.textBoxSettingsFileExtension)
     .then((data) => {
 
-      _p5.env.lineHeight = _p5.constrain(data.lineHeight, _p5.env.lineHeightMin, _p5.env.lineHeightMax) || _p5.env.lineHeight_DEFAULT;
-      _p5.env.scriptStrokeWeight = _p5.constrain(data.strokeWeight, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax) || _p5.env.scriptStrokeWeight_DEFAULT;
-      _p5.env.size = _p5.constrain(data.size, _p5.env.sizeMin, _p5.env.sizeMax) || _p5.env.size_DEFAULT;
-      _p5.env.wordSpace = _p5.constrain(data.wordSpace, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax) || _p5.env.wordSpace_DEFAULT;
-      _p5.env.letterSpace = _p5.constrain(data.letterSpace, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax) || _p5.env.letterSpace_DEFAULT;
-      _p5.env.letterWidth = _p5.constrain(data.letterWidth, _p5.env.letterWidthMin, _p5.env.letterWidthMax) || _p5.env.letterWidth_DEFAULT;
-      _p5.env.letterHeight = _p5.constrain(data.letterHeight, _p5.env.letterHeightMin, _p5.env.letterHeightMax) || _p5.env.letterHeight_DEFAULT;
-      _p5.env.slant = _p5.constrain(data.slant, _p5.env.slantMin, _p5.env.slantMax) || _p5.env.slant_DEFAULT;
-
-      _p5.print("data.slant: " + data.slant + "slant: " + _p5.env.slant);
-      _p5.env.randomSize = _p5.constrain(data.randomSize, _p5.env.randomSizeMin, _p5.env.randomSizeMax) || _p5.env.randomSize_DEFAULT;
-      _p5.env.randomLetterSpace = _p5.constrain(data.randomLetterSpace, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax) || _p5.env.randomLetterSpace_DEFAULT;
-      _p5.env.randomLetterWidth = _p5.constrain(data.randomLetterWidth, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax) || _p5.env.randomLetterWidth_DEFAULT;
-      _p5.env.randomLetterHeight = _p5.constrain(data.randomLetterHeight, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax) || _p5.env.randomLetterHeight_DEFAULT;
-      _p5.env.randomSlant = _p5.constrain(data.randomSlant, _p5.env.randomSlantMin, _p5.env.randomSlantMax) || _p5.env.randomSlant_DEFAULT;
-      _p5.env.randomBaselineOffset = _p5.constrain(data.randomBaselineOffset, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax) || _p5.env.randomBaselineOffset_DEFAULT;
-      _p5.env.precision = _p5.constrain(data.precision, _p5.env.precisionMax, _p5.env.precisionMin) || _p5.env.precision_DEFAULT;
-      _p5.env.textBox.seed = data.seed || _p5.random(1000);
+      _p5.env.lineHeight = _p5.constrain(data.lineHeight, _p5.env.lineHeightMin, _p5.env.lineHeightMax) ?? _p5.env.lineHeight_DEFAULT;
+      _p5.env.scriptStrokeWeight = _p5.constrain(data.strokeWeight, _p5.env.scriptStrokeWeightMin, _p5.env.scriptStrokeWeightMax) ?? _p5.env.scriptStrokeWeight_DEFAULT;
+      _p5.env.size = _p5.constrain(data.size, _p5.env.sizeMin, _p5.env.sizeMax) ?? _p5.env.size_DEFAULT;
+      _p5.env.wordSpace = _p5.constrain(data.wordSpace, _p5.env.wordSpaceMin, _p5.env.wordSpaceMax) ?? _p5.env.wordSpace_DEFAULT;
+      _p5.env.letterSpace = _p5.constrain(data.letterSpace, _p5.env.letterSpaceMin, _p5.env.letterSpaceMax) ?? _p5.env.letterSpace_DEFAULT;
+      _p5.env.letterWidth = _p5.constrain(data.letterWidth, _p5.env.letterWidthMin, _p5.env.letterWidthMax) ?? _p5.env.letterWidth_DEFAULT;
+      _p5.env.letterHeight = _p5.constrain(data.letterHeight, _p5.env.letterHeightMin, _p5.env.letterHeightMax) ?? _p5.env.letterHeight_DEFAULT;
+      _p5.env.slant = _p5.constrain(data.slant, _p5.env.slantMin, _p5.env.slantMax) ?? _p5.env.slant_DEFAULT;
+      _p5.env.randomSize = _p5.constrain(data.randomSize, _p5.env.randomSizeMin, _p5.env.randomSizeMax) ?? _p5.env.randomSize_DEFAULT;
+      _p5.env.randomLetterSpace = _p5.constrain(data.randomLetterSpace, _p5.env.randomLetterSpaceMin, _p5.env.randomLetterSpaceMax) ?? _p5.env.randomLetterSpace_DEFAULT;
+      _p5.env.randomLetterWidth = _p5.constrain(data.randomLetterWidth, _p5.env.randomLetterWidthMin, _p5.env.randomLetterWidthMax) ?? _p5.env.randomLetterWidth_DEFAULT;
+      _p5.env.randomLetterHeight = _p5.constrain(data.randomLetterHeight, _p5.env.randomLetterHeightMin, _p5.env.randomLetterHeightMax) ?? _p5.env.randomLetterHeight_DEFAULT;
+      _p5.env.randomSlant = _p5.constrain(data.randomSlant, _p5.env.randomSlantMin, _p5.env.randomSlantMax) ?? _p5.env.randomSlant_DEFAULT;
+      _p5.env.randomBaselineOffset = _p5.constrain(data.randomBaselineOffset, _p5.env.randomBaselineOffsetMin, _p5.env.randomBaselineOffsetMax) ?? _p5.env.randomBaselineOffset_DEFAULT;
+      _p5.env.precision = _p5.constrain(data.precision, _p5.env.precisionMin, _p5.env.precisionMax) ?? _p5.env.precision_DEFAULT;
+      _p5.env.textBox.seed = data.seed ?? _p5.random(1000);
 
       _p5.env.updateInterface_textBoxSettings_state();
       _p5.env.updateInterface_textBoxSettings_label();

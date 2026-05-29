@@ -62,8 +62,10 @@ export function reticulaSketch(p) {
   };
 
   function display() {
-    p.image(imgDrawing, p.width/2, p.height/2);
+    // Draw imgDrawing onto canvas so updateRasterPoints can sample it via p.get()
+    p.image(imgDrawing, p.width / 2, p.height / 2);
     updateRasterPoints();
+    // Now clear and redraw with the background + raster shapes on top
     p.background(bgColor);
     displayRasterPoints();
   }

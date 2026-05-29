@@ -84,13 +84,12 @@ export function bindEvents(_p5) {
       if (_p5.env.glyphEditor) _p5.env.glyphEditor.handleEscape();
     } else if (_p5.key == 'Alt') {
       if (_p5.env.glyphEditor) _p5.env.glyphEditor.handleAlt('released');
-    } else if ((_p5.key === 'z' || _p5.key === 'Z') && _p5.keyIsDown(_p5.CONTROL)) {
-      _p5.env.glyphEditor.handleCmdZ();
     }
   };
 
   // Handle global document keydown for specific cases
   document.addEventListener('keydown', (event) => {
+    if (!document.getElementById('app-secuencia').classList.contains('active')) return;
     if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
       return;
     }

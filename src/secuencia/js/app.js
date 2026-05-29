@@ -298,8 +298,8 @@ export const secuenciaSketch = _p5 => {
     window.addEventListener('keydown', triggerRedraw);
     window.addEventListener('keyup', triggerRedraw);
     window.addEventListener('input', triggerRedraw);
-    _p5.canvas.addEventListener('wheel', triggerRedraw);
     setupCanvas();
+    _p5.canvas.addEventListener('wheel', triggerRedraw);
     // setupAsync();
 
     if (!loadSecuenciaState()) {

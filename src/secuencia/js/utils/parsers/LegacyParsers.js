@@ -140,7 +140,7 @@ export function parseJHF(scriptInstance, data, { hersheyAlphabet, hersheyBaseInd
     let right = 0;
     if (positioning.length > 0) {
       left = decodeHersheyCharToCoordinate(positioning.charAt(0), hersheyAlphabet, hersheyBaseIndex, hersheyScale);
-      right = decodeHersheyCharToCoordinate(positioning.charAt(1), false, hersheyAlphabet, hersheyBaseIndex, hersheyScale);
+      right = decodeHersheyCharToCoordinate(positioning.charAt(1), hersheyAlphabet, hersheyBaseIndex, hersheyScale);
       glyphWidth = Math.abs(left) + right;
     }
     let paths = [];

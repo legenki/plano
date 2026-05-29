@@ -119,8 +119,11 @@ export function createCornerClass(p) {
     }
 
     static deserialize(data, glyphInstance) {
-      const c = new Corner({x: data.x, y: data.y}, data.r, glyphInstance);
-      c.scale = data.s !== undefined ? data.s : 1;
+      // Support both compact keys (r/s) from serialize() and full keys (radians/scale) from saveProjectJSON()
+      const radians = data.r !== undefined ? data.r : (data.radians !== undefined ? data.radians : 0);
+      const scale = data.s !== undefined ? data.s : (data.scale !== undefined ? data.scale : 1);
+      const c = new Corner({x: data.x, y: data.y}, radians, glyphInstance);
+      c.scale = scale;
       c.active = data.active || false;
       return c;
     }

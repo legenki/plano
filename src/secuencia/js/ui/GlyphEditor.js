@@ -321,7 +321,7 @@ export function createGlyphEditorClass(_p5, {
         }
       }
       this.setActiveAnchor(newAnchor);
-      this.lockedButton == true;
+      this.lockedButton = true;
     }
     removeAnchor(anchor) {
       let path = anchor.path;
@@ -334,7 +334,7 @@ export function createGlyphEditorClass(_p5, {
           break;
         }
       }
-      if (path.anchors.size == 0) {
+      if (path.anchors.length === 0) {
         this.removePath(path);
       }
     }
