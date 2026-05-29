@@ -1,15 +1,17 @@
 import { grafemaSketch } from '../grafema/js/app.js';
 import { verticeSketch } from '../vertice/js/app.js';
 import { secuenciaSketch } from '../secuencia/js/app.js';
+import { reticulaSketch } from '../reticula/js/app.js';
 
 let currentApp = 'grafema';
 let currentTheme = 'light';
-const apps = ['grafema', 'vertice', 'secuencia'];
+const apps = ['grafema', 'vertice', 'secuencia', 'reticula'];
 
 // Store instances if we need to call methods on them
 let grafemaInstance = null;
 let verticeInstance = null;
 let secuenciaInstance = null;
+let reticulaInstance = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize p5 instances
@@ -28,9 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     secuenciaInstance = new p5(secuenciaSketch, secuenciaContainer);
   }
 
+  const reticulaContainer = document.getElementById('reticula-canvas');
+  if (reticulaContainer) {
+    reticulaInstance = new p5(reticulaSketch, reticulaContainer);
+  }
+
   // Initial pause for non-active apps (grafema is active by default)
   if (verticeInstance) verticeInstance.noLoop();
   if (secuenciaInstance) secuenciaInstance.noLoop();
+  if (reticulaInstance) reticulaInstance.noLoop();
 
   // 2. Setup tab switching
   apps.forEach(app => {
@@ -80,6 +88,7 @@ function switchApp(appName) {
         if (app === 'grafema' && grafemaInstance) grafemaInstance.noLoop();
         if (app === 'vertice' && verticeInstance) verticeInstance.noLoop();
         if (app === 'secuencia' && secuenciaInstance) secuenciaInstance.noLoop();
+        if (app === 'reticula' && reticulaInstance) reticulaInstance.noLoop();
       }
     }
   });
@@ -121,6 +130,11 @@ function toggleGlobalTheme() {
     });
     window.dispatchEvent(simulatedEvent);
   }
+
+  // Update Reticula instance
+  if (reticulaInstance && typeof reticulaInstance.applyTheme === 'function') {
+    reticulaInstance.applyTheme(currentTheme);
+  }
 }
 
 function handleGlobalKeys(e) {
@@ -135,6 +149,9 @@ function handleGlobalKeys(e) {
     } else if (key === 's' || key === 'ы') {
       if (e.preventDefault) e.preventDefault();
       switchApp('secuencia');
+    } else if (key === 'r' || key === 'к') {
+      if (e.preventDefault) e.preventDefault();
+      switchApp('reticula');
     }
   }
 }

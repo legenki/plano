@@ -41,6 +41,7 @@ export function reticulaSketch(p) {
     
     p.imageMode(p.CENTER);
     reset();
+    loadState();
     bindUI();
   };
 
@@ -56,6 +57,7 @@ export function reticulaSketch(p) {
       p.resizeCanvas(w, h);
       resizeImages();
       p.redraw();
+      saveState();
     }
   };
 
@@ -72,6 +74,7 @@ export function reticulaSketch(p) {
       lastY = p.mouseY;
       drawImg(p.mouseX, p.mouseY, p.mouseX, p.mouseY);
       p.redraw();
+      saveState();
     } else {
       lastX = null;
       lastY = null;
@@ -86,6 +89,7 @@ export function reticulaSketch(p) {
       lastX = p.mouseX;
       lastY = p.mouseY;
       p.redraw();
+      saveState();
     }
   };
 
@@ -119,18 +123,14 @@ export function reticulaSketch(p) {
     imgDrawing.noFill();
     imgDrawing.line(x, y, px, py);
     
-    // We only push to lines for brush mode. If we export SVG later we may ignore eraser logic, 
-    // but right now lines array is disabled in SVG so we just keep it for consistency.
-    if (state.activeMode === 'brush') {
-      lines.push({
-        x1: px,
-        y1: py,
-        x2: x,
-        y2: y,
-        stroke: state.brushColor.toString(),
-        strokeWeight: state.gridSize
-      });
-    }
+    lines.push({
+      mode: state.activeMode,
+      x1: px,
+      y1: py,
+      x2: x,
+      y2: y,
+      strokeWeight: state.gridSize
+    });
   }
 
   function setGridSize(val) {
@@ -177,6 +177,7 @@ export function reticulaSketch(p) {
     resizeImages();
     lines = [];
     p.redraw();
+    saveState();
   }
 
   function resizeImages() {
@@ -200,6 +201,98 @@ export function reticulaSketch(p) {
     }
     createRasterPoints();
   }
+
+  function saveState() {
+    // Debounce save
+    if (saveState.timeout) clearTimeout(saveState.timeout);
+    saveState.timeout = setTimeout(() => {
+      const data = {
+        state: {
+          gridSize: state.gridSize,
+          gridElementColor: state.gridElementColor ? state.gridElementColor.toString() : '#000000',
+          brushColor: state.brushColor ? state.brushColor.toString() : '#000000',
+          bgColor: bgColor ? bgColor.toString() : '#ffffff'
+        },
+        lines: lines
+      };
+      localStorage.setItem('reticula_autosave', JSON.stringify(data));
+    }, 500);
+  }
+
+  function loadState() {
+    const saved = localStorage.getItem('reticula_autosave');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.state) {
+          state.gridSize = data.state.gridSize || 75;
+          state.gridElementColor = p.color(data.state.gridElementColor || '#000000');
+          state.brushColor = p.color(data.state.brushColor || '#000000');
+          bgColor = p.color(data.state.bgColor || '#ffffff');
+          
+          // Update UI
+          const bgPicker = document.getElementById('r-color-bg');
+          const brushPicker = document.getElementById('r-color-brush');
+          const gridSizeNum = document.getElementById('r-input-grid-size-num');
+          const gridSizeSlide = document.getElementById('r-slide-grid-size');
+          if (bgPicker) bgPicker.value = data.state.bgColor;
+          if (brushPicker) brushPicker.value = data.state.brushColor;
+          if (gridSizeNum) gridSizeNum.value = state.gridSize;
+          if (gridSizeSlide) gridSizeSlide.value = state.gridSize;
+          
+          const bgLabel = document.getElementById('r-label-bg');
+          const brushLabel = document.getElementById('r-label-brush');
+          if (bgLabel) bgLabel.innerText = (data.state.bgColor || '#ffffff').toUpperCase();
+          if (brushLabel) brushLabel.innerText = (data.state.brushColor || '#000000').toUpperCase();
+        }
+        
+        if (data.lines && Array.isArray(data.lines)) {
+          lines = data.lines;
+          // Re-draw all lines on imgDrawing
+          if (imgDrawing) {
+            imgDrawing.background(0);
+            for (const line of lines) {
+              if (line.mode === 'brush') {
+                imgDrawing.stroke(255);
+              } else {
+                imgDrawing.stroke(0);
+              }
+              imgDrawing.strokeWeight(line.strokeWeight || state.gridSize);
+              imgDrawing.noFill();
+              imgDrawing.line(line.x2, line.y2, line.x1, line.y1);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Auto-save load failed:", e);
+      }
+    }
+  }
+
+  p.applyTheme = function (theme) {
+    if (theme === 'dark') {
+      bgColor = p.color('#1e1e1e');
+      state.gridElementColor = p.color('#ffffff');
+      state.brushColor = p.color('#ffffff');
+    } else {
+      bgColor = p.color('#ffffff');
+      state.gridElementColor = p.color('#000000');
+      state.brushColor = p.color('#000000');
+    }
+    
+    const bgPicker = document.getElementById('r-color-bg');
+    const brushPicker = document.getElementById('r-color-brush');
+    if (bgPicker) bgPicker.value = theme === 'dark' ? '#1e1e1e' : '#ffffff';
+    if (brushPicker) brushPicker.value = theme === 'dark' ? '#ffffff' : '#000000';
+    
+    const bgLabel = document.getElementById('r-label-bg');
+    const brushLabel = document.getElementById('r-label-brush');
+    if (bgLabel) bgLabel.innerText = bgPicker.value.toUpperCase();
+    if (brushLabel) brushLabel.innerText = brushPicker.value.toUpperCase();
+
+    p.redraw();
+    saveState();
+  };
 
   // Save functions
   function savePNG() {
@@ -271,6 +364,7 @@ export function reticulaSketch(p) {
       bgColor = p.color(e.target.value);
       if (bgLabel) bgLabel.innerText = e.target.value.toUpperCase();
       p.redraw();
+      saveState();
     });
 
     const brushPicker = document.getElementById('r-color-brush');
@@ -280,6 +374,7 @@ export function reticulaSketch(p) {
       state.gridElementColor = p.color(e.target.value);
       if (brushLabel) brushLabel.innerText = e.target.value.toUpperCase();
       p.redraw();
+      saveState();
     });
 
     const gridSizeNum = document.getElementById('r-input-grid-size-num');
@@ -289,11 +384,13 @@ export function reticulaSketch(p) {
         gridSizeSlide.value = e.target.value;
         setGridSize(parseInt(e.target.value));
         p.redraw();
+        saveState();
       });
       gridSizeSlide.addEventListener('input', (e) => {
         gridSizeNum.value = e.target.value;
         setGridSize(parseInt(e.target.value));
         p.redraw();
+        saveState();
       });
     }
 
