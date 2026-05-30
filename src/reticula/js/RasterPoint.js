@@ -4,40 +4,90 @@ export class RasterPoint {
     this.state = state;
     this.position = p.createVector(x, y);
     this.onOff = [];
-    for (var i = 0; i <= 2; i++) {
+    for (let i = 0; i < 3; i++) {
       this.onOff[i] = [];
     }
-    this.threshold = 50;
+    this.centerBrightness = 0;
     this.elementSize = p.ceil(this.state.gridSize / 2);
-    this.shapes = []; 
+    this.shapes = [];
   }
 
   update(tempScreen, factor) {
-    for (var y = -1; y <= 1; y++) {
-      for (var x = -1; x <= 1; x++) {
-        // use Math.floor instead of int
+    // p.brightness() returns 0–100 (HSB). threshold is also 0–100.
+    const threshold = this.state.densityThreshold ?? 50;
+    for (let y = -1; y <= 1; y++) {
+      for (let x = -1; x <= 1; x++) {
         const px = Math.floor((this.position.x + (this.state.gridSize * x)) / factor);
         const py = Math.floor((this.position.y + (this.state.gridSize * y)) / factor);
-        var pointColor = tempScreen.get(px, py);
-        if (this.p.brightness(pointColor) >= this.threshold) {
-          this.onOff[x + 1][y + 1] = true;
-        } else {
-          this.onOff[x + 1][y + 1] = false;
-        }
+        const pointColor = tempScreen.get(px, py);
+        const bright = this.p.brightness(pointColor); // 0–100
+        if (x === 0 && y === 0) this.centerBrightness = bright;
+        this.onOff[x + 1][y + 1] = bright >= threshold;
       }
     }
   }
 
   display() {
-    this.elementSize = this.state.gridSize / 2;
-    this.shapes = []; 
-    this.p.push();
-    this.p.ellipseMode(this.p.CENTER);
-    this.p.translate(this.position.x, this.position.y);
-    this.p.strokeWeight(2);
-    this.p.stroke(this.state.gridElementColor);
-    this.p.fill(this.state.gridElementColor);
+    const baseSize = this.state.gridSize / 2;
+    const t = this.centerBrightness / 100; // normalised 0–1
 
+    // --- Size mapping ---
+    const sizeMapping = this.state.sizeMapping ?? 'fixed';
+    if (sizeMapping === 'brightness') {
+      this.elementSize = baseSize * t;
+    } else if (sizeMapping === 'inverse') {
+      this.elementSize = baseSize * (1 - t);
+    } else {
+      this.elementSize = baseSize;
+    }
+    // Guard against near-zero size
+    if (this.elementSize < 1) this.elementSize = 1;
+
+    // --- Stroke / Fill mode ---
+    const strokeFill = this.state.strokeFill ?? 'fill';
+
+    this.shapes = [];
+    const shapeType = this.state.shapeType ?? 'metaball';
+
+    this.p.push();
+    this.p.translate(this.position.x, this.position.y);
+
+    // Apply color with computed alpha
+    const col = this.state.gridElementColor;
+    const r = this.p.red(col);
+    const g = this.p.green(col);
+    const b = this.p.blue(col);
+
+    const sw = this.state.strokeWeight ?? 2;
+
+    if (strokeFill === 'fill') {
+      this.p.noStroke();
+      this.p.fill(r, g, b);
+    } else if (strokeFill === 'stroke') {
+      this.p.noFill();
+      this.p.stroke(r, g, b);
+      this.p.strokeWeight(sw);
+    } else { // both
+      this.p.fill(r, g, b);
+      this.p.stroke(r, g, b);
+      this.p.strokeWeight(sw);
+    }
+
+    this.p.ellipseMode(this.p.CENTER);
+    this.p.rectMode(this.p.CENTER);
+
+    if (shapeType === 'metaball') {
+      this._displayMetaball();
+    } else if (this.onOff[1][1]) {
+      this._displaySimpleShape(shapeType);
+    }
+
+    this.p.pop();
+  }
+
+  // --- Original marching-squares metaball logic ---
+  _displayMetaball() {
+    this.p.rectMode(this.p.CORNER);
     if (this.onOff[1][1]) {
       // DOWN RIGHT
       if (this.onOff[2][1] || this.onOff[2][2] || this.onOff[1][2]) {
@@ -105,7 +155,46 @@ export class RasterPoint {
         this.shapes.push({ type: "curve2", rotation: 270 });
       }
     }
-    this.p.pop();
+  }
+
+  // --- Simple shape modes ---
+  _displaySimpleShape(shapeType) {
+    const s = this.elementSize;
+    if (shapeType === 'circle') {
+      this.p.ellipse(0, 0, s * 2, s * 2);
+      this.shapes.push({ type: 'circle', rotation: 0 });
+    } else if (shapeType === 'rect') {
+      this.p.rect(0, 0, s * 2, s * 2);
+      this.shapes.push({ type: 'rect-simple', rotation: 0 });
+    } else if (shapeType === 'cross') {
+      const w = s * 0.35;
+      this.p.rect(0, 0, s * 2, w * 2);
+      this.p.rect(0, 0, w * 2, s * 2);
+      this.shapes.push({ type: 'cross', rotation: 0 });
+    } else if (shapeType === 'custom') {
+      this._displayCustomShape(s);
+    }
+  }
+
+  _displayCustomShape(s) {
+    const raw = this.state.customShapePath ?? '';
+    if (!raw.trim()) return;
+
+    // Replace the token 's' with the actual half-size value
+    const d = raw.replace(/\bs\b/g, s.toFixed(2));
+
+    try {
+      const path = new Path2D(d);
+      const ctx = this.p.drawingContext;
+      const strokeFill = this.state.strokeFill ?? 'fill';
+      if (strokeFill !== 'stroke') ctx.fill(path);
+      if (strokeFill !== 'fill')   ctx.stroke(path);
+      // Push a generic shape so SVG export can include it
+      this.shapes.push({ type: 'custom', rotation: 0, d });
+    } catch (e) {
+      // Invalid path — draw a small dot as fallback
+      this.p.ellipse(0, 0, s * 0.5, s * 0.5);
+    }
   }
 
   element0() {
@@ -117,8 +206,8 @@ export class RasterPoint {
     this.p.vertex(0, 0);
     this.p.vertex(this.elementSize, 0);
     this.p.bezierVertex(
-      this.elementSize, this.elementSize * this.state.magicNr, 
-      this.elementSize * this.state.magicNr, this.elementSize, 
+      this.elementSize, this.elementSize * this.state.magicNr,
+      this.elementSize * this.state.magicNr, this.elementSize,
       0, this.elementSize
     );
     this.p.endShape(this.p.CLOSE);
@@ -128,8 +217,8 @@ export class RasterPoint {
     this.p.beginShape();
     this.p.vertex(this.elementSize, 0);
     this.p.bezierVertex(
-      this.elementSize, this.elementSize * this.state.magicNr, 
-      this.elementSize * this.state.magicNr, this.elementSize, 
+      this.elementSize, this.elementSize * this.state.magicNr,
+      this.elementSize * this.state.magicNr, this.elementSize,
       0, this.elementSize
     );
     this.p.vertex(this.elementSize, this.elementSize);

@@ -33,6 +33,39 @@
               <button class="switcher-tab" data-mode="eraser">Eraser</button>
             </div>
 
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Brush Size</span>
+                <div class="num-input-wrapper">
+                  <input type="number" id="r-input-brush-size-num" class="figma-num-input" min="5" max="300" step="5" value="75">
+                  <span class="unit">px</span>
+                </div>
+              </div>
+              <input type="range" id="r-slide-brush-size" class="custom-slider" min="5" max="300" step="5" value="75">
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Brush Angle</span>
+                <div class="num-input-wrapper">
+                  <input type="number" id="r-input-brush-angle-num" class="figma-num-input" min="0" max="180" step="5" value="0">
+                  <span class="unit">°</span>
+                </div>
+              </div>
+              <input type="range" id="r-slide-brush-angle" class="custom-slider" min="0" max="180" step="5" value="0">
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Stroke Weight</span>
+                <div class="num-input-wrapper">
+                  <input type="number" id="r-input-stroke-weight-num" class="figma-num-input" min="0.5" max="20" step="0.5" value="2">
+                  <span class="unit">px</span>
+                </div>
+              </div>
+              <input type="range" id="r-slide-stroke-weight" class="custom-slider" min="0.5" max="20" step="0.5" value="2">
+            </div>
+
             <div class="control-group color-pickers-row">
               <div>
                 <label for="r-color-bg">Background</label>
@@ -52,23 +85,114 @@
           </div>
         </section>
 
-        <!-- Section: Grid Settings -->
+        <!-- Section: Shape Settings -->
         <section class="panel-section">
           <h2 class="section-title">
-            <span>Grid Settings</span>
+            <span>Shape</span>
             <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </h2>
           <div class="section-content">
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Shape Type</span>
+              </div>
+              <select id="r-select-shape" class="figma-select">
+                <option value="metaball">Metaball</option>
+                <option value="circle">Circle</option>
+                <option value="rect">Rectangle</option>
+                <option value="cross">Cross</option>
+                <option value="custom">Custom SVG</option>
+              </select>
+            </div>
+
+            <div class="parameter-row" id="r-custom-shape-row" style="display:none;">
+              <div class="parameter-header">
+                <span class="parameter-label">SVG Path</span>
+              </div>
+              <textarea id="r-custom-shape-path" placeholder="M-s,-s L s,-s L s,s L-s,s Z" style="width:100%; height:56px; resize:vertical; font-family:var(--font-mono); font-size:10px; padding:6px 8px; border:1px solid var(--border-light); border-radius:var(--radius-sm); background:var(--bg-input); color:var(--text-primary); outline:none; box-sizing:border-box;"></textarea>
+              <span style="font-size:9px; color:var(--text-secondary); margin-top:4px; display:block;">Use <code>s</code> as half-size. e.g. <code>M-s,-s L s,s</code></span>
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Size Mapping</span>
+              </div>
+              <select id="r-select-size-mapping" class="figma-select">
+                <option value="fixed">Fixed</option>
+                <option value="brightness">By Brightness</option>
+                <option value="inverse">Inverse Brightness</option>
+              </select>
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Stroke / Fill</span>
+              </div>
+              <select id="r-select-stroke-fill" class="figma-select">
+                <option value="fill">Fill only</option>
+                <option value="stroke">Stroke only</option>
+                <option value="both">Fill + Stroke</option>
+              </select>
+            </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Density Threshold</span>
+                <div class="num-input-wrapper">
+                  <input type="number" id="r-input-threshold-num" class="figma-num-input" min="0" max="100" step="5" value="50">
+                </div>
+              </div>
+              <input type="range" id="r-slide-threshold" class="custom-slider" min="0" max="100" step="5" value="50">
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Section: Grid Settings -->
+        <section class="panel-section">
+          <h2 class="section-title">
+            <span>Grid</span>
+            <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </h2>
+          <div class="section-content">
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Grid Type</span>
+              </div>
+              <select id="r-select-grid-type" class="figma-select">
+                <option value="rect">Rectangular</option>
+                <option value="hex">Hexagonal</option>
+                <option value="brick">Brick</option>
+                <option value="diagonal">Diagonal</option>
+                <option value="radial">Radial</option>
+              </select>
+            </div>
+
             <div class="parameter-row">
               <div class="parameter-header">
                 <span class="parameter-label">Grid Size</span>
                 <div class="num-input-wrapper">
-                  <input type="number" id="r-input-grid-size-num" class="figma-num-input" min="25" max="200" step="25" value="75">
+                  <input type="number" id="r-input-grid-size-num" class="figma-num-input" min="10" max="200" step="5" value="75">
                   <span class="unit">px</span>
                 </div>
               </div>
-              <input type="range" id="r-slide-grid-size" class="custom-slider" min="25" max="200" step="25" value="75">
+              <input type="range" id="r-slide-grid-size" class="custom-slider" min="10" max="200" step="5" value="75">
             </div>
+
+            <div class="parameter-row">
+              <div class="parameter-header">
+                <span class="parameter-label">Dropout</span>
+                <div class="num-input-wrapper">
+                  <input type="number" id="r-input-dropout-num" class="figma-num-input" min="0" max="80" step="5" value="0">
+                  <span class="unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="r-slide-dropout" class="custom-slider" min="0" max="80" step="5" value="0">
+            </div>
+
+
           </div>
         </section>
 
