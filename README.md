@@ -1,64 +1,61 @@
 # Plano
 
-**Plano** is a unified typography and geometry design studio that merges three creative workspaces (**Grafema**, **Vertice**, and **Secuencia**) into a single, cohesive web application.
+**Plano** is a unified typography and geometry design studio with four creative workspaces built on p5.js and Vite.
+
+Live: [legenki.github.io/plano](https://legenki.github.io/plano/)
 
 ---
 
-## 🚀 Creative Workspaces
+## Workspaces
 
-1. **GRAFEMA** *(formerly Touch Type)*
-   - A generative typography parameterizer that lets you control character width, height, stroke weight, details, and rotation across active layers.
+### GRAFEMA
+Generative typography parameterizer. Control character width, height, stroke weight, detail level, and rotation across active glyph layers.
 
-2. **VERTICE** *(formerly Tangents Studio)*
-   - A vertex and glyph editor focused on geometric connections, custom grids, and interactive path compositions.
+### VERTICE
+Vertex and glyph editor focused on geometric connections, custom grids, and interactive path compositions with corner-based curves.
 
-3. **SECUENCIA** *(formerly ScriptScript Studio)*
-   - An interactive text layout engine allowing you to compose complex typographic lines with random variations (size, slant, baseline) and reference background overlays.
+### SECUENCIA
+Interactive text layout engine. Compose typographic lines with Hershey / SCM vector fonts, randomized size, slant, baseline offset, and reference overlays.
 
----
-
-## 🎨 Unified UX/UI
-
-- **Unified Colors & Tokens**: All apps share a centralized CSS design system (`css/style.css`) using Figma-inspired light/dark theme variables, input states, badges, and button styling.
-- **Floating Right-Side Inspector**: Sub-app sidebars are floated on the right side with a `20px` viewport padding, matching the visual weight of **Secuencia**.
-- **Aesthetic Capsule Switcher**: Swapping apps is done using a sleek, top-center capsule switcher tab bar.
-- **Responsive Layout**: Sidebar panels automatically shrink to fit the viewport height and enable vertical scrolling on smaller screen sizes.
+### RETICULA
+Raster grid drawing tool. Paint a mask with a flat brush and render it through a configurable grid of shapes — metaballs, circles, rectangles, crosses, or custom SVG paths. Supports hex, brick, diagonal, and radial grid layouts with per-element size mapping, stroke/fill modes, and SVG export.
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## Keyboard Shortcuts
 
-You can switch between work modes instantly at any time:
-* 🌐 `Alt + G` (or `Option + G`) — Switch to **Grafema**
-* 🌐 `Alt + V` (or `Option + V`) — Switch to **Vertice**
-* 🌐 `Alt + S` (or `Option + S`) — Switch to **Secuencia**
-
-*(Works globally, even when keyboard focus is captured inside any child canvas).*
-
----
-
-## ⚙️ Architecture
-
-- **Iframe Isolation**: Because all three original editors rely on global p5.js scope instances, conflicting listeners, and custom coordinate tracking, they are embedded inside isolated `<iframe>` containers.
-- **State Preservation**: Tabs are hidden/shown via CSS `visibility` and `opacity` toggles instead of `display: none` to prevent p5.js canvases from collapsing, losing undo/redo history, or resetting scale/zoom.
-- **Window Messaging**: Cross-document messaging (`window.postMessage`) synchronizes Alt-shortcuts and theme changes (dark/light mode toggles) automatically across all parent/child contexts.
-- **Local Compatibility**: Presets are preloaded via `<script>` files in `index.html` to bypass browser-specific CORS request blocks, making Plano fully runnable directly from local disk storage (`file://` protocol).
+| Shortcut | Action |
+|---|---|
+| `Alt + G` | Switch to Grafema |
+| `Alt + V` | Switch to Vertice |
+| `Alt + S` | Switch to Secuencia |
+| `Alt + R` | Switch to Reticula |
+| `Cmd/Ctrl + Z` | Undo |
+| `Cmd/Ctrl + Shift + Z` | Redo |
+| `☾` button | Toggle dark / light theme |
 
 ---
 
-## 💻 How to Run
+## Architecture
 
-### Method 1: Local Disk (No Server)
-Just open [index.html](index.html) directly in any web browser.
+- **ES modules + p5.js instance mode** — each workspace runs as an isolated p5 sketch (`createSketch(p)`) with no global scope pollution
+- **Vite** — dev server and build tool, outputs to `dist/` with `base: '/plano/'` for GitHub Pages
+- **Shared design system** — unified CSS variables, tokens, and component styles in `src/css/style.css`
+- **localStorage autosave** — each workspace saves and restores state automatically
+- **HistoryManager** — shared memento-pattern undo/redo used across workspaces
 
-### Method 2: Local Web Server
-To serve Plano using a local server, navigate to the folder and run:
+---
+
+## Development
 
 ```bash
-# Python 3
-python3 -m http.server 8000
-
-# Node.js static server (e.g. npx)
-npx serve .
+npm install
+npm run dev       # localhost:3000
+npm run build     # outputs to dist/
 ```
-Then navigate to `http://localhost:8000/` or the corresponding address.
+
+---
+
+## Deploy
+
+Pushing to `main` triggers GitHub Actions → builds with Vite → deploys to GitHub Pages automatically.
